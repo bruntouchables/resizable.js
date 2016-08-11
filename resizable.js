@@ -92,7 +92,97 @@ function Resizable(element) {
   }
 
   function mouse_move(event) {
+    /**
+     * Calculate wrapper new height and new width on mouse move
+     *
+     * @param event: {Object} mouse event
+     * @return: undefined
+     */
 
+    var left = wrapper.getBoundingClientRect().left + document.body.scrollLeft;
+    var right = window.innerWidth - left - parseInt(wrapper.style.width, 10);
+    var top = wrapper.getBoundingClientRect().top + document.body.scrollTop;
+    var bottom = window.innerHeight - top - parseInt(wrapper.style.height, 10);
+    var wrapper_new_height, wrapper_new_width;
+
+    switch (handle) {
+      case 'n':
+        wrapper.style.top = 'auto';
+        wrapper.style.bottom = bottom + 'px';
+        // adjust wrapper sizes
+        wrapper_new_height = window.innerHeight - bottom - event.pageY;
+        break;
+      case 'ne':
+        wrapper.style.left = left + 'px';
+        wrapper.style.right = 'auto';
+        wrapper.style.top = 'auto';
+        wrapper.style.bottom = bottom + 'px';
+        // adjust wrapper sizes
+        wrapper_new_height = window.innerHeight - bottom - event.pageY;
+        wrapper_new_width = event.pageX - left;
+        break;
+      case 'e':
+        wrapper.style.left = left + 'px';
+        wrapper.style.top = top + 'px';
+        wrapper.style.bottom = 'auto';
+        // adjust wrapper sizes
+        wrapper_new_width = event.pageX - left;
+        break;
+      case 'se':
+        wrapper.style.left = left + 'px';
+        wrapper.style.top = top + 'px';
+        wrapper.style.bottom = 'auto';
+        // adjust wrapper sizes
+        wrapper_new_height = event.pageY - top;
+        wrapper_new_width = event.pageX - left;
+        break;
+      case 's':
+        wrapper.style.top = top + 'px';
+        wrapper.style.bottom = 'auto';
+        // adjust wrapper sizes
+        wrapper_new_height = event.pageY - top;
+        break;
+      case 'sw':
+        wrapper.style.left = 'auto';
+        wrapper.style.right = right + 'px';
+        wrapper.style.top = top + 'px';
+        wrapper.style.bottom = 'auto';
+        // adjust wrapper sizes
+        wrapper_new_height = event.pageY - top;
+        wrapper_new_width = window.innerWidth - right - event.pageX;
+        break;
+      case 'w':
+        wrapper.style.left = 'auto';
+        wrapper.style.right = right + 'px';
+        wrapper.style.top = top + 'px';
+        wrapper.style.bottom = 'auto';
+        // adjust wrapper sizes
+        wrapper_new_width = window.innerWidth - right - event.pageX;
+        break;
+      case 'nw':
+        wrapper.style.left = 'auto';
+        wrapper.style.right = right + 'px';
+        wrapper.style.top = 'auto';
+        wrapper.style.bottom = bottom + 'px';
+        // adjust wrapper sizes
+        wrapper_new_height = window.innerHeight - bottom - event.pageY;
+        wrapper_new_width = window.innerWidth - right - event.pageX;
+        break;
+    }
+
+    // if wrapper new height is less than minimal height
+    if (wrapper_new_height && wrapper_new_height < wrapper_min_height) {
+      wrapper_new_height = wrapper_min_height;
+    }
+
+    // if wrapper new width is less than minimal width
+    if (wrapper_new_width && wrapper_new_width < wrapper_new_width) {
+      wrapper_new_width = wrapper_min_width;
+    }
+
+    // set new wrapper height
+    wrapper.style.height = wrapper_new_height + 'px';
+    wrapper.style.width = wrapper_new_width + 'px';
   }
 
   function mouse_up(event) {
