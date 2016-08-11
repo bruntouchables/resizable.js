@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Resizable.js – Demo</title>
+    <link rel="stylesheet" href="resizable.css">
+    <style>
+      #example {
+        background: #1fc5d8;
+        height: 200px;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="example"></div>
+
+    <script src="resizable.js"></script>
+    <script>
+      var element = document.getElementById('example');
+      new Resizable(element);
+    </script>
+  </body>
+</html>
