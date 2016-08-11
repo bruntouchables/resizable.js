@@ -32,7 +32,7 @@ function Resizable(element) {
     ';
   var handle;
 
-  // element custom min sizes
+  // element custom minimum sizes
   // modify them according to your needs
   var wrapper_min_height = 50;
   var wrapper_min_width = 50;
@@ -61,4 +61,41 @@ function Resizable(element) {
 
   var wrapper_old_height = wrapper.offsetHeight;
   var wrapper_old_width = wrapper.offsetWidth;
+
+  handles = wrapper.querySelectorAll('.resize-handle');
+  for (var i = 0; i < handles.length; i++) {
+    // disable default drag start event handler
+    handles[i].addEventListener('dragstart', false);
+    // add custom mouse down event handler
+    handles[i].addEventListener('mousedown', mouse_down);
+  }
+
+  function mouse_down(event) {
+    /**
+     * Start element resize, add listeners to mouse move and mouse up events.
+     *
+     * @param event: {Object} mouse event
+     * @return: undefined
+     */
+
+    // get handle side
+    handle = event.target.className.slice('resize-handle resize-handle-'.length);
+    // add active class
+    wrapper.classList.add('active');
+
+    // add event listeners to mouse move and mouse up
+    document.addEventListener('mousemove', mouse_move);
+    document.addEventListener('mouseup', mouse_up);
+
+    // disable selection
+    return false;
+  }
+
+  function mouse_move(event) {
+
+  }
+
+  function mouse_up(event) {
+
+  }
 }
