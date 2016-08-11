@@ -186,6 +186,30 @@ function Resizable(element) {
   }
 
   function mouse_up(event) {
+    /**
+     * Finish element resize, remove mouse move and mouse up events.
+     *
+     * @param event: {Object} mouse event
+     * @return: undefined
+     */
 
+    // remove mouse move and mouse up events
+    document.removeEventListener('mousemove', mouse_move);
+    document.removeEventListener('mouseup', mouse_up);
+
+    var wrapper_new_height = wrapper.offsetHeight;
+    var wrapper_new_width = wrapper.offsetWidth;
+
+    // if nothing changed
+    if (wrapper_new_height === wrapper_old_height && wrapper_new_width === wrapper_old_width) {
+      return;
+    }
+
+    // redefine wrapper old height and old width
+    wrapper_old_height = wrapper_new_height;
+    wrapper_old_width = wrapper_new_width;
+
+    // remove active class
+    wrapper.classList.remove('active');
   }
 }
