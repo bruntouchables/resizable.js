@@ -61,8 +61,6 @@ function Resizable(element) {
   element.style.position = 'relative';
   element.style.left = '0px';
   element.style.top = '0px';
-  // element.style.height = (parseInt(element.offsetHeight, 10) > wrapper_min_height) ? '100%' : wrapper_min_height + 'px';
-  // element.style.width = (parseInt(element.offsetWidth, 10) > wrapper_min_width) ? '100%' : wrapper_min_width + 'px';
   element.style.height = '100%';
   element.style.width = '100%';
 
