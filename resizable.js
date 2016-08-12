@@ -32,7 +32,7 @@ function Resizable(element) {
     ';
   var handle;
 
-  // element custom minimum sizes
+  // element min height and min width
   // modify them according to your needs
   var wrapper_min_height = 50;
   var wrapper_min_width = 50;
@@ -53,11 +53,18 @@ function Resizable(element) {
   wrapper.style.height = (parseInt(element.offsetHeight, 10) > wrapper_min_height) ? element.offsetHeight + 'px' : wrapper_min_height + 'px';
   wrapper.style.width = (parseInt(element.offsetWidth, 10) > wrapper_min_width) ? element.offsetWidth + 'px' : wrapper_min_width + 'px';
 
+  // set wrapper min height and min width
+  wrapper.style.minHeight = wrapper_min_height + 'px';
+  wrapper.style.minWidth = wrapper_min_width + 'px';
+
   // style element
+  element.style.position = 'relative';
   element.style.left = '0px';
   element.style.top = '0px';
-  element.style.height = (parseInt(element.offsetHeight, 10) > wrapper_min_height) ? '100%' : wrapper_min_height + 'px';
-  element.style.width = (parseInt(element.offsetWidth, 10) > wrapper_min_width) ? '100%' : wrapper_min_width + 'px';
+  // element.style.height = (parseInt(element.offsetHeight, 10) > wrapper_min_height) ? '100%' : wrapper_min_height + 'px';
+  // element.style.width = (parseInt(element.offsetWidth, 10) > wrapper_min_width) ? '100%' : wrapper_min_width + 'px';
+  element.style.height = '100%';
+  element.style.width = '100%';
 
   var wrapper_old_height = wrapper.offsetHeight;
   var wrapper_old_width = wrapper.offsetWidth;
@@ -74,18 +81,19 @@ function Resizable(element) {
     /**
      * Start element resize, add listeners to mouse move and mouse up events.
      *
-     * @param event: {Object} mouse event
+     * @param event: {Object} mouse down event
      * @return: undefined
      */
 
     // get handle side
     handle = event.target.className.slice('resize-handle resize-handle-'.length);
-    // add active class
-    wrapper.classList.add('active');
 
     // add event listeners to mouse move and mouse up
     document.addEventListener('mousemove', mouse_move);
     document.addEventListener('mouseup', mouse_up);
+
+    // add active class
+    wrapper.classList.add('active');
 
     // disable selection
     return false;
@@ -95,7 +103,7 @@ function Resizable(element) {
     /**
      * Calculate wrapper new height and new width on mouse move
      *
-     * @param event: {Object} mouse event
+     * @param event: {Object} mouse move event
      * @return: undefined
      */
 
@@ -170,13 +178,13 @@ function Resizable(element) {
         break;
     }
 
-    // if wrapper new height is less than minimal height
+    // if wrapper new height is less than wrapper min height
     if (wrapper_new_height && wrapper_new_height < wrapper_min_height) {
       wrapper_new_height = wrapper_min_height;
     }
 
-    // if wrapper new width is less than minimal width
-    if (wrapper_new_width && wrapper_new_width < wrapper_new_width) {
+    // if wrapper new width is less than wrapper min width
+    if (wrapper_new_width && wrapper_new_width < wrapper_min_width) {
       wrapper_new_width = wrapper_min_width;
     }
 
@@ -189,13 +197,16 @@ function Resizable(element) {
     /**
      * Finish element resize, remove mouse move and mouse up events.
      *
-     * @param event: {Object} mouse event
+     * @param event: {Object} mouse up event
      * @return: undefined
      */
 
     // remove mouse move and mouse up events
     document.removeEventListener('mousemove', mouse_move);
     document.removeEventListener('mouseup', mouse_up);
+
+    // remove active class
+    wrapper.classList.remove('active');
 
     var wrapper_new_height = wrapper.offsetHeight;
     var wrapper_new_width = wrapper.offsetWidth;
@@ -208,8 +219,5 @@ function Resizable(element) {
     // redefine wrapper old height and old width
     wrapper_old_height = wrapper_new_height;
     wrapper_old_width = wrapper_new_width;
-
-    // remove active class
-    wrapper.classList.remove('active');
   }
 }
