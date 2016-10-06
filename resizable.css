@@ -11,8 +11,8 @@
 }
 
 .resizable.active .resize-handle {
-  visibility: visible;
   border-color: #1fc5d8;
+  visibility: visible;
 }
 
 .resize-handle {
