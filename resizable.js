@@ -7,8 +7,8 @@
 
 function Resizable(element) {
   /**
-   * Wrap element with handles and make it resizable
-   * Remark: element must have an id attribute
+   * Wrap an element with handles and make it resizable
+   * Remark: an element must have an id attribute
    *
    * @param element: {Object} DOM element
    * @return: undefined
