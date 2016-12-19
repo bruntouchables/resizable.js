@@ -1,1 +1,1 @@
-# Resizable.js
+# resizable.js
