@@ -11,8 +11,9 @@
  * @param element: {Object} DOM element
  * @return: undefined
  */
-function Resizable(element) {
-  let handle;
+
+let Resizable = (() => {
+  let handle, onInitCallback;
   let wrapper = '<div class="resizable"></div>';
   let handles = '<span class="resize-handle resize-handle-n"></span>\
                  <span class="resize-handle resize-handle-ne"></span>\
@@ -28,60 +29,17 @@ function Resizable(element) {
   let wrapperMinHeight = 50;
   let wrapperMinWidth = 50;
 
-  console.log(element);
+  let wrapperOldHeight;
+  let wrapperOldWidth;
 
-  // add wrapper near element
-  element.insertAdjacentHTML('beforebegin', wrapper);
-  wrapper = element.previousSibling;
-
-  // insert handles into wrapper
-  wrapper.insertAdjacentHTML('beforeend', handles);
-
-  // insert element into wrapper
-  wrapper.appendChild(element);
-
-  // style wrapper
-  wrapper.style.left = element.style.left;
-  wrapper.style.top = element.style.top;
-  wrapper.style.height = (parseInt(element.offsetHeight, 10) > wrapperMinHeight) ? element.offsetHeight + 'px' : wrapperMinHeight + 'px';
-  wrapper.style.width = (parseInt(element.offsetWidth, 10) > wrapperMinWidth) ? element.offsetWidth + 'px' : wrapperMinWidth + 'px';
-
-  // set wrapper min height and min width
-  wrapper.style.minHeight = wrapperMinHeight + 'px';
-  wrapper.style.minWidth = wrapperMinWidth + 'px';
-
-  // style element
-  element.style.position = 'relative';
-  element.style.left = '0px';
-  element.style.top = '0px';
-  element.style.height = '100%';
-  element.style.width = '100%';
-
-  let wrapperOldHeight = wrapper.offsetHeight;
-  let wrapperOldWidth = wrapper.offsetWidth;
-
-  handles = wrapper.querySelectorAll('.resize-handle');
-  for (let i = 0; i < handles.length; i++) {
-    // disable default drag start event handler
-    // FF bug here
-    handles[i].addEventListener('dragstart', false);
-    // add custom mouse down event handler
-    handles[i].addEventListener('mousedown', mouseDown);
-  }
-
-  /**
-   * Start element resize, add listeners to mouse move and mouse up events.
-   *
-   * @param event: {Object} mouse down event
-   * @return: undefined
-   */
-  function mouseDown(event) {
+  // private methods
+  function __mouseDown(event) {
     // get handle side
     handle = event.target.className.slice('resize-handle resize-handle-'.length);
 
     // add event listeners to mouse move and mouse up
-    document.addEventListener('mousemove', mouseMove);
-    document.addEventListener('mouseup', mouseUp);
+    document.addEventListener('mousemove', __mouseMove);
+    document.addEventListener('mouseup', __mouseUp);
 
     // add active class
     wrapper.classList.add('active');
@@ -96,7 +54,7 @@ function Resizable(element) {
    * @param event: {Object} mouse move event
    * @return: undefined
    */
-  function mouseMove(event) {
+  function __mouseMove(event) {
     let left = wrapper.getBoundingClientRect().left + document.body.scrollLeft;
     let right = window.innerWidth - left - parseInt(wrapper.style.width, 10);
     let top = wrapper.getBoundingClientRect().top + document.body.scrollTop;
@@ -189,10 +147,10 @@ function Resizable(element) {
    * @param event: {Object} mouse up event
    * @return: undefined
    */
-  function mouseUp(event) {
+  function __mouseUp(event) {
     // remove mouse move and mouse up events
-    document.removeEventListener('mousemove', mouseMove);
-    document.removeEventListener('mouseup', mouseUp);
+    document.removeEventListener('mousemove', __mouseMove);
+    document.removeEventListener('mouseup', __mouseUp);
 
     // remove active class
     wrapper.classList.remove('active');
@@ -209,4 +167,62 @@ function Resizable(element) {
     wrapperOldHeight = wrapperNewHeight;
     wrapperOldWidth = wrapperNewWidth;
   }
-}
+
+  // public methods
+  let init = (elem, callback) => {
+    element = elem;
+    // add wrapper near element
+    element.insertAdjacentHTML('beforebegin', wrapper);
+    wrapper = element.previousSibling;
+
+    // insert handles into wrapper
+    wrapper.insertAdjacentHTML('beforeend', handles);
+
+    // insert element into wrapper
+    wrapper.appendChild(element);
+
+    // style wrapper
+    wrapper.style.left = element.style.left;
+    wrapper.style.top = element.style.top;
+    wrapper.style.height = (parseInt(element.offsetHeight, 10) > wrapperMinHeight) ? element.offsetHeight + 'px' : wrapperMinHeight + 'px';
+    wrapper.style.width = (parseInt(element.offsetWidth, 10) > wrapperMinWidth) ? element.offsetWidth + 'px' : wrapperMinWidth + 'px';
+
+    // set wrapper min height and min width
+    wrapper.style.minHeight = wrapperMinHeight + 'px';
+    wrapper.style.minWidth = wrapperMinWidth + 'px';
+
+    // style element
+    element.style.position = 'relative';
+    element.style.left = '0px';
+    element.style.top = '0px';
+    element.style.height = '100%';
+    element.style.width = '100%';
+
+    wrapperOldHeight = wrapper.offsetHeight;
+    wrapperOldWidth = wrapper.offsetWidth;
+
+    handles = wrapper.querySelectorAll('.resize-handle');
+    for (let i = 0; i < handles.length; i++) {
+      // disable default drag start event handler
+      // FF bug here
+      handles[i].addEventListener('dragstart', false);
+      // add custom mouse down event handler
+      handles[i].addEventListener('mousedown', __mouseDown);
+    }
+
+    // onInitCallback
+    onInitCallback = callback;
+
+    // callback call
+    if (onInitCallback) {
+      onInitCallback();
+    }
+
+    return Resizable;
+  };
+
+  return {
+    init: init
+  }
+
+})();
