@@ -19,7 +19,9 @@
     <script src="resizable.js"></script>
     <script>
       let element = document.getElementById('example');
-      new Resizable(element);
+      let ex = Resizable.init(element, () => {
+        console.log('yaaay');
+      });
     </script>
   </body>
 </html>
