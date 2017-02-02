@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="resizable.css">
     <style>
       #example {
-        background: #1fc5d8;
+        background: #79589f;
         height: 200px;
         width: 200px;
       }
@@ -20,7 +20,8 @@
     <script>
       let element = document.getElementById('example');
       Resizable.init(element, () => {
-        console.log('resizable.js has been initialized.');
+        // "on init" callback
+        console.log("resizable.js has been successfully initialized.");
       });
     </script>
   </body>

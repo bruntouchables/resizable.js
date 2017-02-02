@@ -8,8 +8,7 @@
 let Resizable = (() => {
   let handle;
   let wrapper = '<div class="resizable"></div>';
-  let handles = '<span class="resize-handle resize-handle-rotate"></span>\
-                 <span class="resize-handle resize-handle-n"></span>\
+  let handles = '<span class="resize-handle resize-handle-n"></span>\
                  <span class="resize-handle resize-handle-ne"></span>\
                  <span class="resize-handle resize-handle-e"></span>\
                  <span class="resize-handle resize-handle-se"></span>\
@@ -56,7 +55,7 @@ let Resizable = (() => {
 
     switch (handle) {
       case 'rotate': {
-        
+
         break;
       }
       case 'n': {
@@ -236,7 +235,7 @@ let Resizable = (() => {
     for (let i = 0; i < handles.length; i++) {
       // disable default drag start event handler
       // FF bug here
-      handles[i].addEventListener('dragstart', false);
+      handles[i].addEventListener('dragstart', {});
       // add custom mouse down event handler
       handles[i].addEventListener('mousedown', _mouseDown);
     }
