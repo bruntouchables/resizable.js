@@ -1,21 +1,16 @@
-.resizable {
-  position: absolute;
-}
-
-.resizable.active .resize-handle {
-  visibility: visible;
-  border-color: #79589f;
-}
-
 .resize-handle {
   background-color: #fff;
-  border: 1px solid #aaa;
+  border: 1px solid #79589f;
   border-radius: 1px;
   height: 10px;
   position: absolute;
   visibility: hidden;
   width: 10px;
   z-index: 1000;
+}
+
+.resizable.active .resize-handle {
+  visibility: visible;
 }
 
 .resize-handle-n {
