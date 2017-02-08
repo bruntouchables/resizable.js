@@ -7,7 +7,8 @@
 
 let Resizable = (() => {
   let wrapper = '<div class="resizable"></div>';
-  let handles = '<span class="resize-handle resize-handle-n"></span>\
+  let handles = '<span class="resize-handle resize-handle-rotate"></span>\
+                 <span class="resize-handle resize-handle-n"></span>\
                  <span class="resize-handle resize-handle-ne"></span>\
                  <span class="resize-handle resize-handle-e"></span>\
                  <span class="resize-handle resize-handle-se"></span>\
@@ -152,6 +153,10 @@ let Resizable = (() => {
         wrapperNewWidth = window.innerWidth - right - event.pageX;
         break;
       }
+      case 'rotate': {
+        _emulate(event);
+        break;
+      }
     }
 
     // don't let wrapper height become less than wrapper min height
@@ -224,8 +229,6 @@ let Resizable = (() => {
     Object.assign(wrapper.style, {
       height: (elementHeight > wrapperMinHeight) ? elementHeight + 'px' : wrapperMinHeight + 'px',
       left: element.style.left,
-      // minHeight: wrapperMinHeight + 'px',
-      // minWidth: wrapperMinWidth + 'px',
       position: 'absolute',
       top: element.style.top,
       width: (elementWidth > wrapperMinWidth) ? elementWidth + 'px' : wrapperMinWidth + 'px'
@@ -271,6 +274,15 @@ let Resizable = (() => {
       handles[i].addEventListener('dragstart', {});
       // add custom "mouse down" event handler
       handles[i].addEventListener('mousedown', _mouseDown);
+    }
+  }
+  
+  /* DEBUG: */
+  function _emulate(event) {
+    wrapper.style.transition = '1s';
+    for (let i = 0; i < 30; ++i) {
+      wrapper.style.transform = 'rotate(' + i + 'deg)';
+      console.log(i + ' deg', wrapper.offsetLeft, wrapper.offsetTop);
     }
   }
 
