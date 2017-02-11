@@ -18,6 +18,7 @@ let Resizable = (() => {
                  <span class="resize-handle resize-handle-nw"></span>';
   let handle;
   let onInitCallback;
+  let mousePosition;
 
   // wrapper min height and min width
   let wrapperMinHeight = 50;
@@ -37,7 +38,13 @@ let Resizable = (() => {
 
     // get handle direction
     handle = event.target.className.slice('resize-handle resize-handle-'.length);
-
+    
+    // save mouse position
+    mousePosition = {
+      x: event.clientX,
+      y: event.clientY
+    };
+    
     // add event listeners to mouse move and mouse up
     document.addEventListener('mousemove', _mouseMove);
     document.addEventListener('mouseup', _mouseUp);
@@ -154,7 +161,17 @@ let Resizable = (() => {
         break;
       }
       case 'rotate': {
-        _emulate(event);
+        // TODO: finish rotate functionality
+        
+        let offsetX = event.clientX - mousePosition.x;
+        let offsetY = event.clientY - mousePosition.y;
+        let angle;
+        
+        if (offsetX > 0) {
+          angle = (offsetX + offsetY) / 2;
+          wrapper.style.transform = 'rotate(' + angle + 'deg)';
+        }
+        
         break;
       }
     }
@@ -168,7 +185,7 @@ let Resizable = (() => {
     if (wrapperNewWidth !== undefined && wrapperNewWidth < wrapperMinWidth) {
       wrapperNewWidth = wrapperMinWidth;
     }
-    
+
     // set new wrapper height
     Object.assign(wrapper.style, {
       height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : wrapperOldHeight + 'px',
@@ -276,15 +293,6 @@ let Resizable = (() => {
       handles[i].addEventListener('mousedown', _mouseDown);
     }
   }
-  
-  /* DEBUG: */
-  function _emulate(event) {
-    wrapper.style.transition = '1s';
-    for (let i = 0; i < 30; ++i) {
-      wrapper.style.transform = 'rotate(' + i + 'deg)';
-      console.log(i + ' deg', wrapper.offsetLeft, wrapper.offsetTop);
-    }
-  }
 
   /**
    * Wrap an element with handles and make it resizable.
@@ -301,7 +309,7 @@ let Resizable = (() => {
 
     // attach events on init
     _attachInitEvents(element);
-
+    
     // callback call
     if (onInitCallback = callback) {
       onInitCallback();
