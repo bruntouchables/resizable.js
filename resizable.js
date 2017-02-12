@@ -7,8 +7,7 @@
 
 let Resizable = (() => {
   let wrapper = '<div class="resizable"></div>';
-  let handles = '<span class="resize-handle resize-handle-rotate"></span>\
-                 <span class="resize-handle resize-handle-n"></span>\
+  let handles = '<span class="resize-handle resize-handle-n"></span>\
                  <span class="resize-handle resize-handle-ne"></span>\
                  <span class="resize-handle resize-handle-e"></span>\
                  <span class="resize-handle resize-handle-se"></span>\
@@ -18,7 +17,6 @@ let Resizable = (() => {
                  <span class="resize-handle resize-handle-nw"></span>';
   let handle;
   let onInitCallback;
-  let mousePosition;
 
   // wrapper min height and min width
   let wrapperMinHeight = 50;
@@ -38,12 +36,6 @@ let Resizable = (() => {
 
     // get handle direction
     handle = event.target.className.slice('resize-handle resize-handle-'.length);
-    
-    // save mouse position
-    mousePosition = {
-      x: event.clientX,
-      y: event.clientY
-    };
     
     // add event listeners to mouse move and mouse up
     document.addEventListener('mousemove', _mouseMove);
@@ -158,20 +150,6 @@ let Resizable = (() => {
         // adjust wrapper sizes
         wrapperNewHeight = window.innerHeight - bottom - event.pageY;
         wrapperNewWidth = window.innerWidth - right - event.pageX;
-        break;
-      }
-      case 'rotate': {
-        // TODO: finish rotate functionality
-        
-        let offsetX = event.clientX - mousePosition.x;
-        let offsetY = event.clientY - mousePosition.y;
-        let angle;
-        
-        if (offsetX > 0) {
-          angle = (offsetX + offsetY) / 2;
-          wrapper.style.transform = 'rotate(' + angle + 'deg)';
-        }
-        
         break;
       }
     }
