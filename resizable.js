@@ -270,7 +270,8 @@ class Resizable {
     document.addEventListener('mousedown', (event) => {
       let allowed = event.target === element;
       allowed = allowed || event.target === this.wrapper;
-      allowed = allowed || event.target.classList.contains('resize-handle');
+      // show handles only on the active element
+      allowed = allowed || (event.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
 
       if (allowed) {
         // add active class to wrapper
