@@ -24,9 +24,16 @@
 
 ```javascript
 let element = document.getElementById('example');
-new Resizable(element, () => {
+let resizable = new Resizable(element, () => {
   // "on init" callback
   console.log("resizable.js has been successfully initialized.");
+});
+
+resizable.onClick(() => {
+  // do something on click
+});
+resizable.onResize(() => {
+  // do something on resize
 });
 ```
 
