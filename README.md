@@ -5,7 +5,7 @@
 
 - Add _resizable.css_ and _resizable.js_ to your project
 - Create a DOM element
-- Call `Resizable.init()`
+- Initialize a new Resizable instance with new Resizable(...)
 - Enjoy!
 
 ### Usage
@@ -24,7 +24,7 @@
 
 ```javascript
 let element = document.getElementById('example');
-Resizable.init(element, () => {
+new Resizable(element, () => {
   // "on init" callback
   console.log("resizable.js has been successfully initialized.");
 });
