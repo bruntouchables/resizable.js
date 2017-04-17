@@ -187,6 +187,11 @@ class Resizable {
       height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
       width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
     });
+
+    // "on click" callback call
+    if (this.onResizeCallback) {
+      this.onResizeCallback();
+    }
   }
 
   /**
@@ -301,5 +306,9 @@ class Resizable {
 
   onClick(callback) {
     this.onClickCallback = callback;
+  }
+
+  onResize(callback) {
+    this.onResizeCallback = callback;
   }
 }
