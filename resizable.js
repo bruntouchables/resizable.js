@@ -270,6 +270,12 @@ class Resizable {
     document.addEventListener('mousedown', (event) => {
       let allowed = event.target === element;
       allowed = allowed || event.target === this.wrapper;
+
+      // "on click" callback call
+      if (this.onClickCallback && allowed) {
+        this.onClickCallback();
+      }
+
       // show handles only on the active element
       allowed = allowed || (event.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
 
@@ -291,5 +297,9 @@ class Resizable {
       this._mouseDown = this._mouseDown.bind(this);
       this.handles[i].addEventListener('mousedown', this._mouseDown);
     }
+  }
+
+  onClick(callback) {
+    this.onClickCallback = callback;
   }
 }
