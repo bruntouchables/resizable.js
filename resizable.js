@@ -190,7 +190,7 @@ class Resizable {
 
     // "on click" callback call
     if (this.onResizeCallback) {
-      this.onResizeCallback();
+      this.onResizeCallback(this.wrapper.childNodes[this.wrapper.childNodes.length - 1]);
     }
   }
 
@@ -278,7 +278,7 @@ class Resizable {
 
       // "on click" callback call
       if (this.onClickCallback && allowed) {
-        this.onClickCallback();
+        this.onClickCallback(element);
       }
 
       // show handles only on the active element
