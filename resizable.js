@@ -190,7 +190,7 @@ class Resizable {
 
     // "on click" callback call
     if (this.onResizeCallback) {
-      this.onResizeCallback(this.wrapper.childNodes[this.wrapper.childNodes.length - 1]);
+      this.onResizeCallback(this.wrapper);
     }
   }
 
