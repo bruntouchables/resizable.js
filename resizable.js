@@ -34,11 +34,6 @@ class Resizable {
 
     // attach events on init
     this._attachInitEvents(element);
-
-    // callback call
-    if (this.onInitCallback = callback) {
-      this.onInitCallback();
-    }
   }
 
   /**
