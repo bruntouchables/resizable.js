@@ -9,7 +9,7 @@ class Resizable {
   constructor(element, options, callback) {
     this.wrapper = '<div class="resizable"></div>';
     this.handles = '';
-    
+
     if (options) {
       for (let i = 0; i < options.length; ++i) {
         this.handles += '<span class="resize-handle resize-handle-' + options[i] + '"></span>';
@@ -139,11 +139,20 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    // BTDT: this is the right order
     let left = this.wrapper.getBoundingClientRect().left + document.body.scrollLeft;
-    let right = window.innerWidth - left - parseInt(this.wrapper.style.width, 10);
     let top = this.wrapper.getBoundingClientRect().top + document.body.scrollTop;
-    let bottom = window.innerHeight - top - parseInt(this.wrapper.style.height, 10);
+    let right = this.wrapper.style.right;
+    if (right && right !== 'auto') {
+      right = parseInt(right, 10);
+    } else {
+      right = window.innerWidth - left - parseInt(this.wrapper.style.width, 10);
+    }
+    let bottom = this.wrapper.style.bottom;
+    if (bottom && bottom !== 'auto') {
+      bottom = parseInt(bottom, 10);
+    } else {
+      bottom = window.innerHeight - top - parseInt(this.wrapper.style.height, 10);
+    }
     let wrapperNewHeight, wrapperNewWidth;
 
     // BTDT: styles are sorted in clockwise order
