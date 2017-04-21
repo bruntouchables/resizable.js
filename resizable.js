@@ -96,17 +96,17 @@ class Resizable {
    */
   _attachInitEvents(element) {
     // allow resize after click
-    document.addEventListener('mousedown', (event) => {
-      let allowed = event.target === element;
-      allowed = allowed || event.target === this.wrapper;
+    document.addEventListener('mousedown', (e) => {
+      let allowed = e.target === element;
+      allowed = allowed || e.target === this.wrapper;
 
       // "on click" callback call
       if (this.onClickCallback && allowed) {
-        this.onClickCallback(event);
+        this.onClickCallback();
       }
 
       // show handles only on the active element
-      allowed = allowed || (event.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
+      allowed = allowed || (e.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
 
       if (allowed) {
         // add active class to wrapper
@@ -130,15 +130,15 @@ class Resizable {
 
   /**
    * Start element resize, add "mouse move" and "mouse up" event listeners
-   * @param event: "mouse down" event
+   * @param e: "mouse down" event
    * @private
    */
-  _mouseDown(event) {
+  _mouseDown(e) {
     // disable selection (Safari)
-    event.preventDefault();
+    e.preventDefault();
 
     // get handle direction
-    this.handle = event.target.className.slice('resize-handle resize-handle-'.length);
+    this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
     // calculate ratio
     let height = parseInt(this.wrapper.style.height, 10);
@@ -157,10 +157,10 @@ class Resizable {
 
   /**
    * Calculate wrapper new height and new width on mouse move
-   * @param event: "mouse move" event
+   * @param e: "mouse move" event
    * @private
    */
-  _mouseMove(event) {
+  _mouseMove(e) {
     // BTDT: this is the right order
     let left = this.wrapper.getBoundingClientRect().left + document.body.scrollLeft;
     let right = window.innerWidth - left - parseInt(this.wrapper.style.width, 10);
@@ -178,7 +178,7 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        wrapperNewHeight = window.innerHeight - bottom - event.pageY;
+        wrapperNewHeight = window.innerHeight - bottom - e.pageY;
         break;
       }
       case 'ne': {
@@ -189,7 +189,7 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        wrapperNewWidth = event.pageX - left;
+        wrapperNewWidth = e.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
@@ -201,7 +201,7 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        wrapperNewWidth = event.pageX - left;
+        wrapperNewWidth = e.pageX - left;
         break;
       }
       case 'se': {
@@ -212,7 +212,7 @@ class Resizable {
           bottom: 'auto'
         });
         // adjust wrapper sizes
-        wrapperNewWidth = event.pageX - left;
+        wrapperNewWidth = e.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
@@ -224,7 +224,7 @@ class Resizable {
           bottom: 'auto'
         });
         // adjust wrapper sizes
-        wrapperNewHeight = event.pageY - top;
+        wrapperNewHeight = e.pageY - top;
         break;
       }
       case 'sw': {
@@ -235,7 +235,7 @@ class Resizable {
           bottom: 'auto'
         });
         // adjust wrapper sizes
-        wrapperNewWidth = window.innerWidth - right - event.pageX;
+        wrapperNewWidth = window.innerWidth - right - e.pageX;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
@@ -247,7 +247,7 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        wrapperNewWidth = window.innerWidth - right - event.pageX;
+        wrapperNewWidth = window.innerWidth - right - e.pageX;
         break;
       }
       case 'nw': {
@@ -258,7 +258,7 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        wrapperNewWidth = window.innerWidth - right - event.pageX;
+        wrapperNewWidth = window.innerWidth - right - e.pageX;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
@@ -288,10 +288,10 @@ class Resizable {
 
   /**
    * Finish element resize, remove "mouse move" and "mouse up" event listeners
-   * @param event: "mouse up" event
+   * @param e: "mouse up" event
    * @private
    */
-  _mouseUp(event) {
+  _mouseUp(e) {
     // remove "mouse move" and "mouse up" events
     document.removeEventListener('mousemove', this._mouseMove);
     document.removeEventListener('mouseup', this._mouseUp);
