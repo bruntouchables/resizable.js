@@ -6,11 +6,6 @@
 'use strict';
 
 class Resizable {
-  /**
-   * Wrap an element with handles and make it resizable.
-   * @param element: a DOM element to resize
-   * @param callback: "on init" callback
-   */
   constructor(element, callback) {
     this.wrapper = '<div class="resizable"></div>';
     this.handles = ' <span class="resize-handle resize-handle-n"></span>\
@@ -41,11 +36,6 @@ class Resizable {
     }
   }
 
-  /**
-   * Create DOM elements for the wrapper, element, and handles.
-   * @param element: a DOM element to resize
-   * @private
-   */
   _createDOMElements(element) {
     // add wrapper near element
     element.insertAdjacentHTML('beforebegin', this.wrapper);
@@ -58,11 +48,6 @@ class Resizable {
     this.wrapper.appendChild(element);
   }
 
-  /**
-   * Apply styles to the wrapper and the element.
-   * @param element: a DOM element to resize
-   * @private
-   */
   _applyStyles(element) {
     let elementHeight = parseInt(element.offsetHeight, 10);
     let elementWidth = parseInt(element.offsetWidth, 10);
@@ -89,11 +74,6 @@ class Resizable {
     this.wrapperOldWidth = this.wrapper.offsetWidth;
   }
 
-  /**
-   * Attach events on init.
-   * @param element: a DOM element to resize
-   * @private
-   */
   _attachInitEvents(element) {
     // allow resize after click
     document.addEventListener('mousedown', (e) => {
@@ -128,11 +108,6 @@ class Resizable {
     }
   }
 
-  /**
-   * Start element resize, add "mouse move" and "mouse up" event listeners
-   * @param e: "mouse down" event
-   * @private
-   */
   _mouseDown(e) {
     // disable selection (Safari)
     e.preventDefault();
@@ -155,11 +130,6 @@ class Resizable {
     return false;
   }
 
-  /**
-   * Calculate wrapper new height and new width on mouse move
-   * @param e: "mouse move" event
-   * @private
-   */
   _mouseMove(e) {
     // BTDT: this is the right order
     let left = this.wrapper.getBoundingClientRect().left + document.body.scrollLeft;
@@ -286,11 +256,6 @@ class Resizable {
     }
   }
 
-  /**
-   * Finish element resize, remove "mouse move" and "mouse up" event listeners
-   * @param e: "mouse up" event
-   * @private
-   */
   _mouseUp(e) {
     // remove "mouse move" and "mouse up" events
     document.removeEventListener('mousemove', this._mouseMove);
