@@ -90,7 +90,7 @@ class Resizable {
 
       // "on click" callback call
       if (this.onClickCallback && allowed) {
-        this.onClickCallback();
+        this.onClickCallback(e);
       }
 
       // show handles only on the active element
