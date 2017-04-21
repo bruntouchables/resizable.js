@@ -6,16 +6,24 @@
 'use strict';
 
 class Resizable {
-  constructor(element, callback) {
+  constructor(element, options, callback) {
     this.wrapper = '<div class="resizable"></div>';
-    this.handles = ' <span class="resize-handle resize-handle-n"></span>\
-                     <span class="resize-handle resize-handle-ne"></span>\
-                     <span class="resize-handle resize-handle-e"></span>\
-                     <span class="resize-handle resize-handle-se"></span>\
-                     <span class="resize-handle resize-handle-s"></span>\
-                     <span class="resize-handle resize-handle-sw"></span>\
-                     <span class="resize-handle resize-handle-w"></span>\
-                     <span class="resize-handle resize-handle-nw"></span>';
+    this.handles = '';
+    
+    if (options) {
+      for (let i = 0; i < options.length; ++i) {
+        this.handles += '<span class="resize-handle resize-handle-' + options[i] + '"></span>';
+      }
+    } else {
+      this.handles = ' <span class="resize-handle resize-handle-n"></span>\
+                       <span class="resize-handle resize-handle-ne"></span>\
+                       <span class="resize-handle resize-handle-e"></span>\
+                       <span class="resize-handle resize-handle-se"></span>\
+                       <span class="resize-handle resize-handle-s"></span>\
+                       <span class="resize-handle resize-handle-sw"></span>\
+                       <span class="resize-handle resize-handle-w"></span>\
+                       <span class="resize-handle resize-handle-nw"></span>';
+    }
 
     // wrapper min height and min width
     this.wrapperMinHeight = 50;
