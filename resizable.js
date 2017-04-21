@@ -139,7 +139,7 @@ class Resizable {
 
     // get handle direction
     this.handle = event.target.className.slice('resize-handle resize-handle-'.length);
-    
+
     // calculate ratio
     let height = parseInt(this.wrapper.style.height, 10);
     let width = parseInt(this.wrapper.style.width, 10);
@@ -189,7 +189,6 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        // wrapperNewHeight = window.innerHeight - bottom - event.pageY;
         wrapperNewWidth = event.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
@@ -236,8 +235,8 @@ class Resizable {
           bottom: 'auto'
         });
         // adjust wrapper sizes
-        wrapperNewHeight = event.pageY - top;
         wrapperNewWidth = window.innerWidth - right - event.pageX;
+        wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
       case 'w': {
@@ -259,8 +258,8 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        wrapperNewHeight = window.innerHeight - bottom - event.pageY;
         wrapperNewWidth = window.innerWidth - right - event.pageX;
+        wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
     }
@@ -308,9 +307,6 @@ class Resizable {
     // set wrapper old height and old width
     this.wrapperOldHeight = wrapperNewHeight;
     this.wrapperOldWidth = wrapperNewWidth;
-
-    // update ratio
-    this.ratio = wrapperNewHeight / wrapperNewWidth;
   }
 
   onClick(callback) {
