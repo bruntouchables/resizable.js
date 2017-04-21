@@ -34,6 +34,98 @@ class Resizable {
 
     // attach events on init
     this._attachInitEvents(element);
+
+    // callback call
+    if (this.onInitCallback = callback) {
+      this.onInitCallback();
+    }
+  }
+
+  /**
+   * Create DOM elements for the wrapper, element, and handles.
+   * @param element: a DOM element to resize
+   * @private
+   */
+  _createDOMElements(element) {
+    // add wrapper near element
+    element.insertAdjacentHTML('beforebegin', this.wrapper);
+    this.wrapper = element.previousSibling;
+
+    // insert handles into the wrapper
+    this.wrapper.insertAdjacentHTML('beforeend', this.handles);
+
+    // insert element into the wrapper
+    this.wrapper.appendChild(element);
+  }
+
+  /**
+   * Apply styles to the wrapper and the element.
+   * @param element: a DOM element to resize
+   * @private
+   */
+  _applyStyles(element) {
+    let elementHeight = parseInt(element.offsetHeight, 10);
+    let elementWidth = parseInt(element.offsetWidth, 10);
+
+    // set wrapper min height and min width
+    Object.assign(this.wrapper.style, {
+      height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
+      left: element.style.left,
+      position: 'absolute',
+      top: element.style.top,
+      width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
+    });
+
+    // style element
+    Object.assign(element.style, {
+      height: '100%',
+      left: '0',
+      position: 'relative',
+      top: '0',
+      width: '100%'
+    });
+
+    this.wrapperOldHeight = this.wrapper.offsetHeight;
+    this.wrapperOldWidth = this.wrapper.offsetWidth;
+  }
+
+  /**
+   * Attach events on init.
+   * @param element: a DOM element to resize
+   * @private
+   */
+  _attachInitEvents(element) {
+    // allow resize after click
+    document.addEventListener('mousedown', (event) => {
+      let allowed = event.target === element;
+      allowed = allowed || event.target === this.wrapper;
+
+      // "on click" callback call
+      if (this.onClickCallback && allowed) {
+        this.onClickCallback();
+      }
+
+      // show handles only on the active element
+      allowed = allowed || (event.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
+
+      if (allowed) {
+        // add active class to wrapper
+        this.wrapper.classList.add('active');
+      } else {
+        // remove active class from wrapper
+        this.wrapper.classList.remove('active');
+      }
+    });
+
+    this.handles = this.wrapper.querySelectorAll('.resize-handle');
+    for (let i = 0; i < this.handles.length; ++i) {
+      // disable default "drag start" event handler
+      this.handles[i].addEventListener('dragstart', {});
+
+      // add custom "mouse down" event handler
+      this._mouseDown = this._mouseDown.bind(this);
+      this.handles[i].addEventListener('mousedown', this._mouseDown);
+    }
   }
 
   /**
@@ -47,6 +139,11 @@ class Resizable {
 
     // get handle direction
     this.handle = event.target.className.slice('resize-handle resize-handle-'.length);
+    
+    // calculate ratio
+    let height = parseInt(this.wrapper.style.height, 10);
+    let width = parseInt(this.wrapper.style.width, 10);
+    this.ratio = height / width;
 
     // add event listeners to mouse move and mouse up
     this._mouseMove = this._mouseMove.bind(this);
@@ -92,8 +189,9 @@ class Resizable {
           bottom: bottom + 'px'
         });
         // adjust wrapper sizes
-        wrapperNewHeight = window.innerHeight - bottom - event.pageY;
+        // wrapperNewHeight = window.innerHeight - bottom - event.pageY;
         wrapperNewWidth = event.pageX - left;
+        wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
       case 'e': {
@@ -115,8 +213,8 @@ class Resizable {
           bottom: 'auto'
         });
         // adjust wrapper sizes
-        wrapperNewHeight = event.pageY - top;
         wrapperNewWidth = event.pageX - left;
+        wrapperNewHeight = this.ratio * wrapperNewWidth;
         break;
       }
       case 's': {
@@ -185,7 +283,7 @@ class Resizable {
 
     // "on click" callback call
     if (this.onResizeCallback) {
-      this.onResizeCallback(this.wrapper);
+      this.onResizeCallback();
     }
   }
 
@@ -210,93 +308,9 @@ class Resizable {
     // set wrapper old height and old width
     this.wrapperOldHeight = wrapperNewHeight;
     this.wrapperOldWidth = wrapperNewWidth;
-  }
 
-  /**
-   * Create DOM elements for the wrapper, element, and handles.
-   * @param element: a DOM element to resize
-   * @private
-   */
-  _createDOMElements(element) {
-    // add wrapper near element
-    element.insertAdjacentHTML('beforebegin', this.wrapper);
-    this.wrapper = element.previousSibling;
-
-    // insert handles into the wrapper
-    this.wrapper.insertAdjacentHTML('beforeend', this.handles);
-
-    // insert element into the wrapper
-    this.wrapper.appendChild(element);
-  }
-
-  /**
-   * Apply styles to the wrapper and the element.
-   * @param element: a DOM element to resize
-   * @private
-   */
-  _applyStyles(element) {
-    let elementHeight = parseInt(element.offsetHeight, 10);
-    let elementWidth = parseInt(element.offsetWidth, 10);
-
-    // set wrapper min height and min width
-    Object.assign(this.wrapper.style, {
-      height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-      left: element.style.left,
-      position: 'absolute',
-      top: element.style.top,
-      width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
-    });
-
-    // style element
-    Object.assign(element.style, {
-      height: '100%',
-      left: '0',
-      position: 'relative',
-      top: '0',
-      width: '100%'
-    });
-
-    this.wrapperOldHeight = this.wrapper.offsetHeight;
-    this.wrapperOldWidth = this.wrapper.offsetWidth;
-  }
-
-  /**
-   * Attach events on init.
-   * @param element: a DOM element to resize
-   * @private
-   */
-  _attachInitEvents(element) {
-    // allow resize after click
-    document.addEventListener('mousedown', (event) => {
-      let allowed = event.target === element;
-      allowed = allowed || event.target === this.wrapper;
-
-      // "on click" callback call
-      if (this.onClickCallback && allowed) {
-        this.onClickCallback(event);
-      }
-
-      // show handles only on the active element
-      allowed = allowed || (event.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
-
-      if (allowed) {
-        // add active class to wrapper
-        this.wrapper.classList.add('active');
-      } else {
-        // remove active class from wrapper
-        this.wrapper.classList.remove('active');
-      }
-    });
-
-    this.handles = this.wrapper.querySelectorAll('.resize-handle');
-    for (let i = 0; i < this.handles.length; ++i) {
-      // disable default "drag start" event handler
-      this.handles[i].addEventListener('dragstart', {});
-
-      // add custom "mouse down" event handler
-      this._mouseDown = this._mouseDown.bind(this);
-      this.handles[i].addEventListener('mousedown', this._mouseDown);
-    }
+    // update ratio
+    this.ratio = wrapperNewHeight / wrapperNewWidth;
   }
 
   onClick(callback) {
