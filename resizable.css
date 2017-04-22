@@ -5,6 +5,7 @@
 .resize-handle {
   background-color: #fff;
   border: 1px solid #79589f;
+  box-sizing: border-box;
   border-radius: 1px;
   display: none;
   height: 10px;
