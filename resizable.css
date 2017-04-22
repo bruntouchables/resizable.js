@@ -17,14 +17,6 @@
   display: block;
 }
 
-.resize-handle-rotate::before {
-  color: #79589f;
-  content: "\21BB";
-  display: block;
-  font-size: 130%;
-  font-weight: bold;
-}
-
 .resize-handle-n {
   cursor: ns-resize;
   left: calc(50% - 5px);
