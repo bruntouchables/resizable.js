@@ -26,8 +26,8 @@ class Resizable {
     }
 
     // wrapper min height and min width
-    this.wrapperMinHeight = 50;
-    this.wrapperMinWidth = 50;
+    this.wrapperMinHeight = 30;
+    this.wrapperMinWidth = 30;
 
     // create necessary DOM elements
     this._createDOMElements(element);
@@ -150,6 +150,7 @@ class Resizable {
     bottom = isNaN(bottom) ? window.innerHeight - top - height : bottom;
     
     let wrapperNewHeight, wrapperNewWidth;
+    let keepRatio = false;
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
@@ -174,6 +175,7 @@ class Resizable {
         // adjust wrapper sizes
         wrapperNewWidth = e.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
+        keepRatio = true;
         break;
       }
       case 'e': {
@@ -197,6 +199,7 @@ class Resizable {
         // adjust wrapper sizes
         wrapperNewWidth = e.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
+        keepRatio = true;
         break;
       }
       case 's': {
@@ -220,6 +223,7 @@ class Resizable {
         // adjust wrapper sizes
         wrapperNewWidth = window.innerWidth - right - e.pageX;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
+        keepRatio = true;
         break;
       }
       case 'w': {
@@ -243,6 +247,7 @@ class Resizable {
         // adjust wrapper sizes
         wrapperNewWidth = window.innerWidth - right - e.pageX;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
+        keepRatio = true;
         break;
       }
     }
@@ -250,11 +255,17 @@ class Resizable {
     // don't let wrapper height become less than wrapper min height
     if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
       wrapperNewHeight = this.wrapperMinHeight;
+      if (keepRatio) {
+        wrapperNewWidth = wrapperNewHeight / this.ratio;
+      }
     }
 
     // don't let wrapper width become less than wrapper min width
     if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
       wrapperNewWidth = this.wrapperMinWidth;
+      if (keepRatio) {
+        wrapperNewHeight = this.ratio * wrapperNewWidth;
+      }
     }
 
     // set new wrapper height
