@@ -1,5 +1,9 @@
+.resizable {
+  border: 1px dashed transparent;
+}
+
 .resizable.active {
-  border: 1px dashed #79589f;
+  border-color: #79589f;
 }
 
 .resize-handle {
