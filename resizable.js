@@ -15,14 +15,14 @@ class Resizable {
         this.handles += '<span class="resize-handle resize-handle-' + options[i] + '"></span>';
       }
     } else {
-      this.handles = ' <span class="resize-handle resize-handle-n"></span>\
-                       <span class="resize-handle resize-handle-ne"></span>\
-                       <span class="resize-handle resize-handle-e"></span>\
-                       <span class="resize-handle resize-handle-se"></span>\
-                       <span class="resize-handle resize-handle-s"></span>\
-                       <span class="resize-handle resize-handle-sw"></span>\
-                       <span class="resize-handle resize-handle-w"></span>\
-                       <span class="resize-handle resize-handle-nw"></span>';
+      this.handles = '<span class="resize-handle resize-handle-n"></span>\
+                      <span class="resize-handle resize-handle-ne"></span>\
+                      <span class="resize-handle resize-handle-e"></span>\
+                      <span class="resize-handle resize-handle-se"></span>\
+                      <span class="resize-handle resize-handle-s"></span>\
+                      <span class="resize-handle resize-handle-sw"></span>\
+                      <span class="resize-handle resize-handle-w"></span>\
+                      <span class="resize-handle resize-handle-nw"></span>';
     }
 
     // wrapper min height and min width
