@@ -50,12 +50,12 @@ class Resizable {
         let wrapperWidth = this.wrapper.offsetWidth;
 
         // TODO: find a maximum child width
-        // if (mutation.type === 'characterData') {
-        //   let textWidth = mutation.target.parentNode.offsetWidth;
-        //   if (textWidth > elementWidth) {
-        //     this.wrapper.style.width = element.style.width = textWidth + 'px';
-        //   }
-        // }
+        if (mutation.type === 'characterData') {
+          let textWidth = mutation.target.parentNode.offsetWidth;
+          if (textWidth > elementWidth) {
+            this.wrapper.style.width = element.style.width = textWidth + 'px';
+          }
+        }
 
         if (elementHeight !== wrapperHeight) {
           this.wrapper.style.height = element.style.height = elementHeight + 'px';
