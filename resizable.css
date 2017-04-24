@@ -1,3 +1,7 @@
+.resizable {
+  word-wrap: break-word;
+}
+
 .resizable.active {
   outline: 1px dashed #79589f;
 }
