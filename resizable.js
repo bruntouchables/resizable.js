@@ -42,10 +42,20 @@ class Resizable {
     // track element mutations
     let elementObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
+        console.log(mutation);
+
         let elementHeight = element.offsetHeight;
         let wrapperHeight = this.wrapper.offsetHeight;
         let elementWidth = element.offsetWidth;
         let wrapperWidth = this.wrapper.offsetWidth;
+
+        // TODO: find a maximum child width
+        // if (mutation.type === 'characterData') {
+        //   let textWidth = mutation.target.parentNode.offsetWidth;
+        //   if (textWidth > elementWidth) {
+        //     this.wrapper.style.width = element.style.width = textWidth + 'px';
+        //   }
+        // }
 
         if (elementHeight !== wrapperHeight) {
           this.wrapper.style.height = element.style.height = elementHeight + 'px';
@@ -60,6 +70,7 @@ class Resizable {
     elementObserver.observe(element, {
       attributes: true,
       childList: true,
+      characterData: true,
       subtree: true,
       attributeFilter: ['style']
     });
@@ -85,6 +96,7 @@ class Resizable {
     wrapperObserver.observe(this.wrapper, {
       attributes: true,
       childList: true,
+      characterData: true,
       subtree: true,
       attributeFilter: ['style']
     });
