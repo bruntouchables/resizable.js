@@ -11,9 +11,9 @@ class Resizable {
     this.handles = '';
 
     if (options) {
-      for (let i = 0; i < options.length; ++i) {
-        this.handles += '<span class="resize-handle resize-handle-' + options[i] + '"></span>';
-      }
+      options.map((option) => {
+        this.handles += '<span class="resize-handle resize-handle-' + option + '"></span>';
+      });
     } else {
       this.handles = '<span class="resize-handle resize-handle-n"></span>\
                       <span class="resize-handle resize-handle-ne"></span>\
@@ -37,6 +37,54 @@ class Resizable {
 
     // attach events on init
     this._attachInitEvents(element);
+
+    let elementObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        let elementHeight = element.offsetHeight;
+        let wrapperHeight = this.wrapper.offsetHeight;
+        let elementWidth = element.offsetWidth;
+        let wrapperWidth = this.wrapper.offsetWidth;
+
+        if (elementHeight !== wrapperHeight) {
+          this.wrapper.style.height = element.style.height = elementHeight + 'px';
+        }
+
+        if (elementWidth !== wrapperWidth) {
+          this.wrapper.style.width = element.style.width = elementWidth + 'px';
+        }
+      });
+    });
+
+    elementObserver.observe(element, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      attributeFilter: ['style']
+    });
+
+    let wrapperObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        let elementHeight = element.offsetHeight;
+        let wrapperHeight = this.wrapper.offsetHeight;
+        let elementWidth = element.offsetWidth;
+        let wrapperWidth = this.wrapper.offsetWidth;
+
+        if (wrapperHeight !== elementHeight) {
+          this.wrapper.style.height = element.style.height = wrapperHeight + 'px';
+        }
+
+        if (wrapperWidth !== elementWidth) {
+          this.wrapper.style.width = element.style.width = wrapperWidth + 'px';
+        }
+      });
+    });
+
+    wrapperObserver.observe(this.wrapper, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      attributeFilter: ['style']
+    });
 
     // callback call
     if (this.onInitCallback = callback) {
