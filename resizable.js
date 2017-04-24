@@ -96,7 +96,7 @@ class Resizable {
   }
 
   _createDOMElements(element) {
-    // add wrapper near element
+    // add wrapper before element
     element.insertAdjacentHTML('beforebegin', this.wrapper);
     this.wrapper = element.previousSibling;
 
@@ -122,11 +122,11 @@ class Resizable {
 
     // style element
     Object.assign(element.style, {
-      height: '100%',
+      height: this.wrapper.style.height,
       left: '0',
       position: 'relative',
       top: '0',
-      width: '100%'
+      width: this.wrapper.style.width
     });
 
     this.wrapperOldHeight = this.wrapper.offsetHeight;
@@ -139,7 +139,7 @@ class Resizable {
       let allowed = e.target === element;
       allowed = allowed || e.target === this.wrapper;
 
-      // "on click" callback call
+      // on click callback call
       if (this.onClickCallback && allowed) {
         this.onClickCallback(e);
       }
@@ -158,10 +158,10 @@ class Resizable {
 
     this.handles = this.wrapper.querySelectorAll('.resize-handle');
     for (let i = 0; i < this.handles.length; ++i) {
-      // disable default "drag start" event handler
+      // disable default drag start event handler
       this.handles[i].addEventListener('dragstart', {});
 
-      // add custom "mouse down" event handler
+      // add custom mouse down event handler
       this._mouseDown = this._mouseDown.bind(this);
       this.handles[i].addEventListener('mousedown', this._mouseDown);
     }
@@ -212,7 +212,6 @@ class Resizable {
           right: right + 'px',
           bottom: bottom + 'px'
         });
-        // adjust wrapper sizes
         wrapperNewHeight = window.innerHeight - bottom - e.pageY;
         break;
       }
@@ -223,7 +222,6 @@ class Resizable {
           right: 'auto',
           bottom: bottom + 'px'
         });
-        // adjust wrapper sizes
         wrapperNewWidth = e.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
@@ -236,7 +234,6 @@ class Resizable {
           right: 'auto',
           bottom: bottom + 'px'
         });
-        // adjust wrapper sizes
         wrapperNewWidth = e.pageX - left;
         break;
       }
@@ -247,7 +244,6 @@ class Resizable {
           right: 'auto',
           bottom: 'auto'
         });
-        // adjust wrapper sizes
         wrapperNewWidth = e.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
@@ -260,7 +256,6 @@ class Resizable {
           right: right + 'px',
           bottom: 'auto'
         });
-        // adjust wrapper sizes
         wrapperNewHeight = e.pageY - top;
         break;
       }
@@ -271,7 +266,6 @@ class Resizable {
           right: right + 'px',
           bottom: 'auto'
         });
-        // adjust wrapper sizes
         wrapperNewWidth = window.innerWidth - right - e.pageX;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
@@ -284,7 +278,6 @@ class Resizable {
           right: right + 'px',
           bottom: bottom + 'px'
         });
-        // adjust wrapper sizes
         wrapperNewWidth = window.innerWidth - right - e.pageX;
         break;
       }
@@ -295,7 +288,6 @@ class Resizable {
           right: right + 'px',
           bottom: bottom + 'px'
         });
-        // adjust wrapper sizes
         wrapperNewWidth = window.innerWidth - right - e.pageX;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
@@ -325,14 +317,14 @@ class Resizable {
       width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
     });
 
-    // "on click" callback call
+    // on resize callback call
     if (this.onResizeCallback) {
       this.onResizeCallback();
     }
   }
 
   _mouseUp(e) {
-    // remove "mouse move" and "mouse up" events
+    // remove mouse move and mouse up events
     document.removeEventListener('mousemove', this._mouseMove);
     document.removeEventListener('mouseup', this._mouseUp);
 
