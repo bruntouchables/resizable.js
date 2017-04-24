@@ -10,6 +10,7 @@ class Resizable {
     this.wrapper = '<div class="resizable"></div>';
     this.handles = '';
 
+    // custom handles
     if (options) {
       options.map((option) => {
         this.handles += '<span class="resize-handle resize-handle-' + option + '"></span>';
@@ -38,6 +39,7 @@ class Resizable {
     // attach events on init
     this._attachInitEvents(element);
 
+    // track element mutations
     let elementObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         let elementHeight = element.offsetHeight;
@@ -62,6 +64,7 @@ class Resizable {
       attributeFilter: ['style']
     });
 
+    // track wrapper mutations
     let wrapperObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         let elementHeight = element.offsetHeight;
