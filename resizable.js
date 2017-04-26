@@ -205,6 +205,11 @@ class Resizable {
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
 
+    console.log('left', this.wrapper.style.left);
+    console.log('top', this.wrapper.style.top);
+    console.log('right', this.wrapper.style.right);
+    console.log('bottom', this.wrapper.style.bottom);
+
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'n': {
