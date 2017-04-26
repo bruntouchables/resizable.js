@@ -355,4 +355,9 @@ class Resizable {
   onResize(callback) {
     this.onResizeCallback = callback;
   }
+
+  setPosition = function (left, top) {
+    this.wrapper.style.left = left;
+    this.wrapper.style.top = top;
+  }
 }
