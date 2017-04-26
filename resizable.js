@@ -210,7 +210,7 @@ class Resizable {
       case 'n': {
         Object.assign(this.wrapper.style, {
           left: left + 'px',
-          top: 'auto',
+          top: top + 'px',
           right: right + 'px',
           bottom: bottom + 'px'
         });
@@ -220,8 +220,8 @@ class Resizable {
       case 'ne': {
         Object.assign(this.wrapper.style, {
           left: left + 'px',
-          top: 'auto',
-          right: 'auto',
+          top: top + 'px',
+          right: right + 'px',
           bottom: bottom + 'px'
         });
         wrapperNewWidth = e.pageX - left;
@@ -233,7 +233,7 @@ class Resizable {
         Object.assign(this.wrapper.style, {
           left: left + 'px',
           top: top + 'px',
-          right: 'auto',
+          right: right + 'px',
           bottom: bottom + 'px'
         });
         wrapperNewWidth = e.pageX - left;
@@ -243,8 +243,8 @@ class Resizable {
         Object.assign(this.wrapper.style, {
           left: left + 'px',
           top: top + 'px',
-          right: 'auto',
-          bottom: 'auto'
+          right: right + 'px',
+          bottom: bottom + 'px'
         });
         wrapperNewWidth = e.pageX - left;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
@@ -256,17 +256,17 @@ class Resizable {
           left: left + 'px',
           top: top + 'px',
           right: right + 'px',
-          bottom: 'auto'
+          bottom: bottom + 'px'
         });
         wrapperNewHeight = e.pageY - top;
         break;
       }
       case 'sw': {
         Object.assign(this.wrapper.style, {
-          left: 'auto',
+          left: left + 'px',
           top: top + 'px',
           right: right + 'px',
-          bottom: 'auto'
+          bottom: bottom + 'px'
         });
         wrapperNewWidth = window.innerWidth - right - e.pageX;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
@@ -275,7 +275,7 @@ class Resizable {
       }
       case 'w': {
         Object.assign(this.wrapper.style, {
-          left: 'auto',
+          left: left + 'px',
           top: top + 'px',
           right: right + 'px',
           bottom: bottom + 'px'
@@ -285,8 +285,8 @@ class Resizable {
       }
       case 'nw': {
         Object.assign(this.wrapper.style, {
-          left: 'auto',
-          top: 'auto',
+          left: left + 'px',
+          top: top + 'px',
           right: right + 'px',
           bottom: bottom + 'px'
         });
