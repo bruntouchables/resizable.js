@@ -204,11 +204,6 @@ class Resizable {
 
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
-    
-    // console.log('left', this.wrapper.style.left);
-    // console.log('top', this.wrapper.style.top);
-    // console.log('right', this.wrapper.style.right);
-    // console.log('bottom', this.wrapper.style.bottom);
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
@@ -318,10 +313,21 @@ class Resizable {
       }
     }
 
-    // set new wrapper height
+    // set new wrapper height and width
     Object.assign(this.wrapper.style, {
       height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
       width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
+    });
+
+    // recalculate position
+    left = this.wrapper.getBoundingClientRect().left + document.body.scrollLeft;
+    top = this.wrapper.getBoundingClientRect().top + document.body.scrollTop;
+
+    Object.assign(this.wrapper.style, {
+      bottom: '',
+      left: left + 'px',
+      right: '',
+      top: top + 'px'
     });
 
     // on resize callback call
