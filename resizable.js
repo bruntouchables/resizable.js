@@ -192,11 +192,7 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    let height = this.wrapper.getBoundingClientRect().height;
-    let width = this.wrapper.getBoundingClientRect().width;
-
-    let left = this.wrapper.getBoundingClientRect().left;
-    let top = this.wrapper.getBoundingClientRect().top;
+    let {height, width, left, top} = this.wrapper.getBoundingClientRect();
     let right = window.innerWidth - left - width;
     let bottom = window.innerHeight - top - height;
 
@@ -318,8 +314,7 @@ class Resizable {
     });
 
     // recalculate position
-    left = this.wrapper.getBoundingClientRect().left + document.body.scrollLeft;
-    top = this.wrapper.getBoundingClientRect().top + document.body.scrollTop;
+    ({left, top} = this.wrapper.getBoundingClientRect());
 
     Object.assign(this.wrapper.style, {
       bottom: '',
