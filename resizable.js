@@ -192,15 +192,13 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    let height = parseInt(this.wrapper.style.height, 10);
-    let width = parseInt(this.wrapper.style.width, 10);
+    let height = this.wrapper.getBoundingClientRect().height;
+    let width = this.wrapper.getBoundingClientRect().width;
 
-    let left = this.wrapper.getBoundingClientRect().left + document.body.scrollLeft;
-    let top = this.wrapper.getBoundingClientRect().top + document.body.scrollTop;
-    let right = parseInt(this.wrapper.style.right, 10);
-    right = isNaN(right) ? window.innerWidth - left - width : right;
-    let bottom = parseInt(this.wrapper.style.bottom, 10);
-    bottom = isNaN(bottom) ? window.innerHeight - top - height : bottom;
+    let left = this.wrapper.getBoundingClientRect().left;
+    let top = this.wrapper.getBoundingClientRect().top;
+    let right = window.innerWidth - left - width;
+    let bottom = window.innerHeight - top - height;
 
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
