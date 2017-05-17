@@ -12,7 +12,7 @@ class Resizable {
 
     // custom handles
     if (options) {
-      options.map((option) => {
+      options.map(option => {
         this.handles += '<span class="resize-handle resize-handle-' + option + '"></span>';
       });
     } else {
@@ -40,8 +40,8 @@ class Resizable {
     this._attachInitEvents(element);
 
     // track element mutations
-    let elementObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
+    let elementObserver = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
         let elementHeight = element.offsetHeight;
         let wrapperHeight = this.wrapper.offsetHeight;
         let elementWidth = element.offsetWidth;
@@ -66,8 +66,8 @@ class Resizable {
     });
 
     // track wrapper mutations
-    let wrapperObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
+    let wrapperObserver = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
         let elementHeight = element.offsetHeight;
         let wrapperHeight = this.wrapper.offsetHeight;
         let elementWidth = element.offsetWidth;
@@ -137,7 +137,7 @@ class Resizable {
 
   _attachInitEvents(element) {
     // allow resize after click
-    document.addEventListener('mousedown', (e) => {
+    document.addEventListener('mousedown', e => {
       let allowed = e.target === element;
       allowed = allowed || e.target === this.wrapper;
 
