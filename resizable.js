@@ -92,10 +92,30 @@ class Resizable {
       attributeFilter: ['style']
     });
 
+    let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
+    if (parentStyle.position === 'static') {
+      this.parent = {
+        left: 0,
+        top: 0,
+        height: window.innerHeight,
+        width: window.innerWidth
+      };
+    } else {
+      this.parent = this.wrapper.parentNode.getBoundingClientRect();
+    }
+
     // callback call
     if (this.onInitCallback = callback) {
       this.onInitCallback();
     }
+  }
+  
+  set scale(scale) {
+    this._scale = scale;
+  }
+  
+  get DOMElement() {
+    return this.wrapper;
   }
 
   _createDOMElements(element) {
@@ -192,13 +212,12 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    let parent = this.wrapper.parentNode.getBoundingClientRect();
     let {height, width, left, top} = this.wrapper.getBoundingClientRect();
 
-    left = left - parent.left;
-    top = top - parent.top;
-    let right = parent.width - left - width;
-    let bottom = parent.height - top - height;
+    left = left - this.parent.left;
+    top = top - this.parent.top;
+    let right = this.parent.width - left - width;
+    let bottom = this.parent.height - top - height;
 
     this.wrapperOldHeight = height / this._scale;
     this.wrapperOldWidth = width / this._scale;
@@ -215,7 +234,7 @@ class Resizable {
           right: right / this._scale + 'px',
           bottom: bottom / this._scale + 'px'
         });
-        wrapperNewHeight = (parent.height - bottom + parent.top - e.pageY) / this._scale;
+        wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
         break;
       }
       case 'ne': {
@@ -225,7 +244,7 @@ class Resizable {
           right: 'auto',
           bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (e.pageX - left - parent.left) / this._scale;
+        wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -237,7 +256,7 @@ class Resizable {
           right: 'auto',
           bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (e.pageX - left - parent.left) / this._scale;
+        wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
         break;
       }
       case 'se': {
@@ -247,7 +266,7 @@ class Resizable {
           right: 'auto',
           bottom: 'auto'
         });
-        wrapperNewWidth = (e.pageX - left - parent.left) / this._scale;
+        wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -259,7 +278,7 @@ class Resizable {
           right: right / this._scale + 'px',
           bottom: 'auto'
         });
-        wrapperNewHeight = (e.pageY - top - parent.top) / this._scale;
+        wrapperNewHeight = (e.pageY - top - this.parent.top) / this._scale;
         break;
       }
       case 'sw': {
@@ -269,7 +288,7 @@ class Resizable {
           right: right / this._scale + 'px',
           bottom: 'auto'
         });
-        wrapperNewWidth = (parent.width - right + parent.left - e.pageX) / this._scale;
+        wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -281,7 +300,7 @@ class Resizable {
           right: right / this._scale + 'px',
           bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (parent.width - right + parent.left - e.pageX) / this._scale;
+        wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
         break;
       }
       case 'nw': {
@@ -291,7 +310,7 @@ class Resizable {
           right: right / this._scale + 'px',
           bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (parent.width - right + parent.left - e.pageX) / this._scale;
+        wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -325,9 +344,9 @@ class Resizable {
 
     Object.assign(this.wrapper.style, {
       bottom: '',
-      left: (left - parent.left) / this._scale + 'px',
+      left: (left - this.parent.left) / this._scale + 'px',
       right: '',
-      top: (top - parent.top) / this._scale + 'px'
+      top: (top - this.parent.top) / this._scale + 'px'
     });
 
     // on resize callback call
@@ -352,14 +371,6 @@ class Resizable {
     // set wrapper old height and old width
     this.wrapperOldHeight = wrapperNewHeight;
     this.wrapperOldWidth = wrapperNewWidth;
-  }
-  
-  set scale(scale) {
-    this._scale = scale;
-  }
-  
-  get DOMElement() {
-    return this.wrapper;
   }
 
   onClick(callback) {
