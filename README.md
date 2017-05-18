@@ -24,7 +24,7 @@
 
 ```javascript
 let element = document.getElementById('example');
-let resizable = new Resizable(element, null, () => {
+let resizable = new Resizable(element, {}, () => {
   // do something on init
 });
 
