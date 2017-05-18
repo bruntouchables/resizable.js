@@ -8,12 +8,13 @@
 class Resizable {
   constructor(element, options, callback) {
     this.wrapper = '<div class="resizable"></div>';
+    this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
     // custom handles
-    if (options) {
-      options.map(option => {
-        this.handles += '<span class="resize-handle resize-handle-' + option + '"></span>';
+    if (options && options.handles) {
+      options.handles.map(handle => {
+        this.handles += '<span class="resize-handle resize-handle-' + handle + '"></span>';
       });
     } else {
       this.handles = '<span class="resize-handle resize-handle-n"></span>\
@@ -95,6 +96,14 @@ class Resizable {
     if (this.onInitCallback = callback) {
       this.onInitCallback();
     }
+  }
+  
+  set scale(scale) {
+    this._scale = scale;
+  }
+  
+  get DOMElement() {
+    return this.wrapper;
   }
 
   _createDOMElements(element) {
@@ -191,16 +200,16 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    let canvas = document.getElementById('canvas').getBoundingClientRect();
+    let parent = this.wrapper.parentNode.getBoundingClientRect();
     let {height, width, left, top} = this.wrapper.getBoundingClientRect();
 
-    this.wrapperOldHeight = height / 0.8;
-    this.wrapperOldWidth = width / 0.8;
+    left = left - parent.left;
+    top = top - parent.top;
+    let right = parent.width - left - width;
+    let bottom = parent.height - top - height;
 
-    left = left - canvas.left;
-    top = top - canvas.top;
-    let right = canvas.width - left - width;
-    let bottom = canvas.height - top - height;
+    this.wrapperOldHeight = height / this._scale;
+    this.wrapperOldWidth = width / this._scale;
 
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
@@ -209,66 +218,66 @@ class Resizable {
     switch (this.handle) {
       case 'n': {
         Object.assign(this.wrapper.style, {
-          left: left / 0.8 + 'px',
+          left: left / this._scale + 'px',
           top: 'auto',
-          right: right / 0.8 + 'px',
-          bottom: bottom / 0.8 + 'px'
+          right: right / this._scale + 'px',
+          bottom: bottom / this._scale + 'px'
         });
-        wrapperNewHeight = (canvas.height - bottom + canvas.top - e.pageY) / 0.8;
+        wrapperNewHeight = (parent.height - bottom + parent.top - e.pageY) / this._scale;
         break;
       }
       case 'ne': {
         Object.assign(this.wrapper.style, {
-          left: left / 0.8 + 'px',
+          left: left / this._scale + 'px',
           top: 'auto',
           right: 'auto',
-          bottom: bottom / 0.8 + 'px'
+          bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (e.pageX - left - canvas.left) / 0.8;
+        wrapperNewWidth = (e.pageX - left - parent.left) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
       }
       case 'e': {
         Object.assign(this.wrapper.style, {
-          left: left / 0.8 + 'px',
-          top: top / 0.8 + 'px',
+          left: left / this._scale + 'px',
+          top: top / this._scale + 'px',
           right: 'auto',
-          bottom: bottom / 0.8 + 'px'
+          bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (e.pageX - left - canvas.left) / 0.8;
+        wrapperNewWidth = (e.pageX - left - parent.left) / this._scale;
         break;
       }
       case 'se': {
         Object.assign(this.wrapper.style, {
-          left: left / 0.8 + 'px',
-          top: top / 0.8 + 'px',
+          left: left / this._scale + 'px',
+          top: top / this._scale + 'px',
           right: 'auto',
           bottom: 'auto'
         });
-        wrapperNewWidth = (e.pageX - left - canvas.left) / 0.8;
+        wrapperNewWidth = (e.pageX - left - parent.left) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
       }
       case 's': {
         Object.assign(this.wrapper.style, {
-          left: left / 0.8 + 'px',
-          top: top / 0.8 + 'px',
-          right: right / 0.8 + 'px',
+          left: left / this._scale + 'px',
+          top: top / this._scale + 'px',
+          right: right / this._scale + 'px',
           bottom: 'auto'
         });
-        wrapperNewHeight = (e.pageY - top - canvas.top) / 0.8;
+        wrapperNewHeight = (e.pageY - top - parent.top) / this._scale;
         break;
       }
       case 'sw': {
         Object.assign(this.wrapper.style, {
           left: 'auto',
-          top: top / 0.8 + 'px',
-          right: right / 0.8 + 'px',
+          top: top / this._scale + 'px',
+          right: right / this._scale + 'px',
           bottom: 'auto'
         });
-        wrapperNewWidth = (canvas.width - right + canvas.left - e.pageX) / 0.8;
+        wrapperNewWidth = (parent.width - right + parent.left - e.pageX) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -276,21 +285,21 @@ class Resizable {
       case 'w': {
         Object.assign(this.wrapper.style, {
           left: 'auto',
-          top: top / 0.8 + 'px',
-          right: right / 0.8 + 'px',
-          bottom: bottom / 0.8 + 'px'
+          top: top / this._scale + 'px',
+          right: right / this._scale + 'px',
+          bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (canvas.width - right + canvas.left - e.pageX) / 0.8;
+        wrapperNewWidth = (parent.width - right + parent.left - e.pageX) / this._scale;
         break;
       }
       case 'nw': {
         Object.assign(this.wrapper.style, {
           left: 'auto',
           top: 'auto',
-          right: right / 0.8 + 'px',
-          bottom: bottom / 0.8 + 'px'
+          right: right / this._scale + 'px',
+          bottom: bottom / this._scale + 'px'
         });
-        wrapperNewWidth = (canvas.width - right + canvas.left - e.pageX) / 0.8;
+        wrapperNewWidth = (parent.width - right + parent.left - e.pageX) / this._scale;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -324,9 +333,9 @@ class Resizable {
 
     Object.assign(this.wrapper.style, {
       bottom: '',
-      left: (left - canvas.left) / 0.8 + 'px',
+      left: (left - parent.left) / this._scale + 'px',
       right: '',
-      top: (top - canvas.top) / 0.8 + 'px'
+      top: (top - parent.top) / this._scale + 'px'
     });
 
     // on resize callback call
