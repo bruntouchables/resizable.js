@@ -97,14 +97,6 @@ class Resizable {
       this.onInitCallback();
     }
   }
-  
-  set scale(scale) {
-    this._scale = scale;
-  }
-  
-  get DOMElement() {
-    return this.wrapper;
-  }
 
   _createDOMElements(element) {
     // add wrapper before element
@@ -360,6 +352,14 @@ class Resizable {
     // set wrapper old height and old width
     this.wrapperOldHeight = wrapperNewHeight;
     this.wrapperOldWidth = wrapperNewWidth;
+  }
+  
+  set scale(scale) {
+    this._scale = scale;
+  }
+  
+  get DOMElement() {
+    return this.wrapper;
   }
 
   onClick(callback) {
