@@ -13,10 +13,20 @@ class Resizable {
 
     // custom handles
     if (options && options.handles) {
+      // this.handles += '<span class="resize-handle resize-handle-rotate"></span>';
       options.handles.map(handle => {
         this.handles += '<span class="resize-handle resize-handle-' + handle + '"></span>';
       });
     } else {
+      // this.handles = '<span class="resize-handle resize-handle-rotate"></span> \
+      //                 <span class="resize-handle resize-handle-n"></span>\
+      //                 <span class="resize-handle resize-handle-ne"></span>\
+      //                 <span class="resize-handle resize-handle-e"></span>\
+      //                 <span class="resize-handle resize-handle-se"></span>\
+      //                 <span class="resize-handle resize-handle-s"></span>\
+      //                 <span class="resize-handle resize-handle-sw"></span>\
+      //                 <span class="resize-handle resize-handle-w"></span>\
+      //                 <span class="resize-handle resize-handle-nw"></span>';
       this.handles = '<span class="resize-handle resize-handle-n"></span>\
                       <span class="resize-handle resize-handle-ne"></span>\
                       <span class="resize-handle resize-handle-e"></span>\
@@ -227,6 +237,13 @@ class Resizable {
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
+      // case 'rotate': {
+      //   Object.assign(this.wrapper.style, {
+      //     transform: 'rotate(120deg)',
+      //     transformOrigin: 'center center'
+      //   });
+      //   break;
+      // }
       case 'n': {
         Object.assign(this.wrapper.style, {
           left: left / this._scale + 'px',
