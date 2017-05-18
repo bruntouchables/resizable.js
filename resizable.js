@@ -192,14 +192,15 @@ class Resizable {
 
   _mouseMove(e) {
     let canvas = document.getElementById('canvas').getBoundingClientRect();
-
     let {height, width, left, top} = this.wrapper.getBoundingClientRect();
+
+    this.wrapperOldHeight = height / 0.8;
+    this.wrapperOldWidth = width / 0.8;
+
     left = left - canvas.left;
     top = top - canvas.top;
-    console.log(left, top);
     let right = canvas.width - left - width;
     let bottom = canvas.height - top - height;
-    console.warn(right, bottom);
 
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
@@ -208,66 +209,66 @@ class Resizable {
     switch (this.handle) {
       case 'n': {
         Object.assign(this.wrapper.style, {
-          left: left + 'px',
+          left: left / 0.8 + 'px',
           top: 'auto',
-          right: right + 'px',
-          bottom: bottom + 'px'
+          right: right / 0.8 + 'px',
+          bottom: bottom / 0.8 + 'px'
         });
-        wrapperNewHeight = canvas.height - bottom + canvas.top - e.pageY;
+        wrapperNewHeight = (canvas.height - bottom + canvas.top - e.pageY) / 0.8;
         break;
       }
       case 'ne': {
         Object.assign(this.wrapper.style, {
-          left: left + 'px',
+          left: left / 0.8 + 'px',
           top: 'auto',
           right: 'auto',
-          bottom: bottom + 'px'
+          bottom: bottom / 0.8 + 'px'
         });
-        wrapperNewWidth = e.pageX - left - canvas.left;
+        wrapperNewWidth = (e.pageX - left - canvas.left) / 0.8;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
       }
       case 'e': {
         Object.assign(this.wrapper.style, {
-          left: left + 'px',
-          top: top + 'px',
+          left: left / 0.8 + 'px',
+          top: top / 0.8 + 'px',
           right: 'auto',
-          bottom: bottom + 'px'
+          bottom: bottom / 0.8 + 'px'
         });
-        wrapperNewWidth = e.pageX - left - canvas.left;
+        wrapperNewWidth = (e.pageX - left - canvas.left) / 0.8;
         break;
       }
       case 'se': {
         Object.assign(this.wrapper.style, {
-          left: left + 'px',
-          top: top + 'px',
+          left: left / 0.8 + 'px',
+          top: top / 0.8 + 'px',
           right: 'auto',
           bottom: 'auto'
         });
-        wrapperNewWidth = e.pageX - left - canvas.left;
+        wrapperNewWidth = (e.pageX - left - canvas.left) / 0.8;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
       }
       case 's': {
         Object.assign(this.wrapper.style, {
-          left: left + 'px',
-          top: top + 'px',
-          right: right + 'px',
+          left: left / 0.8 + 'px',
+          top: top / 0.8 + 'px',
+          right: right / 0.8 + 'px',
           bottom: 'auto'
         });
-        wrapperNewHeight = e.pageY - top - canvas.top;
+        wrapperNewHeight = (e.pageY - top - canvas.top) / 0.8;
         break;
       }
       case 'sw': {
         Object.assign(this.wrapper.style, {
           left: 'auto',
-          top: top + 'px',
-          right: right + 'px',
+          top: top / 0.8 + 'px',
+          right: right / 0.8 + 'px',
           bottom: 'auto'
         });
-        wrapperNewWidth = canvas.width - right + canvas.left - e.pageX;
+        wrapperNewWidth = (canvas.width - right + canvas.left - e.pageX) / 0.8;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -275,21 +276,21 @@ class Resizable {
       case 'w': {
         Object.assign(this.wrapper.style, {
           left: 'auto',
-          top: top + 'px',
-          right: right + 'px',
-          bottom: bottom + 'px'
+          top: top / 0.8 + 'px',
+          right: right / 0.8 + 'px',
+          bottom: bottom / 0.8 + 'px'
         });
-        wrapperNewWidth = canvas.width - right + canvas.left - e.pageX;
+        wrapperNewWidth = (canvas.width - right + canvas.left - e.pageX) / 0.8;
         break;
       }
       case 'nw': {
         Object.assign(this.wrapper.style, {
           left: 'auto',
           top: 'auto',
-          right: right + 'px',
-          bottom: bottom + 'px'
+          right: right / 0.8 + 'px',
+          bottom: bottom / 0.8 + 'px'
         });
-        wrapperNewWidth = canvas.width - right + canvas.left - e.pageX;
+        wrapperNewWidth = (canvas.width - right + canvas.left - e.pageX) / 0.8;
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         keepRatio = true;
         break;
@@ -323,9 +324,9 @@ class Resizable {
 
     Object.assign(this.wrapper.style, {
       bottom: '',
-      left: left - canvas.left + 'px',
+      left: (left - canvas.left) / 0.8 + 'px',
       right: '',
-      top: top - canvas.top + 'px'
+      top: (top - canvas.top) / 0.8 + 'px'
     });
 
     // on resize callback call
