@@ -102,28 +102,16 @@ class Resizable {
       attributeFilter: ['style']
     });
 
-    let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
-    if (parentStyle.position === 'static') {
-      this.parent = {
-        left: 0,
-        top: 0,
-        height: window.innerHeight,
-        width: window.innerWidth
-      };
-    } else {
-      this.parent = this.wrapper.parentNode.getBoundingClientRect();
-    }
-
     // callback call
     if (this.onInitCallback = callback) {
       this.onInitCallback();
     }
   }
-  
+
   set scale(scale) {
     this._scale = scale;
   }
-  
+
   get DOMElement() {
     return this.wrapper;
   }
@@ -222,8 +210,19 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    let {height, width, left, top} = this.wrapper.getBoundingClientRect();
+    let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
+    if (parentStyle.position === 'static') {
+      this.parent = {
+        left: 0, 
+        top: 0, 
+        height: window.innerHeight, 
+        width: window.innerWidth
+      };
+    } else {
+      this.parent = this.wrapper.parentElement.getBoundingClientRect();
+    }
 
+    let {height, width, left, top} = this.wrapper.getBoundingClientRect();
     left = left - this.parent.left;
     top = top - this.parent.top;
     let right = this.parent.width - left - width;
