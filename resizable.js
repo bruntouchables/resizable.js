@@ -376,6 +376,11 @@ class Resizable {
     document.removeEventListener('mousemove', this._mouseMove);
     document.removeEventListener('mouseup', this._mouseUp);
 
+    // on resize end callback call
+    if (this.onResizeEndCallback) {
+      this.onResizeEndCallback();
+    }
+
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
 
@@ -395,5 +400,9 @@ class Resizable {
 
   onResize(callback) {
     this.onResizeCallback = callback;
+  }
+
+  onResizeEnd(callback) {
+    this.onResizeEndCallback = callback;
   }
 }
