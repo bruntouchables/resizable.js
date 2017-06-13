@@ -11,9 +11,6 @@ class Resizable {
     this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
-    // rotate handle position
-    this.x = 0;
-    this.y = 0;
     this.angle = 0;
 
     // custom handles
@@ -225,7 +222,7 @@ class Resizable {
     // } else {
     //   this.parent = this.wrapper.parentElement.getBoundingClientRect();
     // }
-    //
+
     // let {height, width, left, top} = this.wrapper.getBoundingClientRect();
     // left = left - this.parent.left;
     // top = top - this.parent.top;
@@ -244,6 +241,7 @@ class Resizable {
         let angle = 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
         angle += this.angle;
         angle = angle > 360 ? angle - 360 : angle;
+        console.log(angle);
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + angle + 'deg)',
           transformOrigin: 'center center'
@@ -389,7 +387,8 @@ class Resizable {
     }
 
     // remember rotate handle new position
-    this.angle = 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
+    this.angle += 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
+    // this.angle = this.angle > 360 ? this.angle - 360 : this.angle;
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
