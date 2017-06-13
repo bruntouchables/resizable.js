@@ -131,9 +131,11 @@ class Resizable {
     // set wrapper min height and min width
     Object.assign(this.wrapper.style, {
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-      left: element.style.left,
+      // left: element.style.left,
+      left: '200px',
       position: 'absolute',
-      top: element.style.top,
+      // top: element.style.top,
+      top: '200px',
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
@@ -192,8 +194,9 @@ class Resizable {
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
     // set rotate handle's current position
-    this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
-    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top;
+    let resizeHandle = document.querySelector('.resize-handle-rotate');
+    this.x = resizeHandle.getBoundingClientRect().left;
+    this.y = resizeHandle.getBoundingClientRect().top + 25 + 100;
 
     // calculate ratio
     let {height, width} = this.wrapper.getBoundingClientRect();
@@ -210,38 +213,41 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
-    if (parentStyle.position === 'static') {
-      this.parent = {
-        left: 0, 
-        top: 0, 
-        height: window.innerHeight, 
-        width: window.innerWidth
-      };
-    } else {
-      this.parent = this.wrapper.parentElement.getBoundingClientRect();
-    }
-
-    let {height, width, left, top} = this.wrapper.getBoundingClientRect();
-    left = left - this.parent.left;
-    top = top - this.parent.top;
-    let right = this.parent.width - left - width;
-    let bottom = this.parent.height - top - height;
-
-    this.wrapperOldHeight = height / this._scale;
-    this.wrapperOldWidth = width / this._scale;
-
-    let wrapperNewHeight, wrapperNewWidth;
-    let keepRatio = false;
+    // let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
+    // if (parentStyle.position === 'static') {
+    //   this.parent = {
+    //     left: 0, 
+    //     top: 0, 
+    //     height: window.innerHeight, 
+    //     width: window.innerWidth
+    //   };
+    // } else {
+    //   this.parent = this.wrapper.parentElement.getBoundingClientRect();
+    // }
+    //
+    // let {height, width, left, top} = this.wrapper.getBoundingClientRect();
+    // left = left - this.parent.left;
+    // top = top - this.parent.top;
+    // let right = this.parent.width - left - width;
+    // let bottom = this.parent.height - top - height;
+    //
+    // this.wrapperOldHeight = height / this._scale;
+    // this.wrapperOldWidth = width / this._scale;
+    //
+    // let wrapperNewHeight, wrapperNewWidth;
+    // let keepRatio = false;
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        console.log(this.x, this.y, e.pageX, e.pageY);
-        // Object.assign(this.wrapper.style, {
-        //   transform: 'rotate(120deg)',
-        //   transformOrigin: 'center center'
-        // });
+        let a = e.pageX - this.x;
+        let b = e.pageY - this.y;
+        let angle = 180 - Math.atan2(a, b) * (180 / Math.PI);
+        console.log(angle);
+        Object.assign(this.wrapper.style, {
+          transform: 'rotate(' + angle + 'deg)',
+          transformOrigin: 'center center'
+        });
         break;
       }
       case 'n': {
@@ -334,37 +340,37 @@ class Resizable {
       }
     }
 
-    // don't let wrapper height become less than wrapper min height
-    if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
-      wrapperNewHeight = this.wrapperMinHeight;
-      if (keepRatio) {
-        wrapperNewWidth = wrapperNewHeight / this.ratio;
-      }
-    }
-
-    // don't let wrapper width become less than wrapper min width
-    if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
-      wrapperNewWidth = this.wrapperMinWidth;
-      if (keepRatio) {
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
-      }
-    }
-
-    // set new wrapper height and width
-    Object.assign(this.wrapper.style, {
-      height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
-      width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
-    });
-
-    // recalculate position
-    ({left, top} = this.wrapper.getBoundingClientRect());
-
-    Object.assign(this.wrapper.style, {
-      bottom: '',
-      left: (left - this.parent.left) / this._scale + 'px',
-      right: '',
-      top: (top - this.parent.top) / this._scale + 'px'
-    });
+    // // don't let wrapper height become less than wrapper min height
+    // if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
+    //   wrapperNewHeight = this.wrapperMinHeight;
+    //   if (keepRatio) {
+    //     wrapperNewWidth = wrapperNewHeight / this.ratio;
+    //   }
+    // }
+    //
+    // // don't let wrapper width become less than wrapper min width
+    // if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
+    //   wrapperNewWidth = this.wrapperMinWidth;
+    //   if (keepRatio) {
+    //     wrapperNewHeight = this.ratio * wrapperNewWidth;
+    //   }
+    // }
+    //
+    // // set new wrapper height and width
+    // Object.assign(this.wrapper.style, {
+    //   height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
+    //   width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
+    // });
+    //
+    // // recalculate position
+    // ({left, top} = this.wrapper.getBoundingClientRect());
+    //
+    // Object.assign(this.wrapper.style, {
+    //   bottom: '',
+    //   left: (left - this.parent.left) / this._scale + 'px',
+    //   right: '',
+    //   top: (top - this.parent.top) / this._scale + 'px'
+    // });
 
     // on resize callback call
     if (this.onResizeCallback) {
