@@ -131,17 +131,11 @@ class Resizable {
     // set wrapper min height and min width
     Object.assign(this.wrapper.style, {
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-<<<<<<< HEAD
       // left: element.style.left,
       left: '200px',
       position: 'absolute',
       // top: element.style.top,
       top: '200px',
-=======
-      left: '200px', //element.style.left,
-      position: 'absolute',
-      top: '200px', //element.style.top,
->>>>>>> d2c4af353b5c118b8dbbe7dc2b1dc9e8f76d84c1
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
@@ -199,16 +193,10 @@ class Resizable {
     // get handle direction
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
-<<<<<<< HEAD
-    // set rotate handle's current position
+    // remember rotate handle position
     let resizeHandle = document.querySelector('.resize-handle-rotate');
     this.x = resizeHandle.getBoundingClientRect().left;
     this.y = resizeHandle.getBoundingClientRect().top + 25 + 100;
-=======
-    // set rotate handle current position
-    this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
-    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top + 25 + 100;
->>>>>>> d2c4af353b5c118b8dbbe7dc2b1dc9e8f76d84c1
 
     // calculate ratio
     let {height, width} = this.wrapper.getBoundingClientRect();
@@ -228,15 +216,9 @@ class Resizable {
     // let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
     // if (parentStyle.position === 'static') {
     //   this.parent = {
-<<<<<<< HEAD
     //     left: 0, 
     //     top: 0, 
-    //     height: window.innerHeight, 
-=======
-    //     left: 0,
-    //     top: 0,
     //     height: window.innerHeight,
->>>>>>> d2c4af353b5c118b8dbbe7dc2b1dc9e8f76d84c1
     //     width: window.innerWidth
     //   };
     // } else {
@@ -260,17 +242,10 @@ class Resizable {
       case 'rotate': {
         let a = e.pageX - this.x;
         let b = e.pageY - this.y;
-<<<<<<< HEAD
         let angle = 180 - Math.atan2(a, b) * (180 / Math.PI);
         console.log(angle);
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + angle + 'deg)',
-=======
-        let rad = Math.atan2(a, b);
-        let deg = 90 - (rad * (180 / Math.PI));
-        Object.assign(this.wrapper.style, {
-          transform: 'rotate(' + deg + 'deg)',
->>>>>>> d2c4af353b5c118b8dbbe7dc2b1dc9e8f76d84c1
           transformOrigin: 'center center'
         });
         break;
@@ -365,11 +340,7 @@ class Resizable {
       }
     }
 
-<<<<<<< HEAD
     // // don't let wrapper height become less than wrapper min height
-=======
-    // don't let wrapper height become less than wrapper min height
->>>>>>> d2c4af353b5c118b8dbbe7dc2b1dc9e8f76d84c1
     // if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
     //   wrapperNewHeight = this.wrapperMinHeight;
     //   if (keepRatio) {
@@ -400,19 +371,11 @@ class Resizable {
     //   right: '',
     //   top: (top - this.parent.top) / this._scale + 'px'
     // });
-<<<<<<< HEAD
 
     // on resize callback call
     if (this.onResizeCallback) {
       this.onResizeCallback();
     }
-=======
-    //
-    // // on resize callback call
-    // if (this.onResizeCallback) {
-    //   this.onResizeCallback();
-    // }
->>>>>>> d2c4af353b5c118b8dbbe7dc2b1dc9e8f76d84c1
   }
 
   _mouseUp(e) {
@@ -425,9 +388,10 @@ class Resizable {
       this.onResizeEndCallback();
     }
 
-    // set rotate handle current position
-    this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
-    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top + 25 + 100;
+    // remember rotate handle new position
+    let resizeHandle = document.querySelector('.resize-handle-rotate');
+    this.x = resizeHandle.getBoundingClientRect().left;
+    this.y = resizeHandle.getBoundingClientRect().top + 25 + 100;
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
