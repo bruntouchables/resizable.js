@@ -11,23 +11,19 @@ class Resizable {
     this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
+    // rotate handle position
+    this.x = 0;
+    this.y = 0;
+
     // custom handles
     if (options && options.handles) {
-      // this.handles += '<span class="resize-handle resize-handle-rotate"></span>';
+      this.handles += '<span class="resize-handle resize-handle-rotate"></span>';
       options.handles.map(handle => {
         this.handles += '<span class="resize-handle resize-handle-' + handle + '"></span>';
       });
     } else {
-      // this.handles = '<span class="resize-handle resize-handle-rotate"></span> \
-      //                 <span class="resize-handle resize-handle-n"></span>\
-      //                 <span class="resize-handle resize-handle-ne"></span>\
-      //                 <span class="resize-handle resize-handle-e"></span>\
-      //                 <span class="resize-handle resize-handle-se"></span>\
-      //                 <span class="resize-handle resize-handle-s"></span>\
-      //                 <span class="resize-handle resize-handle-sw"></span>\
-      //                 <span class="resize-handle resize-handle-w"></span>\
-      //                 <span class="resize-handle resize-handle-nw"></span>';
-      this.handles = '<span class="resize-handle resize-handle-n"></span>\
+      this.handles = '<span class="resize-handle resize-handle-rotate"></span> \
+                      <span class="resize-handle resize-handle-n"></span>\
                       <span class="resize-handle resize-handle-ne"></span>\
                       <span class="resize-handle resize-handle-e"></span>\
                       <span class="resize-handle resize-handle-se"></span>\
@@ -195,6 +191,10 @@ class Resizable {
     // get handle direction
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
+    // set rotate handle's current position
+    this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
+    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top;
+
     // calculate ratio
     let {height, width} = this.wrapper.getBoundingClientRect();
     this.ratio = height / width;
@@ -236,13 +236,14 @@ class Resizable {
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
-      // case 'rotate': {
-      //   Object.assign(this.wrapper.style, {
-      //     transform: 'rotate(120deg)',
-      //     transformOrigin: 'center center'
-      //   });
-      //   break;
-      // }
+      case 'rotate': {
+        console.log(this.x, this.y, e.pageX, e.pageY);
+        // Object.assign(this.wrapper.style, {
+        //   transform: 'rotate(120deg)',
+        //   transformOrigin: 'center center'
+        // });
+        break;
+      }
       case 'n': {
         Object.assign(this.wrapper.style, {
           left: left / this._scale + 'px',

@@ -22,12 +22,12 @@
   display: block;
 }
 
-/*.resize-handle-rotate {*/
-  /*border-radius: 100%;*/
-  /*cursor: pointer;*/
-  /*left: calc(50% - 5px);*/
-  /*top: -25px;*/
-/*}*/
+.resize-handle-rotate {
+  border-radius: 100%;
+  cursor: pointer;
+  left: calc(50% - 5px);
+  top: -25px;
+}
 
 .resize-handle-n {
   cursor: ns-resize;
