@@ -193,7 +193,7 @@ class Resizable {
 
     // set rotate handle current position
     this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
-    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top;
+    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top + 25 + 100;
 
     // calculate ratio
     let {height, width} = this.wrapper.getBoundingClientRect();
@@ -237,22 +237,10 @@ class Resizable {
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        // console.log(this.x, this.y, e.pageX, e.pageY);
-
-        // var center_x = (offset.left) + (img.width()/2);
-        // var center_y = (offset.top) + (img.height()/2);
-        // var mouse_x = evt.pageX; var mouse_y = evt.pageY;
-        // var radians = Math.atan2(mouse_x - center_x, mouse_y - center_y);
-        // var degree = (radians * (180 / Math.PI) * -1) + 90;
-        // img.css('-moz-transform', 'rotate('+
-
         let a = e.pageX - this.x;
         let b = e.pageY - this.y;
         let rad = Math.atan2(a, b);
         let deg = 90 - (rad * (180 / Math.PI));
-        console.log(deg);
-        // console.log(deg * 180 / Math.PI);
-        // console.log(deg);
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + deg + 'deg)',
           transformOrigin: 'center center'
@@ -399,7 +387,7 @@ class Resizable {
 
     // set rotate handle current position
     this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
-    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top;
+    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top + 25 + 100;
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
