@@ -131,9 +131,9 @@ class Resizable {
     // set wrapper min height and min width
     Object.assign(this.wrapper.style, {
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-      left: element.style.left,
+      left: '200px', //element.style.left,
       position: 'absolute',
-      top: element.style.top,
+      top: '200px', //element.style.top,
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
@@ -191,7 +191,7 @@ class Resizable {
     // get handle direction
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
-    // set rotate handle's current position
+    // set rotate handle current position
     this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
     this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top;
 
@@ -210,38 +210,53 @@ class Resizable {
   }
 
   _mouseMove(e) {
-    let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
-    if (parentStyle.position === 'static') {
-      this.parent = {
-        left: 0, 
-        top: 0, 
-        height: window.innerHeight, 
-        width: window.innerWidth
-      };
-    } else {
-      this.parent = this.wrapper.parentElement.getBoundingClientRect();
-    }
-
-    let {height, width, left, top} = this.wrapper.getBoundingClientRect();
-    left = left - this.parent.left;
-    top = top - this.parent.top;
-    let right = this.parent.width - left - width;
-    let bottom = this.parent.height - top - height;
-
-    this.wrapperOldHeight = height / this._scale;
-    this.wrapperOldWidth = width / this._scale;
-
-    let wrapperNewHeight, wrapperNewWidth;
-    let keepRatio = false;
+    // let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
+    // if (parentStyle.position === 'static') {
+    //   this.parent = {
+    //     left: 0,
+    //     top: 0,
+    //     height: window.innerHeight,
+    //     width: window.innerWidth
+    //   };
+    // } else {
+    //   this.parent = this.wrapper.parentElement.getBoundingClientRect();
+    // }
+    //
+    // let {height, width, left, top} = this.wrapper.getBoundingClientRect();
+    // left = left - this.parent.left;
+    // top = top - this.parent.top;
+    // let right = this.parent.width - left - width;
+    // let bottom = this.parent.height - top - height;
+    //
+    // this.wrapperOldHeight = height / this._scale;
+    // this.wrapperOldWidth = width / this._scale;
+    //
+    // let wrapperNewHeight, wrapperNewWidth;
+    // let keepRatio = false;
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        console.log(this.x, this.y, e.pageX, e.pageY);
-        // Object.assign(this.wrapper.style, {
-        //   transform: 'rotate(120deg)',
-        //   transformOrigin: 'center center'
-        // });
+        // console.log(this.x, this.y, e.pageX, e.pageY);
+
+        // var center_x = (offset.left) + (img.width()/2);
+        // var center_y = (offset.top) + (img.height()/2);
+        // var mouse_x = evt.pageX; var mouse_y = evt.pageY;
+        // var radians = Math.atan2(mouse_x - center_x, mouse_y - center_y);
+        // var degree = (radians * (180 / Math.PI) * -1) + 90;
+        // img.css('-moz-transform', 'rotate('+
+
+        let a = e.pageX - this.x;
+        let b = e.pageY - this.y;
+        let rad = Math.atan2(a, b);
+        let deg = 90 - (rad * (180 / Math.PI));
+        console.log(deg);
+        // console.log(deg * 180 / Math.PI);
+        // console.log(deg);
+        Object.assign(this.wrapper.style, {
+          transform: 'rotate(' + deg + 'deg)',
+          transformOrigin: 'center center'
+        });
         break;
       }
       case 'n': {
@@ -335,41 +350,41 @@ class Resizable {
     }
 
     // don't let wrapper height become less than wrapper min height
-    if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
-      wrapperNewHeight = this.wrapperMinHeight;
-      if (keepRatio) {
-        wrapperNewWidth = wrapperNewHeight / this.ratio;
-      }
-    }
-
-    // don't let wrapper width become less than wrapper min width
-    if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
-      wrapperNewWidth = this.wrapperMinWidth;
-      if (keepRatio) {
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
-      }
-    }
-
-    // set new wrapper height and width
-    Object.assign(this.wrapper.style, {
-      height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
-      width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
-    });
-
-    // recalculate position
-    ({left, top} = this.wrapper.getBoundingClientRect());
-
-    Object.assign(this.wrapper.style, {
-      bottom: '',
-      left: (left - this.parent.left) / this._scale + 'px',
-      right: '',
-      top: (top - this.parent.top) / this._scale + 'px'
-    });
-
-    // on resize callback call
-    if (this.onResizeCallback) {
-      this.onResizeCallback();
-    }
+    // if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
+    //   wrapperNewHeight = this.wrapperMinHeight;
+    //   if (keepRatio) {
+    //     wrapperNewWidth = wrapperNewHeight / this.ratio;
+    //   }
+    // }
+    //
+    // // don't let wrapper width become less than wrapper min width
+    // if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
+    //   wrapperNewWidth = this.wrapperMinWidth;
+    //   if (keepRatio) {
+    //     wrapperNewHeight = this.ratio * wrapperNewWidth;
+    //   }
+    // }
+    //
+    // // set new wrapper height and width
+    // Object.assign(this.wrapper.style, {
+    //   height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
+    //   width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
+    // });
+    //
+    // // recalculate position
+    // ({left, top} = this.wrapper.getBoundingClientRect());
+    //
+    // Object.assign(this.wrapper.style, {
+    //   bottom: '',
+    //   left: (left - this.parent.left) / this._scale + 'px',
+    //   right: '',
+    //   top: (top - this.parent.top) / this._scale + 'px'
+    // });
+    //
+    // // on resize callback call
+    // if (this.onResizeCallback) {
+    //   this.onResizeCallback();
+    // }
   }
 
   _mouseUp(e) {
@@ -381,6 +396,10 @@ class Resizable {
     if (this.onResizeEndCallback) {
       this.onResizeEndCallback();
     }
+
+    // set rotate handle current position
+    this.x = document.querySelector('.resize-handle-rotate').getBoundingClientRect().left;
+    this.y = document.querySelector('.resize-handle-rotate').getBoundingClientRect().top;
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
