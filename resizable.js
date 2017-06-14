@@ -11,9 +11,6 @@ class Resizable {
     this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
-    // rotate handle position
-    this.x = 0;
-    this.y = 0;
     this.angle = 0;
 
     // custom handles
