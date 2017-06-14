@@ -244,6 +244,7 @@ class Resizable {
         let angle = 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
         angle += this.angle;
         angle = angle > 360 ? angle - 360 : angle;
+        console.log(this.angle, angle);
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + angle + 'deg)',
           transformOrigin: 'center center'
@@ -389,7 +390,8 @@ class Resizable {
     }
 
     // remember rotate handle new position
-    this.angle = 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
+    this.angle += 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
+    this.angle = this.angle > 360 ? this.angle - 360 : this.angle;
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
