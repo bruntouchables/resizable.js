@@ -248,40 +248,13 @@ class Resizable {
         this.rotation = newAngle - this.oldAngle;
         let degrees = this.angle + this.rotation;
 
-        console.log(degrees);
-
         // discontinuous rotate effect
-        if (degrees > 40 && degrees < 50) {
-          degrees = 45;
-        }
-
-        if (degrees > 85 && degrees < 95) {
-          degrees = 90;
-        }
-
-        if (degrees > 130 && degrees < 140) {
-          degrees = 135;
-        }
-
-        if (degrees > 175 && degrees < 185) {
-          degrees = 180;
-        }
-
-        if (degrees > 220 && degrees < 230) {
-          degrees = 225;
-        }
-
-        // if (degrees < -85 || degrees > 265) {
-        //   degrees = 270;
-        // }
-
-        if (degrees > -50 && degrees < -40) {
-          degrees = -45;
-        }
-
-        // if (degrees > -5 || degrees < 5) {
-        //   degrees = 0;
-        // }
+        let angles = [-45, 0, 45, 90, 135, 180, 225, 270];
+        angles.map(angle => {
+          if (angle - 5 < degrees && degrees < angle + 5) {
+            degrees = angle;
+          }
+        });
 
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + degrees + 'deg)',
