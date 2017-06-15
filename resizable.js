@@ -10,8 +10,8 @@ class Resizable {
     this.wrapper = '<div class="resizable"></div>';
     this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
-    
-    this.startAngle = 0;
+
+    this.oldAngle = 0;
     this.rotation = 0;
     this.angle = 0;
 
@@ -198,7 +198,7 @@ class Resizable {
       x: wrapperClientRect.left + wrapperClientRect.width / 2,
       y: wrapperClientRect.top + wrapperClientRect.height / 2
     };
-    this.startAngle = Math.atan2(e.clientY - this.center.y, e.clientX - this.center.x) * (180 / Math.PI);
+    this.oldAngle = Math.atan2(e.clientY - this.center.y, e.clientX - this.center.x) * (180 / Math.PI);
 
     // calculate ratio
     let {height, width} = this.wrapper.getBoundingClientRect();
@@ -242,8 +242,8 @@ class Resizable {
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        let angle = Math.atan2(e.pageY - this.center.y, e.pageX - this.center.x) * (180 / Math.PI);
-        this.rotation = angle - this.startAngle;
+        let newAngle = Math.atan2(e.pageY - this.center.y, e.pageX - this.center.x) * (180 / Math.PI);
+        this.rotation = newAngle - this.oldAngle;
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + (this.angle + this.rotation) + 'deg)',
           transformOrigin: 'center center'
