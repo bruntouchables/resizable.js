@@ -131,9 +131,11 @@ class Resizable {
     // set wrapper min height and min width
     Object.assign(this.wrapper.style, {
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-      left: element.style.left,
+      // left: element.style.left,
+      left: '200px',
       position: 'absolute',
-      top: element.style.top,
+      // top: element.style.top,
+      top: '200px',
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
@@ -244,8 +246,26 @@ class Resizable {
         rotate = true;
         let newAngle = Math.atan2(e.pageY - this.center.y, e.pageX - this.center.x) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
+        let degrees = this.angle + this.rotation;
+        
+        console.log(degrees);
+
+        if (degrees > 40 && degrees < 50) {
+          degrees = 45;
+        }
+        
+        if (degrees > 85 && degrees < 95) {
+          degrees = 90;
+        }
+        
+        if (degrees > 130 && degrees < 140) {
+          degrees = 135;
+        }
+        
+        
+        
         Object.assign(this.wrapper.style, {
-          transform: 'rotate(' + (this.angle + this.rotation) + 'deg)',
+          transform: 'rotate(' + degrees + 'deg)',
           transformOrigin: 'center center'
         });
         break;
