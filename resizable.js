@@ -218,8 +218,8 @@ class Resizable {
     let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
     if (parentStyle.position === 'static') {
       this.parent = {
-        left: 0, 
-        top: 0, 
+        left: 0,
+        top: 0,
         height: window.innerHeight,
         width: window.innerWidth
       };
@@ -247,23 +247,42 @@ class Resizable {
         let newAngle = Math.atan2(e.pageY - this.center.y, e.pageX - this.center.x) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
         let degrees = this.angle + this.rotation;
-        
+
         console.log(degrees);
 
+        // discontinuous rotate effect
         if (degrees > 40 && degrees < 50) {
           degrees = 45;
         }
-        
+
         if (degrees > 85 && degrees < 95) {
           degrees = 90;
         }
-        
+
         if (degrees > 130 && degrees < 140) {
           degrees = 135;
         }
-        
-        
-        
+
+        if (degrees > 175 && degrees < 185) {
+          degrees = 180;
+        }
+
+        if (degrees > 220 && degrees < 230) {
+          degrees = 225;
+        }
+
+        // if (degrees < -85 || degrees > 265) {
+        //   degrees = 270;
+        // }
+
+        if (degrees > -50 && degrees < -40) {
+          degrees = -45;
+        }
+
+        // if (degrees > -5 || degrees < 5) {
+        //   degrees = 0;
+        // }
+
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + degrees + 'deg)',
           transformOrigin: 'center center'
