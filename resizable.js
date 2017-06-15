@@ -198,7 +198,7 @@ class Resizable {
       x: wrapperClientRect.left + wrapperClientRect.width / 2,
       y: wrapperClientRect.top + wrapperClientRect.height / 2
     };
-    this.oldAngle = Math.atan2(e.clientY - this.center.y, e.clientX - this.center.x) * (180 / Math.PI);
+    this.oldAngle = Math.atan2(e.clientX - this.center.x, -e.clientY + this.center.y) * (180 / Math.PI);
 
     // calculate ratio
     let {height, width} = this.wrapper.getBoundingClientRect();
@@ -244,12 +244,12 @@ class Resizable {
     switch (this.handle) {
       case 'rotate': {
         rotate = true;
-        let newAngle = Math.atan2(e.pageY - this.center.y, e.pageX - this.center.x) * (180 / Math.PI);
+        let newAngle = Math.atan2(e.pageX - this.center.x, -e.pageY + this.center.y, ) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
         let degrees = this.angle + this.rotation;
 
         // discontinuous rotate effect
-        let angles = [-45, 0, 45, 90, 135, 180, 225, 270];
+        let angles = [-180, -135, -90, -45, 0, 45, 90, 135, 180];
         angles.map(angle => {
           if (angle - 5 < degrees && degrees < angle + 5) {
             degrees = angle;
@@ -260,96 +260,99 @@ class Resizable {
           transform: 'rotate(' + degrees + 'deg)',
           transformOrigin: 'center center'
         });
+        console.log(degrees);
         break;
       }
       case 'n': {
+        console.log(left, top, right, bottom);
         Object.assign(this.wrapper.style, {
           left: left / this._scale + 'px',
           top: 'auto',
           right: right / this._scale + 'px',
           bottom: bottom / this._scale + 'px'
         });
+        let radians = this.angle * (Math.PI / 180);
         wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
         break;
       }
-      case 'ne': {
-        Object.assign(this.wrapper.style, {
-          left: left / this._scale + 'px',
-          top: 'auto',
-          right: 'auto',
-          bottom: bottom / this._scale + 'px'
-        });
-        wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
-        keepRatio = true;
-        break;
-      }
-      case 'e': {
-        Object.assign(this.wrapper.style, {
-          left: left / this._scale + 'px',
-          top: top / this._scale + 'px',
-          right: 'auto',
-          bottom: bottom / this._scale + 'px'
-        });
-        wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-        break;
-      }
-      case 'se': {
-        Object.assign(this.wrapper.style, {
-          left: left / this._scale + 'px',
-          top: top / this._scale + 'px',
-          right: 'auto',
-          bottom: 'auto'
-        });
-        wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
-        keepRatio = true;
-        break;
-      }
-      case 's': {
-        Object.assign(this.wrapper.style, {
-          left: left / this._scale + 'px',
-          top: top / this._scale + 'px',
-          right: right / this._scale + 'px',
-          bottom: 'auto'
-        });
-        wrapperNewHeight = (e.pageY - top - this.parent.top) / this._scale;
-        break;
-      }
-      case 'sw': {
-        Object.assign(this.wrapper.style, {
-          left: 'auto',
-          top: top / this._scale + 'px',
-          right: right / this._scale + 'px',
-          bottom: 'auto'
-        });
-        wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
-        keepRatio = true;
-        break;
-      }
-      case 'w': {
-        Object.assign(this.wrapper.style, {
-          left: 'auto',
-          top: top / this._scale + 'px',
-          right: right / this._scale + 'px',
-          bottom: bottom / this._scale + 'px'
-        });
-        wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
-        break;
-      }
-      case 'nw': {
-        Object.assign(this.wrapper.style, {
-          left: 'auto',
-          top: 'auto',
-          right: right / this._scale + 'px',
-          bottom: bottom / this._scale + 'px'
-        });
-        wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
-        keepRatio = true;
-        break;
-      }
+      // case 'ne': {
+      //   Object.assign(this.wrapper.style, {
+      //     left: left / this._scale + 'px',
+      //     top: 'auto',
+      //     right: 'auto',
+      //     bottom: bottom / this._scale + 'px'
+      //   });
+      //   wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
+      //   wrapperNewHeight = this.ratio * wrapperNewWidth;
+      //   keepRatio = true;
+      //   break;
+      // }
+      // case 'e': {
+      //   Object.assign(this.wrapper.style, {
+      //     left: left / this._scale + 'px',
+      //     top: top / this._scale + 'px',
+      //     right: 'auto',
+      //     bottom: bottom / this._scale + 'px'
+      //   });
+      //   wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
+      //   break;
+      // }
+      // case 'se': {
+      //   Object.assign(this.wrapper.style, {
+      //     left: left / this._scale + 'px',
+      //     top: top / this._scale + 'px',
+      //     right: 'auto',
+      //     bottom: 'auto'
+      //   });
+      //   wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
+      //   wrapperNewHeight = this.ratio * wrapperNewWidth;
+      //   keepRatio = true;
+      //   break;
+      // }
+      // case 's': {
+      //   Object.assign(this.wrapper.style, {
+      //     left: left / this._scale + 'px',
+      //     top: top / this._scale + 'px',
+      //     right: right / this._scale + 'px',
+      //     bottom: 'auto'
+      //   });
+      //   wrapperNewHeight = (e.pageY - top - this.parent.top) / this._scale;
+      //   break;
+      // }
+      // case 'sw': {
+      //   Object.assign(this.wrapper.style, {
+      //     left: 'auto',
+      //     top: top / this._scale + 'px',
+      //     right: right / this._scale + 'px',
+      //     bottom: 'auto'
+      //   });
+      //   wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
+      //   wrapperNewHeight = this.ratio * wrapperNewWidth;
+      //   keepRatio = true;
+      //   break;
+      // }
+      // case 'w': {
+      //   Object.assign(this.wrapper.style, {
+      //     left: 'auto',
+      //     top: top / this._scale + 'px',
+      //     right: right / this._scale + 'px',
+      //     bottom: bottom / this._scale + 'px'
+      //   });
+      //   wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
+      //   break;
+      // }
+      // case 'nw': {
+      //   Object.assign(this.wrapper.style, {
+      //     left: 'auto',
+      //     top: 'auto',
+      //     right: right / this._scale + 'px',
+      //     bottom: bottom / this._scale + 'px'
+      //   });
+      //   wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
+      //   wrapperNewHeight = this.ratio * wrapperNewWidth;
+      //   keepRatio = true;
+      //   break;
+      // }
     }
 
     if (!rotate) {

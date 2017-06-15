@@ -23,9 +23,8 @@
   display: block;
 }
 
-.resizable.active .resize-handle-rotate {
+.resize-handle-rotate {
   border-radius: 50%;
-  cursor: alias;
   left: calc(50% - 5px);
   top: -25px;
 }
