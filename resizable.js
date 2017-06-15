@@ -10,7 +10,9 @@ class Resizable {
     this.wrapper = '<div class="resizable"></div>';
     this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
-
+    
+    this.startAngle = 0;
+    this.rotation = 0;
     this.angle = 0;
 
     // custom handles
@@ -191,10 +193,12 @@ class Resizable {
     // get handle direction
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
-    // remember rotate handle position
-    let resizeHandle = document.querySelector('.resize-handle-rotate');
-    this.x = resizeHandle.getBoundingClientRect().left;
-    this.y = resizeHandle.getBoundingClientRect().top + 25 + 100;
+    let wrapperClientRect = this.wrapper.getBoundingClientRect();
+    this.center = {
+      x: wrapperClientRect.left + wrapperClientRect.width / 2,
+      y: wrapperClientRect.top + wrapperClientRect.height / 2
+    };
+    this.startAngle = Math.atan2(e.clientY - this.center.y, e.clientX - this.center.x) * (180 / Math.PI);
 
     // calculate ratio
     let {height, width} = this.wrapper.getBoundingClientRect();
@@ -238,12 +242,10 @@ class Resizable {
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        let angle = 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
-        angle += this.angle;
-        angle = angle > 360 ? angle - 360 : angle;
-        console.log(this.angle, angle);
+        let angle = Math.atan2(e.pageY - this.center.y, e.pageX - this.center.x) * (180 / Math.PI);
+        this.rotation = angle - this.startAngle;
         Object.assign(this.wrapper.style, {
-          transform: 'rotate(' + angle + 'deg)',
+          transform: 'rotate(' + (this.angle + this.rotation) + 'deg)',
           transformOrigin: 'center center'
         });
         break;
@@ -386,9 +388,7 @@ class Resizable {
       this.onResizeEndCallback();
     }
 
-    // remember rotate handle new position
-    this.angle += 180 - Math.atan2(e.pageX - this.x, e.pageY - this.y) * (180 / Math.PI);
-    this.angle = this.angle > 360 ? this.angle - 360 : this.angle;
+    this.angle += this.rotation;
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
