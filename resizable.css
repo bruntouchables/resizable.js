@@ -19,60 +19,61 @@
 }
 
 .resizable.active .resize-handle {
+  cursor: pointer;
   display: block;
 }
 
-.resize-handle-rotate {
-  border-radius: 100%;
-  cursor: pointer;
+.resizable.active .resize-handle-rotate {
+  border-radius: 50%;
+  cursor: alias;
   left: calc(50% - 5px);
   top: -25px;
 }
 
 .resize-handle-n {
-  cursor: ns-resize;
+  /*cursor: ns-resize;*/
   left: calc(50% - 5px);
   top: -5px;
 }
 
 .resize-handle-ne {
-  cursor: nesw-resize;
+  /*cursor: nesw-resize;*/
   right: -5px;
   top: -5px;
 }
 
 .resize-handle-e {
-  cursor: ew-resize;
+  /*cursor: ew-resize;*/
   right: -5px;
   top: calc(50% - 5px);
 }
 
 .resize-handle-se {
   bottom: -5px;
-  cursor: nwse-resize;
+  /*cursor: nwse-resize;*/
   right: -5px;
 }
 
 .resize-handle-s {
   bottom: -5px;
-  cursor: ns-resize;
+  /*cursor: ns-resize;*/
   left: calc(50% - 5px);
 }
 
 .resize-handle-sw {
   bottom: -5px;
-  cursor: nesw-resize;
+  /*cursor: nesw-resize;*/
   left: -5px;
 }
 
 .resize-handle-w {
-  cursor: ew-resize;
+  /*cursor: ew-resize;*/
   left: -5px;
   top: calc(50% - 5px);
 }
 
 .resize-handle-nw {
-  cursor: nwse-resize;
+  /*cursor: nwse-resize;*/
   left: -5px;
   top: -5px;
 }
