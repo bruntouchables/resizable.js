@@ -244,7 +244,7 @@ class Resizable {
     switch (this.handle) {
       case 'rotate': {
         rotate = true;
-        let newAngle = Math.atan2(e.pageX - this.center.x, -e.pageY + this.center.y, ) * (180 / Math.PI);
+        let newAngle = Math.atan2(e.pageX - this.center.x, -e.pageY + this.center.y,) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
         let degrees = this.angle + this.rotation;
 
@@ -260,19 +260,29 @@ class Resizable {
           transform: 'rotate(' + degrees + 'deg)',
           transformOrigin: 'center center'
         });
-        console.log(degrees);
         break;
       }
       case 'n': {
-        console.log(left, top, right, bottom);
-        Object.assign(this.wrapper.style, {
-          left: left / this._scale + 'px',
-          top: 'auto',
-          right: right / this._scale + 'px',
-          bottom: bottom / this._scale + 'px'
-        });
+        // console.log(left, top, right, bottom);
+        // Object.assign(this.wrapper.style, {
+        //   left: left / this._scale + 'px',
+        //   top: 'auto',
+        //   right: right / this._scale + 'px',
+        //   bottom: bottom / this._scale + 'px'
+        // });
         let radians = this.angle * (Math.PI / 180);
-        wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
+        let handleRect = this.wrapper.querySelector('.resize-handle-n').getBoundingClientRect();
+        console.log(e.pageX, e.pageY, handleRect.left, handleRect.top);
+        let height = Math.sqrt(Math.pow(e.pageY - handleRect.top, 2) + Math.pow(e.pageX - handleRect.left, 2)) * Math.cos(radians);
+        // if (e.pageY < handleRect.top || e.pageX < handleRect.left) {
+        //   height = -height;
+        // }
+        console.log(height);
+        // let x = e.pageX * Math.cos(radians) - e.pageY * Math.sin(radians);
+        // let y = e.pageX * Math.sin(radians) + e.pageY * Math.cos(radians);
+        // console.log(x, y);
+        // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
+        wrapperNewHeight = height;
         break;
       }
       // case 'ne': {
@@ -379,14 +389,15 @@ class Resizable {
       });
 
       // recalculate position
-      ({left, top} = this.wrapper.getBoundingClientRect());
 
-      Object.assign(this.wrapper.style, {
-        bottom: '',
-        left: (left - this.parent.left) / this._scale + 'px',
-        right: '',
-        top: (top - this.parent.top) / this._scale + 'px'
-      });
+      // Object.assign(this.wrapper.style, {
+      //   bottom: '',
+      //   left: (left - this.parent.left) / this._scale + 'px',
+      //   right: '',
+      //   top: (top - this.parent.top) / this._scale + 'px'
+      // });
+    } else {
+      ({left, top} = this.wrapper.getBoundingClientRect());
     }
 
     // on resize callback call
