@@ -245,7 +245,7 @@ class Resizable {
 
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
-    
+
     let wrapperClientRect = this.wrapper.getBoundingClientRect();
 
     // BTDT: styles are sorted in clockwise order
@@ -263,7 +263,7 @@ class Resizable {
             degrees = angle;
           }
         });
-        
+
         this.rotation = degrees - this.angle;
 
         Object.assign(this.wrapper.style, {
@@ -281,19 +281,21 @@ class Resizable {
         //   bottom: bottom / this._scale + 'px'
         // });
         // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
-        
+
         let angle = this.angle * (Math.PI / 180);
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2)) * Math.tan(angle);
 
-        console.log(this.wrapperClientRect, dh);
+        console.log(this.wrapper.style.top);
 
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
-          top: this.wrapperClientRect.top - dh + 'px',
+          top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dh - this.wrapperClientRect.height / 2  + 'px',
           left: wrapperClientRect.left + 'px',
           transformOrigin: 'left bottom'
         });
-        
+
+        console.log(this.wrapper.style.top);
+
         break;
       }
       // case 'ne': {
@@ -434,11 +436,14 @@ class Resizable {
       transform: 'rotate(0deg)'
     });
 
-    this.wrapperClientRect = this.wrapper.getBoundingClientRect();
-    console.log(this.wrapperClientRect.top + this.wrapperClientRect.height / 2);
+    let newWrapperClientRect = this.wrapper.getBoundingClientRect();
+    let top = this.wrapperClientRect.top - (newWrapperClientRect.height - this.wrapperClientRect.height) / 2;
+    this.wrapperClientRect = newWrapperClientRect;
+
+    console.log(top);
 
     this.wrapperCenter = {
-      y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
+      y: top + this.wrapperClientRect.height / 2,
       x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
     };
 
