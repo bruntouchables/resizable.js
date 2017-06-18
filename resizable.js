@@ -14,6 +14,7 @@ class Resizable {
     this.oldAngle = 0;
     this.rotation = 0;
     this.angle = 0;
+    this.rotate = false;
 
     // custom handles
     if (options && options.handles) {
@@ -244,14 +245,13 @@ class Resizable {
 
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
-    let rotate = false;
     
     let wrapperClientRect = this.wrapper.getBoundingClientRect();
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        rotate = true;
+        this.rotate = true;
         let newAngle = Math.atan2(e.pageX - this.center.x, -e.pageY + this.center.y,) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
         let degrees = this.angle + this.rotation;
@@ -273,6 +273,7 @@ class Resizable {
         break;
       }
       case 'n': {
+        this.rotate = false;
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
         //   top: 'auto',
@@ -282,11 +283,10 @@ class Resizable {
         // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
         
         let angle = this.angle * (Math.PI / 180);
-        let handleRect = this.wrapper.querySelector('.resize-handle-n').getBoundingClientRect();
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2)) * Math.tan(angle);
 
-        console.log(dh);
-        
+        console.log(this.wrapperClientRect, dh);
+
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
           top: this.wrapperClientRect.top - dh + 'px',
@@ -376,7 +376,7 @@ class Resizable {
       // }
     }
 
-    if (!rotate) {
+    if (!this.rotate) {
       // don't let wrapper's height become less than wrapper min height
       if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
         wrapperNewHeight = this.wrapperMinHeight;
@@ -426,21 +426,25 @@ class Resizable {
       this.onResizeEndCallback();
     }
 
-    this.angle += this.rotation;
-    
-    // Object.assign(this.wrapper.style, {
-    //   transform: 'rotate(0deg)'
-    // });
-    //
-    // this.wrapperClientRect = this.wrapper.getBoundingClientRect();
-    // this.wrapperCenter = {
-    //   y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
-    //   x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
-    // };
-    //
-    // Object.assign(this.wrapper.style, {
-    //   transform: 'rotate(' + this.angle + 'deg)'
-    // });
+    if (this.rotate) {
+      this.angle += this.rotation;
+    }
+
+    Object.assign(this.wrapper.style, {
+      transform: 'rotate(0deg)'
+    });
+
+    this.wrapperClientRect = this.wrapper.getBoundingClientRect();
+    console.log(this.wrapperClientRect.top + this.wrapperClientRect.height / 2);
+
+    this.wrapperCenter = {
+      y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
+      x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
+    };
+
+    Object.assign(this.wrapper.style, {
+      transform: 'rotate(' + this.angle + 'deg)'
+    });
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
