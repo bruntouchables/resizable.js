@@ -98,6 +98,12 @@ class Resizable {
       attributeFilter: ['style']
     });
 
+    this.wrapperClientRect = this.wrapper.getBoundingClientRect();
+    this.wrapperCenter = {
+      y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
+      x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
+    };
+
     // callback call
     if (this.onInitCallback = callback) {
       this.onInitCallback();
@@ -239,6 +245,8 @@ class Resizable {
     let wrapperNewHeight, wrapperNewWidth;
     let keepRatio = false;
     let rotate = false;
+    
+    let wrapperClientRect = this.wrapper.getBoundingClientRect();
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
@@ -255,34 +263,37 @@ class Resizable {
             degrees = angle;
           }
         });
+        
+        this.rotation = degrees - this.angle;
 
         Object.assign(this.wrapper.style, {
-          transform: 'rotate(' + degrees + 'deg)',
+          transform: 'rotateZ(' + degrees + 'deg)',
           transformOrigin: 'center center'
         });
         break;
       }
       case 'n': {
-        // console.log(left, top, right, bottom);
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
         //   top: 'auto',
         //   right: right / this._scale + 'px',
         //   bottom: bottom / this._scale + 'px'
         // });
-        let radians = this.angle * (Math.PI / 180);
-        let handleRect = this.wrapper.querySelector('.resize-handle-n').getBoundingClientRect();
-        console.log(e.pageX, e.pageY, handleRect.left, handleRect.top);
-        let height = Math.sqrt(Math.pow(e.pageY - handleRect.top, 2) + Math.pow(e.pageX - handleRect.left, 2)) * Math.cos(radians);
-        // if (e.pageY < handleRect.top || e.pageX < handleRect.left) {
-        //   height = -height;
-        // }
-        console.log(height);
-        // let x = e.pageX * Math.cos(radians) - e.pageY * Math.sin(radians);
-        // let y = e.pageX * Math.sin(radians) + e.pageY * Math.cos(radians);
-        // console.log(x, y);
         // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
-        wrapperNewHeight = height;
+        
+        let angle = this.angle * (Math.PI / 180);
+        let handleRect = this.wrapper.querySelector('.resize-handle-n').getBoundingClientRect();
+        let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2)) * Math.tan(angle);
+
+        console.log(dh);
+        
+        Object.assign(this.wrapper.style, {
+          height: dh + this.wrapperClientRect.height / 2 + 'px',
+          top: this.wrapperClientRect.top - dh + 'px',
+          left: wrapperClientRect.left + 'px',
+          transformOrigin: 'left bottom'
+        });
+        
         break;
       }
       // case 'ne': {
@@ -383,21 +394,20 @@ class Resizable {
       }
 
       // set new wrapper height and width
-      Object.assign(this.wrapper.style, {
-        height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
-        width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
-      });
-
-      // recalculate position
-
+      // Object.assign(this.wrapper.style, {
+      //   height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
+      //   width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
+      // });
+      //
+      // // recalculate position
+      // ({left, top} = this.wrapper.getBoundingClientRect());
+      //
       // Object.assign(this.wrapper.style, {
       //   bottom: '',
       //   left: (left - this.parent.left) / this._scale + 'px',
       //   right: '',
       //   top: (top - this.parent.top) / this._scale + 'px'
       // });
-    } else {
-      ({left, top} = this.wrapper.getBoundingClientRect());
     }
 
     // on resize callback call
@@ -417,6 +427,20 @@ class Resizable {
     }
 
     this.angle += this.rotation;
+    
+    // Object.assign(this.wrapper.style, {
+    //   transform: 'rotate(0deg)'
+    // });
+    //
+    // this.wrapperClientRect = this.wrapper.getBoundingClientRect();
+    // this.wrapperCenter = {
+    //   y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
+    //   x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
+    // };
+    //
+    // Object.assign(this.wrapper.style, {
+    //   transform: 'rotate(' + this.angle + 'deg)'
+    // });
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
     let wrapperNewWidth = this.wrapper.offsetWidth;
