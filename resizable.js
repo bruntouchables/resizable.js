@@ -252,7 +252,7 @@ class Resizable {
     switch (this.handle) {
       case 'rotate': {
         this.rotate = true;
-        
+
         let transformOrigin = this.wrapper.style.transformOrigin;
         if (transformOrigin !== '' && transformOrigin !== 'center center') {
           Object.assign(this.wrapper.style, {
@@ -261,7 +261,7 @@ class Resizable {
             transformOrigin: 'center center'
           });
         }
-        
+
         let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y,) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
         let degrees = this.angle + this.rotation;
@@ -295,7 +295,7 @@ class Resizable {
             transformOrigin: 'left bottom'
           });
         }
-        
+
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
         //   top: 'auto',
@@ -305,13 +305,14 @@ class Resizable {
         // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
 
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
-        let top = Math.cos(angle) * this.wrapperClientRect.height + Math.sin(angle) * this.wrapperClientRect.top;
-        
-        console.log(wrapperClientRect.height, this.wrapperClientRect.height);
-        
+        // 15º = 70  // 46
+        // 20º = 58  // 56
+        // 25º = 46  // 66
+        // 30º = 35  // 73
+        let a = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
-          top: top - dh - this.diff + 'px',
+          top: this.wrapperClientRect.top - dh + a + 'px',
           left: wrapperClientRect.left + 'px'
         });
         break;
@@ -395,7 +396,7 @@ class Resizable {
       //   break;
       // }
     }
-    
+
     wrapperClientRect = this.wrapper.getBoundingClientRect();
 
     if (!this.rotate) {
