@@ -305,14 +305,11 @@ class Resizable {
         // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
 
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
-        // 15º = 70  // 46
-        // 20º = 58  // 56
-        // 25º = 46  // 66
-        // 30º = 35  // 73
-        let a = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
+
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
-          top: this.wrapperClientRect.top - dh + a + 'px',
+          top: this.wrapperClientRect.top - dh + dy + 'px',
           left: wrapperClientRect.left + 'px'
         });
         break;
