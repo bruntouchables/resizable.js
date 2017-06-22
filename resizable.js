@@ -39,13 +39,13 @@ class Resizable {
     this.wrapperMinWidth = 30;
 
     // create necessary DOM elements
-    this._createDOMElements(element);
+    this.createDOMElements(element);
 
     // style wrapper and element
-    this._applyStyles(element);
+    this.applyStyles(element);
 
     // attach events on init
-    this._attachInitEvents(element);
+    this.attachInitEvents(element);
 
     // track element mutations
     let elementObserver = new MutationObserver(mutations => {
@@ -119,7 +119,7 @@ class Resizable {
     return this.wrapper;
   }
 
-  _createDOMElements(element) {
+  createDOMElements(element) {
     // add wrapper before element
     element.insertAdjacentHTML('beforebegin', this.wrapper);
     this.wrapper = element.previousSibling;
@@ -131,7 +131,7 @@ class Resizable {
     this.wrapper.appendChild(element);
   }
 
-  _applyStyles(element) {
+  applyStyles(element) {
     let elementHeight = parseInt(element.offsetHeight, 10);
     let elementWidth = parseInt(element.offsetWidth, 10);
 
@@ -159,7 +159,7 @@ class Resizable {
     this.wrapperOldWidth = this.wrapper.offsetWidth;
   }
 
-  _attachInitEvents(element) {
+  attachInitEvents(element) {
     // allow resize after click
     document.addEventListener('mousedown', e => {
       let allowed = e.target === element;
@@ -188,12 +188,12 @@ class Resizable {
       this.handles[i].addEventListener('dragstart', {});
 
       // add custom mouse down event handler
-      this._mouseDown = this._mouseDown.bind(this);
-      this.handles[i].addEventListener('mousedown', this._mouseDown);
+      this.mouseDown = this.mouseDown.bind(this);
+      this.handles[i].addEventListener('mousedown', this.mouseDown);
     }
   }
 
-  _mouseDown(e) {
+  mouseDown(e) {
     // disable selection (Safari)
     e.preventDefault();
 
@@ -212,16 +212,16 @@ class Resizable {
     this.ratio = height / width;
 
     // add event listeners to mouse move and mouse up
-    this._mouseMove = this._mouseMove.bind(this);
-    this._mouseUp = this._mouseUp.bind(this);
-    document.addEventListener('mousemove', this._mouseMove);
-    document.addEventListener('mouseup', this._mouseUp);
+    this.mouseMove = this.mouseMove.bind(this);
+    this.mouseUp = this.mouseUp.bind(this);
+    document.addEventListener('mousemove', this.mouseMove);
+    document.addEventListener('mouseup', this.mouseUp);
 
     // disable selection
     return false;
   }
 
-  _mouseMove(e) {
+  mouseMove(e) {
     let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
     if (parentStyle.position === 'static') {
       this.parent = {
@@ -254,7 +254,6 @@ class Resizable {
         this.rotate = true;
 
         let transformOrigin = this.wrapper.style.transformOrigin;
-        console.log(this.wrapperClientRect.top, this.wrapperClientRect.height);
         if (transformOrigin !== '' && transformOrigin !== 'center center') {
           Object.assign(this.wrapper.style, {
             top: this.wrapperClientRect.top + 'px',
@@ -274,7 +273,6 @@ class Resizable {
             degrees = angle;
           }
         });
-
         this.rotation = degrees - this.angle;
         // console.log(degrees);
 
@@ -395,8 +393,6 @@ class Resizable {
       // }
     }
 
-    // this.wrapperClientRect = this.wrapper.getBoundingClientRect();
-
     if (!this.rotate) {
       // don't let wrapper's height become less than wrapper min height
       if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
@@ -437,10 +433,10 @@ class Resizable {
     }
   }
 
-  _mouseUp(e) {
+  mouseUp(e) {
     // remove mouse move and mouse up events
-    document.removeEventListener('mousemove', this._mouseMove);
-    document.removeEventListener('mouseup', this._mouseUp);
+    document.removeEventListener('mousemove', this.mouseMove);
+    document.removeEventListener('mouseup', this.mouseUp);
 
     // on resize end callback call
     if (this.onResizeEndCallback) {
@@ -448,11 +444,7 @@ class Resizable {
     }
 
     if (this.rotate) {
-      this.diff = this.wrapper.getBoundingClientRect().height - this.wrapperClientRect.height;
-
       this.angle += this.rotation;
-    } else {
-      this.wrapperClientRect = this.wrapper.getBoundingClientRect();
     }
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
