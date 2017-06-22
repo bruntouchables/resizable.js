@@ -445,6 +445,12 @@ class Resizable {
 
     if (this.rotate) {
       this.angle += this.rotation;
+    } else if (this.angle === 0) {
+      this.wrapperClientRect = this.wrapper.getBoundingClientRect();
+      this.wrapperCenter = {
+        y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
+        x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
+      };
     }
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
