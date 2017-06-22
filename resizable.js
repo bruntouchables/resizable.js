@@ -254,6 +254,7 @@ class Resizable {
         this.rotate = true;
 
         let transformOrigin = this.wrapper.style.transformOrigin;
+        console.log(this.wrapperClientRect.top, this.wrapperClientRect.height);
         if (transformOrigin !== '' && transformOrigin !== 'center center') {
           Object.assign(this.wrapper.style, {
             top: this.wrapperClientRect.top + 'px',
@@ -275,7 +276,7 @@ class Resizable {
         });
 
         this.rotation = degrees - this.angle;
-        console.log(degrees);
+        // console.log(degrees);
 
         Object.assign(this.wrapper.style, {
           transform: 'rotate(' + degrees + 'deg)'
@@ -394,7 +395,7 @@ class Resizable {
       // }
     }
 
-    wrapperClientRect = this.wrapper.getBoundingClientRect();
+    // this.wrapperClientRect = this.wrapper.getBoundingClientRect();
 
     if (!this.rotate) {
       // don't let wrapper's height become less than wrapper min height
@@ -447,11 +448,11 @@ class Resizable {
     }
 
     if (this.rotate) {
-      this.angle += this.rotation;
-    }
-
-    if (this.handle === 'rotate') {
       this.diff = this.wrapper.getBoundingClientRect().height - this.wrapperClientRect.height;
+
+      this.angle += this.rotation;
+    } else {
+      this.wrapperClientRect = this.wrapper.getBoundingClientRect();
     }
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
