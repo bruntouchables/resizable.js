@@ -53,6 +53,13 @@ class Resizable {
       y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
     };
 
+    this.wrapperClientRect2 = {
+      top: this.wrapperClientRect.top,
+      left: this.wrapperClientRect.left,
+      height: this.wrapperClientRect.height,
+      width: this.wrapperClientRect.width
+    };
+
     // track element mutations
     let elementObserver = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
@@ -238,8 +245,8 @@ class Resizable {
         let transformOrigin = this.wrapper.style.transformOrigin;
         if (transformOrigin !== '' && transformOrigin !== 'center center') {
           Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top + 'px',
-            left: this.wrapperClientRect.left + 'px',
+            top: this.wrapperClientRect2.top + 'px',
+            left: this.wrapperClientRect2.left + 'px',
             transformOrigin: 'center center'
           });
         }
@@ -430,6 +437,13 @@ class Resizable {
         y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
         x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
       };
+    } else {
+      this.wrapperClientRect = this.wrapper.getBoundingClientRect();
+      console.log(this.wrapperClientRect, this.wrapperClientRect2, this.wrapper.style.height);
+      Object.assign(this.wrapperClientRect2, {
+        top: this.wrapperClientRect.top + (this.wrapperClientRect.height - parseInt(this.wrapper.style.height, 10)) / 2,
+        left: this.wrapperClientRect.left + (this.wrapperClientRect.width - parseInt(this.wrapper.style.width, 10)) / 2,
+      });
     }
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
