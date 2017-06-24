@@ -288,6 +288,8 @@ class Resizable {
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
 
+        console.log(localWrapperClientRect.left);
+        
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
           top: this.wrapperClientRect.top - dh + dy + 'px',
@@ -375,39 +377,39 @@ class Resizable {
       // }
     }
 
-    if (!this.rotate) {
-      // // don't let wrapper's height become less than wrapper min height
-      // if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
-      //   wrapperNewHeight = this.wrapperMinHeight;
-      //   if (keepRatio) {
-      //     wrapperNewWidth = wrapperNewHeight / this.ratio;
-      //   }
-      // }
-      //
-      // // don't let wrapper's width become less than wrapper min width
-      // if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
-      //   wrapperNewWidth = this.wrapperMinWidth;
-      //   if (keepRatio) {
-      //     wrapperNewHeight = this.ratio * wrapperNewWidth;
-      //   }
-      // }
-
-      // // set new wrapper height and width
-      // Object.assign(this.wrapper.style, {
-      //   height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
-      //   width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
-      // });
-      //
-      // // recalculate position
-      // ({left, top} = this.wrapper.getBoundingClientRect());
-      //
-      // Object.assign(this.wrapper.style, {
-      //   bottom: '',
-      //   left: (left - this.parent.left) / this._scale + 'px',
-      //   right: '',
-      //   top: (top - this.parent.top) / this._scale + 'px'
-      // });
-    }
+    // if (!this.rotate) {
+    //   // don't let wrapper's height become less than wrapper min height
+    //   if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
+    //     wrapperNewHeight = this.wrapperMinHeight;
+    //     if (keepRatio) {
+    //       wrapperNewWidth = wrapperNewHeight / this.ratio;
+    //     }
+    //   }
+    //
+    //   // don't let wrapper's width become less than wrapper min width
+    //   if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
+    //     wrapperNewWidth = this.wrapperMinWidth;
+    //     if (keepRatio) {
+    //       wrapperNewHeight = this.ratio * wrapperNewWidth;
+    //     }
+    //   }
+    //
+    //   // set new wrapper height and width
+    //   Object.assign(this.wrapper.style, {
+    //     height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
+    //     width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
+    //   });
+    //
+    //   // recalculate position
+    //   ({left, top} = this.wrapper.getBoundingClientRect());
+    //
+    //   Object.assign(this.wrapper.style, {
+    //     bottom: '',
+    //     left: (left - this.parent.left) / this._scale + 'px',
+    //     right: '',
+    //     top: (top - this.parent.top) / this._scale + 'px'
+    //   });
+    // }
   }
 
   mouseUp(e) {
@@ -419,7 +421,7 @@ class Resizable {
     if (this.rotate) {
       this.angle += this.rotation;
     } else if (this.angle === 0) {
-      this.wrapperClientRect = Object.assign({}, this.wrapper.getBoundingClientRect());
+      this.wrapperClientRect = this.wrapper.getBoundingClientRect();
       this.wrapperCenter = {
         y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
         x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
