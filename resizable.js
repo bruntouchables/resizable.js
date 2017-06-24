@@ -8,7 +8,7 @@
 class Resizable {
   constructor(element, options, callback) {
     this.wrapper = '<div class="resizable"></div>';
-    this._scale = (options && options.scale) ? options.scale : 1.0;
+    // this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
     this.oldAngle = 0;
@@ -41,87 +41,90 @@ class Resizable {
     // create necessary DOM elements
     this.createDOMElements(element);
 
-    // style wrapper and element
+    // apply styles to the element and the wrapper
     this.applyStyles(element);
 
-    // attach events on init
+    // attach on init events
     this.attachInitEvents(element);
 
-    // track element mutations
-    let elementObserver = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        let elementHeight = element.offsetHeight;
-        let wrapperHeight = this.wrapper.offsetHeight;
-        let elementWidth = element.offsetWidth;
-        let wrapperWidth = this.wrapper.offsetWidth;
-
-        if (elementHeight !== wrapperHeight) {
-          this.wrapper.style.height = element.style.height = elementHeight + 'px';
-        }
-
-        if (elementWidth !== wrapperWidth) {
-          this.wrapper.style.width = element.style.width = elementWidth + 'px';
-        }
-      });
-    });
-
-    elementObserver.observe(element, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true,
-      attributeFilter: ['style']
-    });
-
-    // track wrapper mutations
-    let wrapperObserver = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        let elementHeight = element.offsetHeight;
-        let wrapperHeight = this.wrapper.offsetHeight;
-        let elementWidth = element.offsetWidth;
-        let wrapperWidth = this.wrapper.offsetWidth;
-
-        if (wrapperHeight !== elementHeight) {
-          this.wrapper.style.height = element.style.height = wrapperHeight + 'px';
-        }
-
-        if (wrapperWidth !== elementWidth) {
-          this.wrapper.style.width = element.style.width = wrapperWidth + 'px';
-        }
-      });
-    });
-
-    wrapperObserver.observe(this.wrapper, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true,
-      attributeFilter: ['style']
-    });
-
+    // TODO:
     this.wrapperClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperCenter = {
-      y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
-      x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
+      x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2,
+      y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
     };
 
-    // callback call
+    // // track element mutations
+    // let elementObserver = new MutationObserver(mutations => {
+    //   mutations.forEach(mutation => {
+    //     let elementHeight = element.offsetHeight;
+    //     let elementWidth = element.offsetWidth;
+    //     let wrapperHeight = this.wrapper.offsetHeight;
+    //     let wrapperWidth = this.wrapper.offsetWidth;
+    //    
+    //     if (elementHeight !== wrapperHeight) {
+    //       this.wrapper.style.height = element.style.height = elementHeight + 'px';
+    //     }
+    //
+    //     if (elementWidth !== wrapperWidth) {
+    //       this.wrapper.style.width = element.style.width = elementWidth + 'px';
+    //     }
+    //   });
+    // });
+    //
+    // elementObserver.observe(element, {
+    //   attributes: true,
+    //   childList: true,
+    //   characterData: true,
+    //   subtree: true,
+    //   attributeFilter: ['style']
+    // });
+    //
+    // // track wrapper mutations
+    // let wrapperObserver = new MutationObserver(mutations => {
+    //   mutations.forEach(mutation => {
+    //     let elementHeight = element.offsetHeight;
+    //     let wrapperHeight = this.wrapper.offsetHeight;
+    //     let elementWidth = element.offsetWidth;
+    //     let wrapperWidth = this.wrapper.offsetWidth;
+    //
+    //     if (wrapperHeight !== elementHeight) {
+    //       this.wrapper.style.height = element.style.height = wrapperHeight + 'px';
+    //     }
+    //
+    //     if (wrapperWidth !== elementWidth) {
+    //       this.wrapper.style.width = element.style.width = wrapperWidth + 'px';
+    //     }
+    //   });
+    // });
+    //
+    // wrapperObserver.observe(this.wrapper, {
+    //   attributes: true,
+    //   childList: true,
+    //   characterData: true,
+    //   subtree: true,
+    //   attributeFilter: ['style']
+    // });
+
+    // on init callback call
     if (this.onInitCallback = callback) {
       this.onInitCallback();
     }
   }
 
-  set scale(scale) {
-    this._scale = scale;
-  }
+  // set scale(scale) {
+  //   this._scale = scale;
+  // }
 
-  get DOMElement() {
-    return this.wrapper;
-  }
+  // get DOMElement() {
+  //   return this.wrapper;
+  // }
 
   createDOMElements(element) {
     // add wrapper before element
     element.insertAdjacentHTML('beforebegin', this.wrapper);
+    
+    // get wrapper DOM element
     this.wrapper = element.previousSibling;
 
     // insert handles into the wrapper
@@ -135,7 +138,7 @@ class Resizable {
     let elementHeight = parseInt(element.offsetHeight, 10);
     let elementWidth = parseInt(element.offsetWidth, 10);
 
-    // set wrapper min height and min width
+    // apply styles to the wrapper
     Object.assign(this.wrapper.style, {
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
       left: '200px',
@@ -146,7 +149,7 @@ class Resizable {
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
-    // style element
+    // apply styles to the element
     Object.assign(element.style, {
       height: this.wrapper.style.height,
       left: '0',
@@ -165,6 +168,7 @@ class Resizable {
       let allowed = e.target === element;
       allowed = allowed || e.target === this.wrapper;
 
+      // BTDT: handle click event on the wrapper or the element
       // on click callback call
       if (this.onClickCallback && allowed) {
         this.onClickCallback(e);
@@ -174,23 +178,21 @@ class Resizable {
       allowed = allowed || (e.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
 
       if (allowed) {
-        // add active class to wrapper
         this.wrapper.classList.add('active');
       } else {
-        // remove active class from wrapper
         this.wrapper.classList.remove('active');
       }
     });
 
     this.handles = this.wrapper.querySelectorAll('.resize-handle');
-    for (let i = 0; i < this.handles.length; ++i) {
+    Array.prototype.map.call(this.handles, handle => {
       // disable default drag start event handler
-      this.handles[i].addEventListener('dragstart', {});
+      handle.addEventListener('dragstart', {});
 
       // add custom mouse down event handler
       this.mouseDown = this.mouseDown.bind(this);
-      this.handles[i].addEventListener('mousedown', this.mouseDown);
-    }
+      handle.addEventListener('mousedown', this.mouseDown);
+    });
   }
 
   mouseDown(e) {
@@ -200,16 +202,9 @@ class Resizable {
     // get handle direction
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
-    // let wrapperClientRect = this.wrapper.getBoundingClientRect();
-    // this.center = {
-    //   x: wrapperClientRect.left + wrapperClientRect.width / 2,
-    //   y: wrapperClientRect.top + wrapperClientRect.height / 2
-    // };
-    this.oldAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y) * (180 / Math.PI);
-
-    // calculate ratio
-    let {height, width} = this.wrapper.getBoundingClientRect();
-    this.ratio = height / width;
+    // // calculate ratio
+    // let {height, width} = this.wrapper.getBoundingClientRect();
+    // this.ratio = height / width;
 
     // add event listeners to mouse move and mouse up
     this.mouseMove = this.mouseMove.bind(this);
@@ -261,6 +256,8 @@ class Resizable {
             transformOrigin: 'center center'
           });
         }
+        
+        console.log(this.top);
 
         let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y,) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
@@ -286,6 +283,14 @@ class Resizable {
 
         let angle = this.angle * (Math.PI / 180);
 
+        // Object.assign(this.wrapper.style, {
+        //   left: left / this._scale + 'px',
+        //   top: 'auto',
+        //   right: right / this._scale + 'px',
+        //   bottom: bottom / this._scale + 'px'
+        // });
+        // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
+
         let transformOrigin = this.wrapper.style.transformOrigin;
         if (transformOrigin === '' || transformOrigin === 'center center') {
           Object.assign(this.wrapper.style, {
@@ -294,14 +299,6 @@ class Resizable {
             transformOrigin: 'left bottom'
           });
         }
-
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: 'auto',
-        //   right: right / this._scale + 'px',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
 
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
@@ -445,8 +442,9 @@ class Resizable {
 
     if (this.rotate) {
       this.angle += this.rotation;
+      this.oldAngle = this.angle;
     } else if (this.angle === 0) {
-      this.wrapperClientRect = this.wrapper.getBoundingClientRect();
+      this.wrapperClientRect = Object.assign({}, this.wrapper.getBoundingClientRect());
       this.wrapperCenter = {
         y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
         x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
