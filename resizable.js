@@ -22,7 +22,7 @@ class Resizable {
         this.handles += '<span class="resize-handle resize-handle-' + handle + '"></span>';
       });
     } else {
-      this.handles = '<span class="resize-handle resize-handle-rotate"></span> \
+      this.handles = '<span class="resize-handle resize-handle-rotate"></span>\
                       <span class="resize-handle resize-handle-n"></span>\
                       <span class="resize-handle resize-handle-ne"></span>\
                       <span class="resize-handle resize-handle-e"></span>\
