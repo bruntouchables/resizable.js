@@ -24,13 +24,7 @@
 
 ```javascript
 let element = document.getElementById('example');
-let resizable = new Resizable(element, {}, () => {
-  // do something on init
-});
-
-resizable.onClick(() => {
-  // do something on click
-});
+new Resizable(element);
 ```
 
 ### Demo
