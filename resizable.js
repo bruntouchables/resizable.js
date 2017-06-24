@@ -273,14 +273,15 @@ class Resizable {
         this.rotate = false;
 
         let localWrapperClientRect = this.wrapper.getBoundingClientRect();
+        console.log(localWrapperClientRect.left, this.wrapperClientRect2.left);
         let angle = this.angle * (Math.PI / 180);
 
         // --- //
         let transformOrigin = this.wrapper.style.transformOrigin;
         if (transformOrigin === '' || transformOrigin === 'center center') {
           Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top + 'px',
-            left: this.wrapperClientRect.left + 'px',
+            top: this.wrapperClientRect2.top - (localWrapperClientRect.height - this.wrapperClientRect.height) / 2 + 'px',
+            left: this.wrapperClientRect2.left - (localWrapperClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
             transformOrigin: 'left bottom'
           });
         }
@@ -290,12 +291,12 @@ class Resizable {
         let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
         dh *= Math.cos(alpha - angle);
 
-        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
+        let dy = Math.cos(angle) * this.wrapperClientRect2.height / 2 - Math.sin(angle) * this.wrapperClientRect2.width / 2;
 
         Object.assign(this.wrapper.style, {
-          height: dh + this.wrapperClientRect.height / 2 + 'px',
-          top: this.wrapperClientRect.top - dh + dy + 'px',
-          left: localWrapperClientRect.left + 'px'
+          height: dh + this.wrapperClientRect2.height / 2 + 'px',
+          top: this.wrapperClientRect2.top - dh + dy + 'px',
+          left: this.wrapperClientRect2.left + 'px'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -429,11 +430,14 @@ class Resizable {
     document.removeEventListener('mouseup', this.mouseUp);
 
     // TODO:
+    this.wrapperClientRect = this.wrapper.getBoundingClientRect();
     if (this.rotate) {
       this.angle += this.rotation;
+      Object.assign(this.wrapperClientRect2, {
+        top: this.wrapperClientRect.top + (this.wrapperClientRect.height - parseInt(this.wrapper.style.height, 10)) / 2,
+        left: this.wrapperClientRect.left,
+      });
     } else {
-      this.wrapperClientRect = this.wrapper.getBoundingClientRect();
-      
       Object.assign(this.wrapperClientRect2, {
         top: this.wrapperClientRect.top + (this.wrapperClientRect.height - parseInt(this.wrapper.style.height, 10)) / 2,
         left: this.wrapperClientRect.left + (this.wrapperClientRect.width - parseInt(this.wrapper.style.width, 10)) / 2,
