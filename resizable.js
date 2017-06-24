@@ -227,7 +227,7 @@ class Resizable {
     // this.wrapperOldWidth = width / this._scale;
 
     let wrapperNewHeight, wrapperNewWidth;
-    // let keepRatio = false;
+    let keepRatio = false;
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
@@ -280,9 +280,10 @@ class Resizable {
         // --- //
 
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
-        dh *= Math.cos(Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y));
-        
-        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
+        dh *= Math.cos(alpha - angle);
+
+        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
 
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
