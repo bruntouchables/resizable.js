@@ -11,7 +11,6 @@ class Resizable {
     // this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
-    this.oldAngle = 0;
     this.rotation = 0;
     this.angle = 0;
     this.rotate = false;
@@ -242,7 +241,7 @@ class Resizable {
     // let keepRatio = false;
 
     // TODO:
-    let wrapperClientRect = this.wrapper.getBoundingClientRect();
+    let localWrapperClientRect = this.wrapper.getBoundingClientRect();
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
@@ -259,7 +258,7 @@ class Resizable {
         }
 
         let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y,) * (180 / Math.PI);
-        this.rotation = newAngle - this.oldAngle;
+        this.rotation = newAngle - this.angle;
         let degrees = this.angle + this.rotation;
 
         // discontinuous rotate effect
@@ -305,7 +304,7 @@ class Resizable {
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
           top: this.wrapperClientRect.top - dh + dy + 'px',
-          left: wrapperClientRect.left + 'px'
+          left: localWrapperClientRect.left + 'px'
         });
         break;
       }
@@ -437,7 +436,6 @@ class Resizable {
     // TODO:
     if (this.rotate) {
       this.angle += this.rotation;
-      this.oldAngle = this.angle;
     } else if (this.angle === 0) {
       this.wrapperClientRect = Object.assign({}, this.wrapper.getBoundingClientRect());
       this.wrapperCenter = {
