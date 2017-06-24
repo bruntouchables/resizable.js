@@ -117,7 +117,7 @@ class Resizable {
   createDOMElements(element) {
     // add wrapper before element
     element.insertAdjacentHTML('beforebegin', this.wrapper);
-    
+
     // get wrapper DOM element
     this.wrapper = element.previousSibling;
 
@@ -268,14 +268,7 @@ class Resizable {
         let localWrapperClientRect = this.wrapper.getBoundingClientRect();
         let angle = this.angle * (Math.PI / 180);
 
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: 'auto',
-        //   right: right / this._scale + 'px',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
-
+        // --- //
         let transformOrigin = this.wrapper.style.transformOrigin;
         if (transformOrigin === '' || transformOrigin === 'center center') {
           Object.assign(this.wrapper.style, {
@@ -284,17 +277,27 @@ class Resizable {
             transformOrigin: 'left bottom'
           });
         }
+        // --- //
 
         let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
+        dh *= Math.cos(Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y));
+        
         let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
 
-        console.log(localWrapperClientRect.left);
-        
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
           top: this.wrapperClientRect.top - dh + dy + 'px',
           left: localWrapperClientRect.left + 'px'
         });
+
+        // Object.assign(this.wrapper.style, {
+        //   left: left / this._scale + 'px',
+        //   top: 'auto',
+        //   right: right / this._scale + 'px',
+        //   bottom: bottom / this._scale + 'px'
+        // });
+        // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
+
         break;
       }
       // case 'ne': {
