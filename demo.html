@@ -18,21 +18,7 @@
     <script src="resizable.js"></script>
     <script>
       let element = document.getElementById('example');
-      let resizable = new Resizable(element, {}, () => {
-        // do something on init
-      });
-
-      resizable.onClick(element => {
-        // do something on click
-      });
-
-      resizable.onResize(element => {
-        // do something on resize
-      });
-
-      resizable.onResizeEnd(element => {
-        // do something on resize end
-      });
+      new Resizable(element);
     </script>
   </body>
 </html>

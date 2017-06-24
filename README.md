@@ -31,10 +31,6 @@ let resizable = new Resizable(element, {}, () => {
 resizable.onClick(() => {
   // do something on click
 });
-
-resizable.onResize(() => {
-  // do something on resize
-});
 ```
 
 ### Demo
