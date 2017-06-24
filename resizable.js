@@ -54,57 +54,57 @@ class Resizable {
       y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
     };
 
-    // // track element mutations
-    // let elementObserver = new MutationObserver(mutations => {
-    //   mutations.forEach(mutation => {
-    //     let elementHeight = element.offsetHeight;
-    //     let elementWidth = element.offsetWidth;
-    //     let wrapperHeight = this.wrapper.offsetHeight;
-    //     let wrapperWidth = this.wrapper.offsetWidth;
-    //    
-    //     if (elementHeight !== wrapperHeight) {
-    //       this.wrapper.style.height = element.style.height = elementHeight + 'px';
-    //     }
-    //
-    //     if (elementWidth !== wrapperWidth) {
-    //       this.wrapper.style.width = element.style.width = elementWidth + 'px';
-    //     }
-    //   });
-    // });
-    //
-    // elementObserver.observe(element, {
-    //   attributes: true,
-    //   childList: true,
-    //   characterData: true,
-    //   subtree: true,
-    //   attributeFilter: ['style']
-    // });
-    //
-    // // track wrapper mutations
-    // let wrapperObserver = new MutationObserver(mutations => {
-    //   mutations.forEach(mutation => {
-    //     let elementHeight = element.offsetHeight;
-    //     let wrapperHeight = this.wrapper.offsetHeight;
-    //     let elementWidth = element.offsetWidth;
-    //     let wrapperWidth = this.wrapper.offsetWidth;
-    //
-    //     if (wrapperHeight !== elementHeight) {
-    //       this.wrapper.style.height = element.style.height = wrapperHeight + 'px';
-    //     }
-    //
-    //     if (wrapperWidth !== elementWidth) {
-    //       this.wrapper.style.width = element.style.width = wrapperWidth + 'px';
-    //     }
-    //   });
-    // });
-    //
-    // wrapperObserver.observe(this.wrapper, {
-    //   attributes: true,
-    //   childList: true,
-    //   characterData: true,
-    //   subtree: true,
-    //   attributeFilter: ['style']
-    // });
+    // track element mutations
+    let elementObserver = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        let elementHeight = element.offsetHeight;
+        let elementWidth = element.offsetWidth;
+        let wrapperHeight = this.wrapper.offsetHeight;
+        let wrapperWidth = this.wrapper.offsetWidth;
+
+        if (elementHeight !== wrapperHeight) {
+          this.wrapper.style.height = element.style.height = elementHeight + 'px';
+        }
+
+        if (elementWidth !== wrapperWidth) {
+          this.wrapper.style.width = element.style.width = elementWidth + 'px';
+        }
+      });
+    });
+
+    elementObserver.observe(element, {
+      attributes: true,
+      childList: true,
+      characterData: true,
+      subtree: true,
+      attributeFilter: ['style']
+    });
+
+    // track wrapper mutations
+    let wrapperObserver = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        let elementHeight = element.offsetHeight;
+        let wrapperHeight = this.wrapper.offsetHeight;
+        let elementWidth = element.offsetWidth;
+        let wrapperWidth = this.wrapper.offsetWidth;
+
+        if (wrapperHeight !== elementHeight) {
+          this.wrapper.style.height = element.style.height = wrapperHeight + 'px';
+        }
+
+        if (wrapperWidth !== elementWidth) {
+          this.wrapper.style.width = element.style.width = wrapperWidth + 'px';
+        }
+      });
+    });
+
+    wrapperObserver.observe(this.wrapper, {
+      attributes: true,
+      childList: true,
+      characterData: true,
+      subtree: true,
+      attributeFilter: ['style']
+    });
 
     // on init callback call
     if (this.onInitCallback = callback) {
@@ -232,15 +232,16 @@ class Resizable {
     let {height, width, left, top} = this.wrapper.getBoundingClientRect();
     left = left - this.parent.left;
     top = top - this.parent.top;
-    let right = this.parent.width - left - width;
-    let bottom = this.parent.height - top - height;
+    // let right = this.parent.width - left - width;
+    // let bottom = this.parent.height - top - height;
 
-    this.wrapperOldHeight = height / this._scale;
-    this.wrapperOldWidth = width / this._scale;
+    // this.wrapperOldHeight = height / this._scale;
+    // this.wrapperOldWidth = width / this._scale;
 
     let wrapperNewHeight, wrapperNewWidth;
-    let keepRatio = false;
+    // let keepRatio = false;
 
+    // TODO:
     let wrapperClientRect = this.wrapper.getBoundingClientRect();
 
     // BTDT: styles are sorted in clockwise order
@@ -256,8 +257,6 @@ class Resizable {
             transformOrigin: 'center center'
           });
         }
-        
-        console.log(this.top);
 
         let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y,) * (180 / Math.PI);
         this.rotation = newAngle - this.oldAngle;
@@ -435,11 +434,7 @@ class Resizable {
     document.removeEventListener('mousemove', this.mouseMove);
     document.removeEventListener('mouseup', this.mouseUp);
 
-    // on resize end callback call
-    if (this.onResizeEndCallback) {
-      this.onResizeEndCallback();
-    }
-
+    // TODO:
     if (this.rotate) {
       this.angle += this.rotation;
       this.oldAngle = this.angle;
@@ -449,6 +444,11 @@ class Resizable {
         y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2,
         x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2
       };
+    }
+
+    // on resize end callback call
+    if (this.onResizeEndCallback) {
+      this.onResizeEndCallback();
     }
 
     let wrapperNewHeight = this.wrapper.offsetHeight;
