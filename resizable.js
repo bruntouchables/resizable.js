@@ -281,7 +281,8 @@ class Resizable {
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
           top: this.wrapperClientRect.top - dh + dy + 'px',
-          left: this.wrapperClientRect.left - (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px'
+          left: this.wrapperClientRect.left - (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
+          transformOrigin: 'left bottom'
         });
 
         // Object.assign(this.wrapper.style, {
