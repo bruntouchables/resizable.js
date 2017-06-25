@@ -274,8 +274,8 @@ class Resizable {
         let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
 
-        let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
-        dh *= Math.cos(alpha - angle);
+        let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
+        let dh = d * Math.cos(alpha - angle);
         let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
 
         Object.assign(this.wrapper.style, {
@@ -295,17 +295,6 @@ class Resizable {
         break;
       }
       case 'ne': {
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: 'auto',
-        //   right: 'auto',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-        // wrapperNewHeight = this.ratio * wrapperNewWidth;
-        // keepRatio = true;
-        // break;
-
         let transformOrigin = this.wrapper.style.transformOrigin;
         if (transformOrigin === '' || transformOrigin === 'center center') {
           Object.assign(this.wrapper.style, {
@@ -318,9 +307,9 @@ class Resizable {
         let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
 
-        let dh = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
-        let dw = dh * Math.sin(alpha - angle);
-        dh *= Math.cos(alpha - angle);
+        let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
+        let dh = d * Math.cos(alpha - angle);
+        let dw = d * Math.sin(alpha - angle);
         let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
 
         Object.assign(this.wrapper.style, {
@@ -330,7 +319,17 @@ class Resizable {
           left: this.wrapperClientRect.left - (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
           transformOrigin: 'left bottom'
         });
-
+        
+        // Object.assign(this.wrapper.style, {
+        //   left: left / this._scale + 'px',
+        //   top: 'auto',
+        //   right: 'auto',
+        //   bottom: bottom / this._scale + 'px'
+        // });
+        // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
+        // wrapperNewHeight = this.ratio * wrapperNewWidth;
+        // keepRatio = true;
+        break;
       }
       // case 'e': {
       //   Object.assign(this.wrapper.style, {
@@ -386,18 +385,43 @@ class Resizable {
       //   wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
       //   break;
       // }
-      // case 'nw': {
-      //   Object.assign(this.wrapper.style, {
-      //     left: 'auto',
-      //     top: 'auto',
-      //     right: right / this._scale + 'px',
-      //     bottom: bottom / this._scale + 'px'
-      //   });
-      //   wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
-      //   wrapperNewHeight = this.ratio * wrapperNewWidth;
-      //   keepRatio = true;
-      //   break;
-      // }
+      case 'nw': {
+        let transformOrigin = this.wrapper.style.transformOrigin;
+        if (transformOrigin === '' || transformOrigin === 'center center') {
+          Object.assign(this.wrapper.style, {
+            top: this.wrapperClientRect.top + 'px',
+            right: this.parent.width - this.wrapperClientRect.left - this.wrapperClientRect.width + 'px',
+            transformOrigin: 'right bottom'
+          });
+        }
+
+        let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
+        let angle = this.angle * (Math.PI / 180);
+
+        let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
+        let dh = d * Math.cos(alpha - angle);
+        let dw = d * Math.sin(alpha - angle);
+        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
+
+        Object.assign(this.wrapper.style, {
+          height: dh + this.wrapperClientRect.height / 2 + 'px',
+          width: dw + this.wrapperClientRect.width / 2 + 'px',
+          top: this.wrapperClientRect.top - dh + dy + 'px',
+          right: this.parent.width - this.wrapperClientRect.left - (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 - this.wrapperClientRect.width + 'px',
+          transformOrigin: 'right bottom'
+        });
+        
+        // Object.assign(this.wrapper.style, {
+        //   left: 'auto',
+        //   top: 'auto',
+        //   right: right / this._scale + 'px',
+        //   bottom: bottom / this._scale + 'px'
+        // });
+        // wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
+        // wrapperNewHeight = this.ratio * wrapperNewWidth;
+        // keepRatio = true;
+        break;
+      }
     }
 
     // if (!this.rotate) {
