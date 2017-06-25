@@ -36,4 +36,4 @@ new Resizable(element);
 - Shahen Kosyan ([@k0syan](https://github.com/k0syan))
 
 
-Please feel free to open an issue or a pull request.  
+Please feel free to open an issue or a pull request.
