@@ -37,4 +37,3 @@ new Resizable(element);
 
 
 Please feel free to open an issue or a pull request.  
-If you like this project please leave us feedback. If you don't - please tell us how we can improve it.
