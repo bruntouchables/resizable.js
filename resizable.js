@@ -237,15 +237,6 @@ class Resizable {
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        let transformOrigin = this.wrapper.style.transformOrigin;
-        if (transformOrigin !== '' && transformOrigin !== 'center center') {
-          Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top + 'px',
-            left: this.wrapperClientRect.left + 'px',
-            transformOrigin: 'center center'
-          });
-        }
-
         let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y,) * (180 / Math.PI);
         // discontinuous rotate effect
         let angles = [-180, -135, -90, -45, 0, 45, 90, 135, 180];
@@ -257,7 +248,10 @@ class Resizable {
 
         this.rotation = newAngle - this.angle;
         Object.assign(this.wrapper.style, {
-          transform: 'rotate(' + newAngle + 'deg)'
+          left: this.wrapperClientRect.left + 'px',
+          top: this.wrapperClientRect.top + 'px',
+          transform: 'rotate(' + newAngle + 'deg)',
+          transformOrigin: 'center center'
         });
         break;
       }
@@ -271,16 +265,16 @@ class Resizable {
           let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 + Math.sin(angle) * this.wrapperClientRect.width / 2;
           Object.assign(this.wrapper.style, {
             height: dh + this.wrapperClientRect.height / 2 + 'px',
-            top: this.wrapperClientRect.top - dh + dy + 'px',
             left: this.wrapperClientRect.left + (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
+            top: this.wrapperClientRect.top - dh + dy + 'px',
             transformOrigin: 'right bottom'
           });
         } else {
           let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
           Object.assign(this.wrapper.style, {
             height: dh + this.wrapperClientRect.height / 2 + 'px',
-            top: this.wrapperClientRect.top - dh + dy + 'px',
             left: this.wrapperClientRect.left - (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
+            top: this.wrapperClientRect.top - dh + dy + 'px',
             transformOrigin: 'left bottom'
           });
         }
@@ -295,15 +289,6 @@ class Resizable {
         break;
       }
       case 'ne': {
-        let transformOrigin = this.wrapper.style.transformOrigin;
-        if (transformOrigin === '' || transformOrigin === 'center center') {
-          Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top + 'px',
-            left: this.wrapperClientRect.left + 'px',
-            transformOrigin: 'left bottom'
-          });
-        }
-
         let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
 
@@ -314,10 +299,10 @@ class Resizable {
 
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
-          width: dw + this.wrapperClientRect.width / 2 + 'px',
-          top: this.wrapperClientRect.top - dh + dy + 'px',
           left: this.wrapperClientRect.left - (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
-          transformOrigin: 'left bottom'
+          top: this.wrapperClientRect.top - dh + dy + 'px',
+          transformOrigin: 'left bottom',
+          width: dw + this.wrapperClientRect.width / 2 + 'px'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -386,17 +371,6 @@ class Resizable {
       //   break;
       // }
       case 'nw': {
-
-        let transformOrigin = this.wrapper.style.transformOrigin;
-        if (transformOrigin === '' || transformOrigin === 'center center') {
-          Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top + 'px',
-            bottom: this.wrapperClientRect.top + this.wrapperClientRect.height + 'px',
-            right: this.parent.width - this.wrapperClientRect.left - this.wrapperClientRect.width + 'px',
-            transformOrigin: 'right bottom'
-          });
-        }
-
         let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
 
@@ -407,13 +381,13 @@ class Resizable {
         let dx = Math.sin(angle) * this.wrapperClientRect.height / 2 + Math.cos(angle) * this.wrapperClientRect.width / 2;
 
         Object.assign(this.wrapper.style, {
-          height: dh + this.wrapperClientRect.height / 2 + 'px',
-          width: dw + this.wrapperClientRect.width / 2 + 'px',
-          top: this.wrapperClientRect.top - dh + dy + 'px',
-          left: this.wrapperClientRect.left - Math.abs(dw) + dx + 'px',
           bottom: this.wrapperClientRect.top + this.wrapperClientRect.height + 'px',
+          height: dh + this.wrapperClientRect.height / 2 + 'px',
+          left: this.wrapperClientRect.left - Math.abs(dw) + dx + 'px',
           right: this.parent.width - this.wrapperClientRect.left - this.wrapperClientRect.width + 'px',
-          transformOrigin: 'right bottom'
+          top: this.wrapperClientRect.top - dh + dy + 'px',
+          transformOrigin: 'right bottom',
+          width: dw + this.wrapperClientRect.width / 2 + 'px'
         });
 
         // Object.assign(this.wrapper.style, {
