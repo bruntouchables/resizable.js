@@ -260,24 +260,15 @@ class Resizable {
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
+        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
+        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
 
-        if (this.angle >= -45 && this.angle < 0) {
-          let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 + Math.sin(angle) * this.wrapperClientRect.width / 2;
-          Object.assign(this.wrapper.style, {
-            height: dh + this.wrapperClientRect.height / 2 + 'px',
-            left: this.wrapperClientRect.left + (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
-            top: this.wrapperClientRect.top - dh + dy + 'px',
-            transformOrigin: 'right bottom'
-          });
-        } else {
-          let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
-          Object.assign(this.wrapper.style, {
-            height: dh + this.wrapperClientRect.height / 2 + 'px',
-            left: this.wrapperClientRect.left - (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
-            top: this.wrapperClientRect.top - dh + dy + 'px',
-            transformOrigin: 'left bottom'
-          });
-        }
+        Object.assign(this.wrapper.style, {
+          height: dh + this.wrapperClientRect.height / 2 + 'px',
+          left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
+          top: this.wrapperClientRect.top - dh + dy + 'px',
+          transformOrigin: 'left bottom'
+        });
 
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
@@ -465,7 +456,7 @@ class Resizable {
             width: this.wrapperClientRect.width / 2 - dw + 'px'
           });
         }
-        
+
         // Object.assign(this.wrapper.style, {
         //   left: 'auto',
         //   top: top / this._scale + 'px',
