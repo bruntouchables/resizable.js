@@ -362,18 +362,34 @@ class Resizable {
         // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
         break;
       }
-      // case 'se': {
-      //   Object.assign(this.wrapper.style, {
-      //     left: left / this._scale + 'px',
-      //     top: top / this._scale + 'px',
-      //     right: 'auto',
-      //     bottom: 'auto'
-      //   });
-      //   wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-      //   wrapperNewHeight = this.ratio * wrapperNewWidth;
-      //   keepRatio = true;
-      //   break;
-      // }
+      case 'se': {
+        let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
+        let angle = this.angle * (Math.PI / 180);
+        let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
+        let dh = d * Math.cos(alpha - angle);
+        let dw = d * Math.sin(alpha - angle);
+        let dx = -Math.sin(angle) * this.wrapperClientRect.height / 2 + Math.cos(angle) * this.wrapperClientRect.width / 2;
+        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 + Math.sin(angle) * this.wrapperClientRect.width / 2;
+
+        Object.assign(this.wrapper.style, {
+          height: -dh + this.wrapperClientRect.height / 2 + 'px',
+          left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
+          top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
+          transformOrigin: 'left top',
+          width: dw + this.wrapperClientRect.width / 2 + 'px'
+        });
+
+        // Object.assign(this.wrapper.style, {
+        //   left: left / this._scale + 'px',
+        //   top: top / this._scale + 'px',
+        //   right: 'auto',
+        //   bottom: 'auto'
+        // });
+        // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
+        // wrapperNewHeight = this.ratio * wrapperNewWidth;
+        // keepRatio = true;
+        break;
+      }
       // case 's': {
       //   Object.assign(this.wrapper.style, {
       //     left: left / this._scale + 'px',
