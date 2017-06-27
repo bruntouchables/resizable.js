@@ -330,16 +330,38 @@ class Resizable {
 
         break;
       }
-      // case 'e': {
-      //   Object.assign(this.wrapper.style, {
-      //     left: left / this._scale + 'px',
-      //     top: top / this._scale + 'px',
-      //     right: 'auto',
-      //     bottom: bottom / this._scale + 'px'
-      //   });
-      //   wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-      //   break;
-      // }
+      case 'e': {
+        let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
+        let angle = this.angle * (Math.PI / 180);
+        let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
+        let dw = d * Math.sin(alpha - angle);
+        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
+
+        if (this.angle >= -45 && this.angle < 0) {
+          // Object.assign(this.wrapper.style, {
+          //   left: this.wrapperClientRect.left + (this.rotatedClientRect.width - this.wrapperClientRect.width) / 2 + 'px',
+          //   top: this.wrapperClientRect.top + (this.rotatedClientRect.height - this.wrapperClientRect.height) + dy + 'px',
+          //   transformOrigin: 'right bottom',
+          //   width: dw + this.wrapperClientRect.width / 2 + 'px'
+          // });
+        } else {
+          Object.assign(this.wrapper.style, {
+            top: this.wrapperClientRect.top - (this.rotatedClientRect.height - this.wrapperClientRect.height) / 2 + 'px',
+            left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
+            transformOrigin: 'left top',
+            width: dw + this.wrapperClientRect.width / 2 + 'px'
+          });
+        }
+
+        // Object.assign(this.wrapper.style, {
+        //   left: left / this._scale + 'px',
+        //   top: top / this._scale + 'px',
+        //   right: 'auto',
+        //   bottom: bottom / this._scale + 'px'
+        // });
+        // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
+        break;
+      }
       // case 'se': {
       //   Object.assign(this.wrapper.style, {
       //     left: left / this._scale + 'px',
@@ -391,17 +413,15 @@ class Resizable {
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dw = d * Math.sin(alpha - angle);
-        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
-        let dx = Math.sin(angle) * this.wrapperClientRect.height / 2 + Math.cos(angle) * this.wrapperClientRect.width / 2;
+        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 + Math.sin(angle) * this.wrapperClientRect.width / 2;
+        let dx = -Math.sin(angle) * this.wrapperClientRect.height / 2 + Math.cos(angle) * this.wrapperClientRect.width / 2;
 
         Object.assign(this.wrapper.style, {
-          bottom: this.wrapperClientRect.top + this.wrapperClientRect.height + 'px',
           height: dh + this.wrapperClientRect.height / 2 + 'px',
-          left: this.wrapperClientRect.left - Math.abs(dw) + dx + 'px',
-          right: this.parent.width - this.wrapperClientRect.left - this.wrapperClientRect.width + 'px',
+          left: this.wrapperClientRect.left + dw + dx + 'px',
           top: this.wrapperClientRect.top - dh + dy + 'px',
           transformOrigin: 'right bottom',
-          width: dw + this.wrapperClientRect.width / 2 + 'px'
+          width: -dw + this.wrapperClientRect.width / 2 + 'px'
         });
 
         // Object.assign(this.wrapper.style, {
