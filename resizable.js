@@ -315,7 +315,6 @@ class Resizable {
         // wrapperNewHeight = this.ratio * wrapperNewWidth;
         // keepRatio = true;
         // }
-
         break;
       }
       case 'e': {
@@ -396,12 +395,13 @@ class Resizable {
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dw = d * Math.sin(alpha - angle);
-        let dx = -Math.sin(angle) * this.wrapperClientRect.height / 2 + Math.cos(angle) * this.wrapperClientRect.width / 2;
-        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 + Math.sin(angle) * this.wrapperClientRect.width / 2;
+        // TODO: dx and dy are not the same
+        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         Object.assign(this.wrapper.style, {
           height: -dh + this.wrapperClientRect.height / 2 + 'px',
-          left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
+          left: this.wrapperClientRect.left + dx + dw + 'px',
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
           transformOrigin: 'right top',
           width: -dw + this.wrapperClientRect.width / 2 + 'px'
@@ -431,12 +431,11 @@ class Resizable {
       case 'nw': {
         let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
-
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dw = d * Math.sin(alpha - angle);
-        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 + Math.sin(angle) * this.wrapperClientRect.width / 2;
-        let dx = -Math.sin(angle) * this.wrapperClientRect.height / 2 + Math.cos(angle) * this.wrapperClientRect.width / 2;
+        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
