@@ -313,24 +313,15 @@ class Resizable {
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dw = d * Math.sin(alpha - angle);
-        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        if (this.angle >= -45 && this.angle < 0) {
-          dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
-          Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top + (this.rotatedClientRect.height - this.wrapperClientRect.height) / 2 + 'px',
-            left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
-            transformOrigin: 'left bottom',
-            width: dw + this.wrapperClientRect.width / 2 + 'px'
-          });
-        } else {
-          Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top - (this.rotatedClientRect.height - this.wrapperClientRect.height) / 2 + 'px',
-            left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
-            transformOrigin: 'left top',
-            width: dw + this.wrapperClientRect.width / 2 + 'px'
-          });
-        }
+        Object.assign(this.wrapper.style, {
+          left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
+          top: this.wrapperClientRect.top - this.wrapperClientRect.height / 2 + dy + 'px',
+          transformOrigin: 'left bottom',
+          width: dw + this.wrapperClientRect.width / 2 + 'px'
+        });
 
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
