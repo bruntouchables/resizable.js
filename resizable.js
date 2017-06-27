@@ -368,21 +368,12 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        if (this.angle >= -45 && this.angle < 0) {
-          Object.assign(this.wrapper.style, {
-            height: this.wrapperClientRect.height / 2 - dh + 'px',
-            left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
-            top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
-            transformOrigin: 'left top'
-          });
-        } else {
-          Object.assign(this.wrapper.style, {
-            height: this.wrapperClientRect.height / 2 - dh + 'px',
-            left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
-            top: this.wrapperClientRect.top - (this.rotatedClientRect.height - this.wrapperClientRect.height) / 2 + 'px',
-            transformOrigin: 'left top'
-          });
-        }
+        Object.assign(this.wrapper.style, {
+          height: -dh + this.wrapperClientRect.height / 2 + 'px',
+          left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
+          top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
+          transformOrigin: 'left top'
+        });
 
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
