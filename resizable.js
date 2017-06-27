@@ -260,8 +260,8 @@ class Resizable {
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
-        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         Object.assign(this.wrapper.style, {
           height: dh + this.wrapperClientRect.height / 2 + 'px',
