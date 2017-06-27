@@ -418,26 +418,15 @@ class Resizable {
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dw = d * Math.sin(alpha - angle);
-        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
-        let dy = Math.cos(angle) * this.wrapperClientRect.height / 2 + Math.sin(angle) * this.wrapperClientRect.width / 2;
+        let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        if (this.angle >= -45 && this.angle < 0) {
-          dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
-          dy = Math.cos(angle) * this.wrapperClientRect.height / 2 - Math.sin(angle) * this.wrapperClientRect.width / 2;
-          Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
-            left: this.wrapperClientRect.left + dw + dx + 'px',
-            transformOrigin: 'right top',
-            width: this.wrapperClientRect.width / 2 - dw + 'px'
-          });
-        } else {
-          Object.assign(this.wrapper.style, {
-            top: this.wrapperClientRect.top - this.wrapperClientRect.height / 2 + dy + 'px',
-            left: this.wrapperClientRect.left + dw + dx + 'px',
-            transformOrigin: 'right bottom',
-            width: this.wrapperClientRect.width / 2 - dw + 'px'
-          });
-        }
+        Object.assign(this.wrapper.style, {
+          left: this.wrapperClientRect.left + dw + dx + 'px',
+          top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
+          transformOrigin: 'right top',
+          width: -dw + this.wrapperClientRect.width / 2 + 'px'
+        });
 
         // Object.assign(this.wrapper.style, {
         //   left: 'auto',
