@@ -414,22 +414,14 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // TODO: element jumps
         // don't let wrapper's height become smaller than wrapperMinHeight
-        let top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy;
-        let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
-
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
-
-        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight - mdy) {
-          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight - mdy;
-        }
         
         Object.assign(this.wrapper.style, {
           height: wrapperNewHeight + 'px',
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
-          top: top + 'px',
+          top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
           transformOrigin: 'left top'
         });
 
