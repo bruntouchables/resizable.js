@@ -1,6 +1,6 @@
 .resizable {
   word-wrap: break-word;
-  /* avoid element shake */
+  /* prevent flickering of CSS transitions and transforms in Webkit */
   -webkit-transform: translate3d(0, 0, 0);
   -webkit-backface-visibility: hidden;
 }
