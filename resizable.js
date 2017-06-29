@@ -254,7 +254,6 @@ class Resizable {
           transformOrigin: 'center center'
         });
 
-        console.log(newAngle);
         break;
       }
       case 'n': {
@@ -329,11 +328,21 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
+        let left = this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx;
+        let mdx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
+
+        let wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
+        wrapperNewWidth = wrapperNewWidth < 30 ? 30 : wrapperNewWidth;
+
+        if (left > this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + mdx) {
+          top = this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + mdx;
+        }
+
         Object.assign(this.wrapper.style, {
-          left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
+          left: left + 'px',
           top: this.wrapperClientRect.top - this.wrapperClientRect.height / 2 + dy + 'px',
           transformOrigin: 'left bottom',
-          width: dw + this.wrapperClientRect.width / 2 + 'px'
+          width: wrapperNewWidth + 'px'
         });
 
         // Object.assign(this.wrapper.style, {
