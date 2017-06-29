@@ -422,8 +422,8 @@ class Resizable {
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
 
-        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
-          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
+        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight - mdy) {
+          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight - mdy;
         }
         
         Object.assign(this.wrapper.style, {
