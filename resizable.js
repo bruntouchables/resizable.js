@@ -253,6 +253,8 @@ class Resizable {
           transform: 'rotate(' + newAngle + 'deg)',
           transformOrigin: 'center center'
         });
+
+        console.log(newAngle);
         break;
       }
       case 'n': {
@@ -263,19 +265,16 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
+        // don't let wrapper become smaller than wrapperMinHeight
+        let top = this.wrapperClientRect.top - dh + dy;
+        let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
+        
         let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
-
-        let top = parseFloat(this.wrapper.style.top);
-        if (wrapperNewHeight > 30) {
-          top = this.wrapperClientRect.top - dh + dy;
+        
+        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
+          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
         }
-
-        // let possibleMaximumTop = this.wrapperClientRect.top + this.wrapperClientRect.height +
-        //   (this.rotatedClientRect.height - this.wrapperClientRect.height) / 2 - 30;
-        // if (top > possibleMaximumTop) {
-        //   top = possibleMaximumTop;
-        // }
 
         Object.assign(this.wrapper.style, {
           height: wrapperNewHeight + 'px',
