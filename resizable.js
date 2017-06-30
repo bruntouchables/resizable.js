@@ -516,8 +516,11 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        let wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
+        wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+
+        wrapperNewHeight = this.ratio * wrapperNewWidth;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         let mdx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let left = this.wrapperClientRect.left + dw + dx;
@@ -526,21 +529,19 @@ class Resizable {
           left = this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + mdx;
         }
 
-        let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+        // let mdy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
+        let top = this.wrapperClientRect.top + dy;
+        top += this.keepRatio ? this.wrapperClientRect.height / 2 - wrapperNewHeight : -dh;
 
-        let mdy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
-        let top = this.wrapperClientRect.top - dh + dy;
+        // if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
+        //   top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
+        // }
 
-        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
-          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
-        }
+        keepRatio = true;
 
         Object.assign(this.wrapper.style, {
           left: left + 'px',
           top: top + 'px',
-          height: wrapperNewHeight + 'px',
-          width: wrapperNewWidth + 'px',
           transformOrigin: 'right bottom'
         });
 
