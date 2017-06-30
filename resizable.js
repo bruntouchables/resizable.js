@@ -33,8 +33,8 @@ class Resizable {
     }
 
     // wrapper min height and min width
-    this.wrapperMinHeight = this.wrapperMinWidth;
-    this.wrapperMinWidth = this.wrapperMinWidth;
+    this.wrapperMinHeight = 30;
+    this.wrapperMinWidth = 30;
 
     // create necessary DOM elements
     this.createDOMElements(element);
