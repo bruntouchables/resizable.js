@@ -269,7 +269,7 @@ class Resizable {
         let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
           top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
@@ -305,7 +305,7 @@ class Resizable {
         let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
           top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
@@ -381,7 +381,7 @@ class Resizable {
 
         // don't let wrapper's height become smaller than wrapperMinHeight
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
@@ -416,7 +416,7 @@ class Resizable {
 
         // don't let wrapper's height become smaller than wrapperMinHeight
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         Object.assign(this.wrapper.style, {
           height: wrapperNewHeight + 'px',
@@ -446,7 +446,7 @@ class Resizable {
 
         // don't let wrapper's height become smaller than wrapperMinHeight
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < 30 ? 30 : wrapperNewHeight;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
