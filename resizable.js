@@ -140,11 +140,9 @@ class Resizable {
     // apply styles to the wrapper
     Object.assign(this.wrapper.style, {
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-      left: '200px',
-      // left: element.style.left,
+      left: element.style.left,
       position: 'absolute',
-      top: '200px',
-      // top: element.style.top,
+      top: element.style.top,
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
