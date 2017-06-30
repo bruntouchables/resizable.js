@@ -42,7 +42,10 @@ class Resizable {
     // apply styles to the element and the wrapper
     this.applyStyles(element);
 
-    // attach on init events
+    this.wrapperOldHeight = this.wrapper.offsetHeight;
+    this.wrapperOldWidth = this.wrapper.offsetWidth;
+
+    // on init events
     this.attachInitEvents(element);
 
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
@@ -139,24 +142,21 @@ class Resizable {
 
     // apply styles to the wrapper
     Object.assign(this.wrapper.style, {
-      height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-      left: element.style.left,
       position: 'absolute',
+      left: element.style.left,
       top: element.style.top,
+      height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
     // apply styles to the element
     Object.assign(element.style, {
-      height: this.wrapper.style.height,
-      left: '0',
       position: 'relative',
+      left: '0',
       top: '0',
+      height: this.wrapper.style.height,
       width: this.wrapper.style.width
     });
-
-    this.wrapperOldHeight = this.wrapper.offsetHeight;
-    this.wrapperOldWidth = this.wrapper.offsetWidth;
   }
 
   attachInitEvents(element) {
@@ -175,8 +175,8 @@ class Resizable {
       }
     });
 
-    this.handles = this.wrapper.querySelectorAll('.resize-handle');
-    Array.prototype.map.call(this.handles, handle => {
+    this.handles = [...this.wrapper.querySelectorAll('.resize-handle')];
+    this.handles.map(handle => {
       // disable default drag start event handler
       handle.addEventListener('dragstart', {});
 
@@ -197,9 +197,11 @@ class Resizable {
     // let {height, width} = this.wrapper.getBoundingClientRect();
     // this.ratio = height / width;
 
-    // add event listeners to mouse move and mouse up
+    // bind `this` to event listeners
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
+
+    // add `mousemove` and `mouseup` event listeners 
     document.addEventListener('mousemove', this.mouseMove);
     document.addEventListener('mouseup', this.mouseUp);
 
@@ -236,6 +238,7 @@ class Resizable {
     switch (this.handle) {
       case 'rotate': {
         let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y,) * (180 / Math.PI);
+
         // discontinuous rotate effect
         let angles = [-180, -135, -90, -45, 0, 45, 90, 135, 180];
         angles.map(angle => {
@@ -245,13 +248,13 @@ class Resizable {
         });
 
         this.rotation = newAngle - this.angle;
+
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + 'px',
           top: this.wrapperClientRect.top + 'px',
           transform: 'rotate(' + newAngle + 'deg)',
           transformOrigin: 'center center'
         });
-
         break;
       }
       case 'n': {
@@ -262,7 +265,6 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's height become smaller than wrapperMinHeight
         let top = this.wrapperClientRect.top - dh + dy;
         let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
@@ -274,9 +276,9 @@ class Resizable {
         }
 
         Object.assign(this.wrapper.style, {
-          height: wrapperNewHeight + 'px',
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
           top: top + 'px',
+          height: wrapperNewHeight + 'px',
           transformOrigin: 'left bottom'
         });
 
@@ -298,7 +300,6 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's height become smaller than wrapperMinHeight
         let top = this.wrapperClientRect.top - dh + dy;
         let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
@@ -309,16 +310,15 @@ class Resizable {
           top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
         }
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
         Object.assign(this.wrapper.style, {
-          height: wrapperNewHeight + 'px',
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
           top: top + 'px',
-          transformOrigin: 'left bottom',
-          width: wrapperNewWidth + 'px'
+          height: wrapperNewHeight + 'px',
+          width: wrapperNewWidth + 'px',
+          transformOrigin: 'left bottom'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -341,15 +341,14 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
           top: this.wrapperClientRect.top - this.wrapperClientRect.height / 2 + dy + 'px',
-          transformOrigin: 'left bottom',
-          width: wrapperNewWidth + 'px'
+          width: wrapperNewWidth + 'px',
+          transformOrigin: 'left bottom'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -370,20 +369,18 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's height become smaller than wrapperMinHeight
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
         Object.assign(this.wrapper.style, {
-          height: wrapperNewHeight + 'px',
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
-          transformOrigin: 'left top',
-          width: wrapperNewWidth + 'px'
+          height: wrapperNewHeight + 'px',
+          width: wrapperNewWidth + 'px',
+          transformOrigin: 'left top'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -405,14 +402,13 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's height become smaller than wrapperMinHeight
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         Object.assign(this.wrapper.style, {
-          height: wrapperNewHeight + 'px',
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
+          height: wrapperNewHeight + 'px',
           transformOrigin: 'left top'
         });
 
@@ -431,19 +427,17 @@ class Resizable {
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dw = d * Math.sin(alpha - angle);
+        
         // TODO: dx and dy are not the same
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's height become smaller than wrapperMinHeight
         let wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let left = this.wrapperClientRect.left + dx + dw;
         let mdx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
 
@@ -452,11 +446,11 @@ class Resizable {
         }
 
         Object.assign(this.wrapper.style, {
-          height: wrapperNewHeight + 'px',
           left: left + 'px',
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
-          transformOrigin: 'right top',
-          width: wrapperNewWidth + 'px'
+          height: wrapperNewHeight + 'px',
+          width: wrapperNewWidth + 'px',
+          transformOrigin: 'right top'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -478,11 +472,9 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let left = this.wrapperClientRect.left + dw + dx;
         let mdx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
 
@@ -493,8 +485,8 @@ class Resizable {
         Object.assign(this.wrapper.style, {
           left: left + 'px',
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
-          transformOrigin: 'right top',
-          width: wrapperNewWidth +'px'
+          width: wrapperNewWidth + 'px',
+          transformOrigin: 'right top'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -515,7 +507,6 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        // don't let wrapper's width become smaller than wrapperMinWidth
         let wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
@@ -526,7 +517,6 @@ class Resizable {
           left = this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + mdx;
         }
 
-        // don't let wrapper's height become smaller than wrapperMinHeight
         let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
@@ -538,11 +528,11 @@ class Resizable {
         }
 
         Object.assign(this.wrapper.style, {
-          height: wrapperNewHeight + 'px',
           left: left + 'px',
           top: top + 'px',
-          transformOrigin: 'right bottom',
-          width: wrapperNewWidth + 'px'
+          height: wrapperNewHeight + 'px',
+          width: wrapperNewWidth + 'px',
+          transformOrigin: 'right bottom'
         });
 
         // Object.assign(this.wrapper.style, {
@@ -594,7 +584,7 @@ class Resizable {
   }
 
   mouseUp(e) {
-    // remove mouse move and mouse up events
+    // remove `mousemove` and `mouseup` event listeners
     document.removeEventListener('mousemove', this.mouseMove);
     document.removeEventListener('mouseup', this.mouseUp);
 
@@ -623,7 +613,6 @@ class Resizable {
       return;
     }
 
-    // set wrapper old height and old width
     this.wrapperOldHeight = wrapperNewHeight;
     this.wrapperOldWidth = wrapperNewWidth;
   }
