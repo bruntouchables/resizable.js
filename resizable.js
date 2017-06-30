@@ -43,9 +43,6 @@ class Resizable {
     // apply styles to the element and the wrapper
     this.applyStyles(element);
 
-    this.wrapperOldHeight = this.wrapper.offsetHeight;
-    this.wrapperOldWidth = this.wrapper.offsetWidth;
-
     // on init events
     this.attachInitEvents(element);
 
@@ -310,7 +307,7 @@ class Resizable {
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
         // wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
-        
+
         wrapperNewHeight = this.ratio * wrapperNewWidth;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
@@ -557,7 +554,7 @@ class Resizable {
         break;
       }
     }
-    
+
     if (this.handle !== 'rotate') {
       Object.assign(this.wrapper.style, {
         height: wrapperNewHeight + 'px',
@@ -621,16 +618,5 @@ class Resizable {
         y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
       };
     }
-
-    let wrapperNewHeight = this.wrapper.offsetHeight;
-    let wrapperNewWidth = this.wrapper.offsetWidth;
-
-    // if nothing has changed
-    if (wrapperNewHeight === this.wrapperOldHeight && wrapperNewWidth === this.wrapperOldWidth) {
-      return;
-    }
-
-    this.wrapperOldHeight = wrapperNewHeight;
-    this.wrapperOldWidth = wrapperNewWidth;
   }
 }
