@@ -203,7 +203,7 @@ class Resizable {
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
 
-    // add `mousemove` and `mouseup` event listeners 
+    // add `mousemove` and `mouseup` event listeners
     document.addEventListener('mousemove', this.mouseMove);
     document.addEventListener('mouseup', this.mouseUp);
 
