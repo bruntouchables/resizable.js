@@ -143,8 +143,10 @@ class Resizable {
     // apply styles to the wrapper
     Object.assign(this.wrapper.style, {
       position: 'absolute',
-      left: element.style.left,
-      top: element.style.top,
+      // left: element.style.left,
+      // top: element.style.top,
+      left: '200px',
+      top: '200px',
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
@@ -197,6 +199,8 @@ class Resizable {
     // let {height, width} = this.wrapper.getBoundingClientRect();
     // this.ratio = height / width;
 
+    this.ratio = this.wrapper.offsetHeight / this.wrapper.offsetWidth;
+
     // bind `this` to event listeners
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
@@ -210,8 +214,8 @@ class Resizable {
   }
 
   mouseMove(e) {
-    let parentStyle = window.getComputedStyle(this.wrapper.parentElement);
-    if (parentStyle.position === 'static') {
+    let parentPosition = this.wrapper.parentElement.style;
+    if (parentPosition === '' || parentPosition === 'static') {
       this.parent = {
         left: 0,
         top: 0,
@@ -233,6 +237,8 @@ class Resizable {
 
     // let wrapperNewHeight, wrapperNewWidth;
     // let keepRatio = false;
+
+    let keepRatio = false;
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
@@ -300,18 +306,20 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        let top = this.wrapperClientRect.top - dh + dy;
-        let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
-
-        let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
-
-        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
-          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
-        }
-
         let wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+
+        // let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
+        let wrapperNewHeight = this.ratio * wrapperNewWidth;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+
+        let top = this.wrapperClientRect.top + (this.wrapperClientRect.height - wrapperNewHeight);
+
+        // let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
+        // let top  = this.wrapperClientRect.top - dh + dy;
+        // if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
+        //   top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
+        // }
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
@@ -320,6 +328,7 @@ class Resizable {
           width: wrapperNewWidth + 'px',
           transformOrigin: 'left bottom'
         });
+        keepRatio = true;
 
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
@@ -427,7 +436,7 @@ class Resizable {
         let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dw = d * Math.sin(alpha - angle);
-        
+
         // TODO: dx and dy are not the same
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
@@ -546,6 +555,10 @@ class Resizable {
         // keepRatio = true;
         break;
       }
+    }
+
+    if (this.handle !== 'rotate') {
+
     }
 
     // if (!this.rotate) {
