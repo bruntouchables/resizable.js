@@ -549,6 +549,14 @@ class Resizable {
     }
 
     if (this.handle !== 'rotate') {
+      if (wrapperNewHeight !== undefined && wrapperNewHeight === this.wrapperMinHeight && keepRatio) {
+        wrapperNewWidth = wrapperNewHeight / this.ratio;
+      }
+
+      if (wrapperNewWidth !== undefined && wrapperNewWidth === this.wrapperMinWidth && keepRatio) {
+        wrapperNewHeight = this.ratio * wrapperNewWidth;
+      }
+
       Object.assign(this.wrapper.style, {
         height: wrapperNewHeight + 'px',
         width: wrapperNewWidth + 'px',
@@ -556,21 +564,6 @@ class Resizable {
     }
 
     // if (!this.rotate) {
-    //   // don't let wrapper's height become less than wrapper min height
-    //   if (wrapperNewHeight !== undefined && wrapperNewHeight < this.wrapperMinHeight) {
-    //     wrapperNewHeight = this.wrapperMinHeight;
-    //     if (keepRatio) {
-    //       wrapperNewWidth = wrapperNewHeight / this.ratio;
-    //     }
-    //   }
-    //
-    //   // don't let wrapper's width become less than wrapper min width
-    //   if (wrapperNewWidth !== undefined && wrapperNewWidth < this.wrapperMinWidth) {
-    //     wrapperNewWidth = this.wrapperMinWidth;
-    //     if (keepRatio) {
-    //       wrapperNewHeight = this.ratio * wrapperNewWidth;
-    //     }
-    //   }
     //
     //   // set new wrapper height and width
     //   Object.assign(this.wrapper.style, {
