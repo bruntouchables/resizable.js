@@ -354,13 +354,12 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        let wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
+        wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
           top: this.wrapperClientRect.top - this.wrapperClientRect.height / 2 + dy + 'px',
-          width: wrapperNewWidth + 'px',
           transformOrigin: 'left bottom'
         });
 
