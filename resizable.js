@@ -13,7 +13,7 @@ class Resizable {
 
     this.rotation = 0;
     this.angle = 0;
-    this.keepRatio = true;
+    this.keepRatio = false;
 
     // custom handles
     if (options && options.handles) {
@@ -33,9 +33,8 @@ class Resizable {
                       <span class="resize-handle resize-handle-nw"></span>';
     }
 
-    // wrapper min height and min width
-    this.wrapperMinHeight = 30;
-    this.wrapperMinWidth = 30;
+    // wrapper min-height and min-width
+    this.wrapperMinHeight = this.wrapperMinWidth = 30 / this._scale;
 
     // create necessary DOM elements
     this.createDOMElements(element);
@@ -142,9 +141,9 @@ class Resizable {
     Object.assign(this.wrapper.style, {
       position: 'absolute',
       // left: element.style.left,
-      // top: element.style.top,
       left: '200px',
       top: '200px',
+      // top: element.style.top,
       height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
       width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
     });
@@ -152,8 +151,8 @@ class Resizable {
     // apply styles to the element
     Object.assign(element.style, {
       position: 'relative',
-      left: '0',
-      top: '0',
+      left: 0,
+      top: 0,
       height: this.wrapper.style.height,
       width: this.wrapper.style.width
     });
@@ -198,7 +197,7 @@ class Resizable {
     // this.ratio = height / width;
 
     this.ratio = this.wrapper.offsetHeight / this.wrapper.offsetWidth;
-    this.wrapperMinHeight = this.wrapperMinWidth = 30;
+    this.wrapperMinHeight = this.wrapperMinWidth = 30 / this._scale;
 
     if (this.keepRatio) {
       if (this.wrapper.offsetHeight > this.wrapper.offsetWidth) {
@@ -221,21 +220,21 @@ class Resizable {
   }
 
   mouseMove(e) {
-    let parentPosition = this.wrapper.parentElement.style;
-    if (parentPosition === '' || parentPosition === 'static') {
-      this.parent = {
-        left: 0,
-        top: 0,
-        height: window.innerHeight,
-        width: window.innerWidth
-      };
-    } else {
-      this.parent = this.wrapper.parentElement.getBoundingClientRect();
-    }
+    // let parentPosition = this.wrapper.parentElement.style;
+    // if (parentPosition === '' || parentPosition === 'static') {
+    //   this.parent = {
+    //     left: 0,
+    //     top: 0,
+    //     height: window.innerHeight,
+    //     width: window.innerWidth
+    //   };
+    // } else {
+    //   this.parent = this.wrapper.parentElement.getBoundingClientRect();
+    // }
 
-    let {height, width, left, top} = this.wrapper.getBoundingClientRect();
-    left = left - this.parent.left;
-    top = top - this.parent.top;
+    // let {height, width, left, top} = this.wrapper.getBoundingClientRect();
+    // left = left - this.parent.left;
+    // top = top - this.parent.top;
     // let right = this.parent.width - left - width;
     // let bottom = this.parent.height - top - height;
 
@@ -245,10 +244,9 @@ class Resizable {
     let wrapperNewHeight, wrapperNewWidth;
     // keepRatio = false;
 
-    // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
       case 'rotate': {
-        let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y,) * (180 / Math.PI);
+        let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y) / this._scale * (180 / Math.PI);
 
         // discontinuous rotate effect
         let angles = [-180, -135, -90, -45, 0, 45, 90, 135, 180];
@@ -261,8 +259,8 @@ class Resizable {
         this.rotation = newAngle - this.angle;
 
         Object.assign(this.wrapper.style, {
-          left: this.wrapperClientRect.left + 'px',
-          top: this.wrapperClientRect.top + 'px',
+          left: this.wrapperClientRect.left / this._scale + 'px',
+          top: this.wrapperClientRect.top / this._scale + 'px',
           transform: 'rotate(' + newAngle + 'deg)',
           transformOrigin: 'center center'
         });
@@ -276,12 +274,12 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
+        wrapperNewHeight = (dh + this.wrapperClientRect.height / 2) / this._scale;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
-        let top = this.wrapperClientRect.top - dh + dy;
-        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy) {
-          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy;
+        let top = (this.wrapperClientRect.top - dh + dy) / this._scale;
+        if (top > (this.wrapperClientRect.top + this.wrapperClientRect.height / 2 + dy) / this._scale - this.wrapperMinHeight) {
+          top = (this.wrapperClientRect.top + this.wrapperClientRect.height / 2 + dy) / this._scale - this.wrapperMinHeight;
         }
 
         Object.assign(this.wrapper.style, {
