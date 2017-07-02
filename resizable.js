@@ -8,7 +8,7 @@
 class Resizable {
   constructor(element, options) {
     this.wrapper = '<div class="resizable"></div>';
-    // this._scale = (options && options.scale) ? options.scale : 1.0;
+    this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
     this.rotation = 0;
@@ -505,10 +505,10 @@ class Resizable {
         wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
+        wrapperNewHeight = this.keepRatio ? this.ratio * wrapperNewWidth : dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
-        let left = this.wrapperClientRect.left + dw + dx;
+        let left = this.wrapperClientRect.left + dx + dw;
         if (left > this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + dx) {
           left = this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + dx;
         }
@@ -516,14 +516,14 @@ class Resizable {
         let top = this.wrapperClientRect.top + dy;
         top += this.keepRatio ? this.wrapperClientRect.height / 2 - wrapperNewHeight : -dh;
 
-        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy) {
-          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy;
-        }
+        // if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy) {
+        //   top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy;
+        // }
 
         Object.assign(this.wrapper.style, {
           left: left + 'px',
           top: top + 'px',
-          transformOrigin: 'right bottom'
+          transformOrigin: 'right bottom',
         });
 
         // Object.assign(this.wrapper.style, {

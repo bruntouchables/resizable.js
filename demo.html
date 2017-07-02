@@ -5,6 +5,10 @@
     <title>Demo - resizable.js</title>
     <link rel="stylesheet" href="resizable.css">
     <style>
+      /*body {*/
+        /*transform: scale(.8);  */
+      /*}*/
+      
       #example {
         background: #79589f;
         height: 200px;
@@ -18,7 +22,9 @@
     <script src="resizable.js"></script>
     <script>
       let element = document.getElementById('example');
-      new Resizable(element);
+      new Resizable(element, {
+        scale: 1.0
+      });
     </script>
   </body>
 </html>
