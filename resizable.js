@@ -47,12 +47,13 @@ class Resizable {
 
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperClientRect = {
-      left: this.rotatedClientRect.left,
-      top: this.rotatedClientRect.top,
-      height: this.rotatedClientRect.height,
-      width: this.rotatedClientRect.width
+      left: this.rotatedClientRect.left / this._scale,
+      top: this.rotatedClientRect.top / this._scale,
+      height: this.rotatedClientRect.height / this._scale,
+      width: this.rotatedClientRect.width / this._scale
     };
 
+    // TODO:
     this.wrapperCenter = {
       x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2,
       y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
@@ -246,7 +247,7 @@ class Resizable {
 
     switch (this.handle) {
       case 'rotate': {
-        let newAngle = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y) / this._scale * (180 / Math.PI);
+        let newAngle = Math.atan2(e.pageX / this._scale - this.wrapperCenter.x, -e.pageY / this._scale + this.wrapperCenter.y) * (180 / Math.PI);
 
         // discontinuous rotate effect
         let angles = [-180, -135, -90, -45, 0, 45, 90, 135, 180];
@@ -259,8 +260,8 @@ class Resizable {
         this.rotation = newAngle - this.angle;
 
         Object.assign(this.wrapper.style, {
-          left: this.wrapperClientRect.left / this._scale + 'px',
-          top: this.wrapperClientRect.top / this._scale + 'px',
+          left: this.wrapperClientRect.left + 'px',
+          top: this.wrapperClientRect.top + 'px',
           transform: 'rotate(' + newAngle + 'deg)',
           transformOrigin: 'center center'
         });
@@ -570,11 +571,13 @@ class Resizable {
 
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperClientRect = {
-      left: this.rotatedClientRect.left + (this.rotatedClientRect.width - this.wrapper.offsetWidth) / 2,
-      top: this.rotatedClientRect.top + (this.rotatedClientRect.height - this.wrapper.offsetHeight) / 2,
+      left: this.rotatedClientRect.left / this._scale + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
+      top: this.rotatedClientRect.top / this._scale + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
       height: this.wrapper.offsetHeight,
       width: this.wrapper.offsetWidth
     };
+    
+    // console.log('up', this.wrapperClientRect);
 
     if (this.handle === 'rotate') {
       this.angle += this.rotation;
