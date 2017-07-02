@@ -13,7 +13,7 @@ class Resizable {
 
     this.rotation = 0;
     this.angle = 0;
-    this.keepRatio = false;
+    this.keepRatio = true;
 
     // custom handles
     if (options && options.handles) {
@@ -89,8 +89,8 @@ class Resizable {
     let wrapperObserver = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
         let elementHeight = element.offsetHeight;
-        let wrapperHeight = this.wrapper.offsetHeight;
         let elementWidth = element.offsetWidth;
+        let wrapperHeight = this.wrapper.offsetHeight;
         let wrapperWidth = this.wrapper.offsetWidth;
 
         if (wrapperHeight !== elementHeight) {
