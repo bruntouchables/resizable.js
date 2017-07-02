@@ -243,7 +243,7 @@ class Resizable {
     // this.wrapperOldWidth = width / this._scale;
 
     let wrapperNewHeight, wrapperNewWidth;
-    let keepRatio = false;
+    // keepRatio = false;
 
     // BTDT: styles are sorted in clockwise order
     switch (this.handle) {
@@ -326,7 +326,6 @@ class Resizable {
           top: top + 'px',
           transformOrigin: 'left bottom'
         });
-        keepRatio = true;
 
         // Object.assign(this.wrapper.style, {
         //   left: left / this._scale + 'px',
@@ -526,7 +525,6 @@ class Resizable {
           top: top + 'px',
           transformOrigin: 'right bottom'
         });
-        keepRatio = true;
 
         // Object.assign(this.wrapper.style, {
         //   left: 'auto',
