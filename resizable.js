@@ -198,6 +198,13 @@ class Resizable {
     // this.ratio = height / width;
 
     this.ratio = this.wrapper.offsetHeight / this.wrapper.offsetWidth;
+    this.wrapperMinHeight = this.wrapperMinWidth = 30;
+
+    if (this.wrapper.offsetHeight > this.wrapper.offsetWidth) {
+      this.wrapperMinHeight = this.wrapperMinWidth * this.ratio;
+    } else {
+      this.wrapperMinWidth = this.wrapperMinHeight / this.ratio;
+    }
 
     // bind `this` to event listeners
     this.mouseMove = this.mouseMove.bind(this);
