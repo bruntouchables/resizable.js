@@ -13,7 +13,7 @@ class Resizable {
 
     this.rotation = 0;
     this.angle = 0;
-    this.keepRatio = true;
+    this.keepRatio = false;
 
     // custom handles
     if (options && options.handles) {
@@ -282,7 +282,7 @@ class Resizable {
         }
 
         wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+        wrapperNewHeight = (wrapperNewHeight < this.wrapperMinHeight) ? this.wrapperMinHeight : wrapperNewHeight;
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
@@ -308,24 +308,18 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        let top = this.wrapperClientRect.top + dy;
-
-        if (this.keepRatio) {
-          top += this.wrapperClientRect.height / 2 - wrapperNewHeight;
-        } else {
-          let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
-          top -= dh;
-
-          if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
-            top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
-          }
-        }
-
         wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
-        wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+        wrapperNewWidth = (wrapperNewWidth < this.wrapperMinWidth) ? this.wrapperMinWidth : wrapperNewWidth;
 
         wrapperNewHeight = this.keepRatio ? this.ratio * wrapperNewWidth : dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+        wrapperNewHeight = (wrapperNewHeight < this.wrapperMinHeight) ? this.wrapperMinHeight : wrapperNewHeight;
+
+        let top = this.wrapperClientRect.top + dy;
+        top += this.keepRatio ? this.wrapperClientRect.height / 2 - wrapperNewHeight : -dh;
+
+        if (!this.keepRatio && top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy) {
+          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + dy;
+        }
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
@@ -355,7 +349,7 @@ class Resizable {
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
-        wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+        wrapperNewWidth = (wrapperNewWidth < this.wrapperMinWidth) ? this.wrapperMinWidth : wrapperNewWidth;
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
@@ -382,10 +376,10 @@ class Resizable {
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
-        wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+        wrapperNewWidth = (wrapperNewWidth < this.wrapperMinWidth) ? this.wrapperMinWidth : wrapperNewWidth;
 
         wrapperNewHeight = this.keepRatio ? this.ratio * wrapperNewWidth : -dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+        wrapperNewHeight = (wrapperNewHeight < this.wrapperMinHeight) ? this.wrapperMinHeight : wrapperNewHeight;
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
@@ -413,7 +407,7 @@ class Resizable {
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         wrapperNewHeight = -dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+        wrapperNewHeight = (wrapperNewHeight < this.wrapperMinHeight) ? this.wrapperMinHeight : wrapperNewHeight;
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
@@ -441,18 +435,18 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
-        wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
-
-        wrapperNewHeight = wrapperNewWidth * this.ratio;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
-
-        let left = this.wrapperClientRect.left + dx + dw;
         let mdx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
+        let left = this.wrapperClientRect.left + dx + dw;
 
         if (left > this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + mdx) {
           left = this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - this.wrapperMinWidth + mdx;
         }
+
+        wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
+        wrapperNewWidth = (wrapperNewWidth < this.wrapperMinWidth) ? this.wrapperMinWidth : wrapperNewWidth;
+
+        wrapperNewHeight = wrapperNewWidth * this.ratio;
+        wrapperNewHeight = (wrapperNewHeight < this.wrapperMinHeight) ? this.wrapperMinHeight : wrapperNewHeight;
 
         Object.assign(this.wrapper.style, {
           left: left + 'px',
@@ -480,7 +474,7 @@ class Resizable {
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         let wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
-        wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+        wrapperNewWidth = (wrapperNewWidth < this.wrapperMinWidth) ? this.wrapperMinWidth : wrapperNewWidth;
 
         let left = this.wrapperClientRect.left + dw + dx;
         let mdx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
@@ -515,10 +509,10 @@ class Resizable {
         let dy = Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
         wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
-        wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+        wrapperNewWidth = (wrapperNewWidth < this.wrapperMinWidth) ? this.wrapperMinWidth : wrapperNewWidth;
 
         wrapperNewHeight = this.ratio * wrapperNewWidth;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+        wrapperNewHeight = (wrapperNewHeight < this.wrapperMinHeight) ? this.wrapperMinHeight : wrapperNewHeight;
 
         let mdx = Math.cos(angle) * this.wrapperClientRect.width / 2 - Math.sin(angle) * this.wrapperClientRect.height / 2;
         let left = this.wrapperClientRect.left + dw + dx;
