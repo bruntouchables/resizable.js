@@ -257,7 +257,6 @@ class Resizable {
         });
 
         this.rotation = newAngle - this.angle;
-        console.log(newAngle);
 
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + 'px',
@@ -275,20 +274,19 @@ class Resizable {
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        let top = this.wrapperClientRect.top - dh + dy;
         let mdy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
-
-        let wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
-        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+        let top = this.wrapperClientRect.top - dh + dy;
 
         if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy) {
           top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - this.wrapperMinHeight + mdy;
         }
 
+        wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
+        wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
+
         Object.assign(this.wrapper.style, {
           left: this.wrapperClientRect.left + this.wrapperClientRect.width / 2 - dx + 'px',
           top: top + 'px',
-          height: wrapperNewHeight + 'px',
           transformOrigin: 'left bottom'
         });
 
@@ -556,14 +554,6 @@ class Resizable {
     }
 
     if (this.handle !== 'rotate') {
-      if (wrapperNewHeight !== undefined && wrapperNewHeight === this.wrapperMinHeight && keepRatio) {
-        wrapperNewWidth = wrapperNewHeight / this.ratio;
-      }
-
-      if (wrapperNewWidth !== undefined && wrapperNewWidth === this.wrapperMinWidth && keepRatio) {
-        wrapperNewHeight = this.ratio * wrapperNewWidth;
-      }
-
       Object.assign(this.wrapper.style, {
         height: wrapperNewHeight + 'px',
         width: wrapperNewWidth + 'px',
@@ -571,7 +561,6 @@ class Resizable {
     }
 
     // if (!this.rotate) {
-    //
     //   // set new wrapper height and width
     //   Object.assign(this.wrapper.style, {
     //     height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
