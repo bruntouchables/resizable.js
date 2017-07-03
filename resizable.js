@@ -8,7 +8,7 @@
 class Resizable {
   constructor(element, options) {
     this.wrapper = '<div class="resizable"></div>';
-    this._scale = (options && options.scale) ? options.scale : 1.0;
+    this._scale = (options && options.scale) ? options.scale : .8;
     this.handles = '';
 
     this.rotation = 0;
@@ -273,8 +273,8 @@ class Resizable {
         break;
       }
       case 'n': {
-        let x = (e.pageX - this.parentClientRect.left) / this._scale;
-        let y = (e.pageY - this.parentClientRect.top) / this._scale;
+        let x = e.pageX / this._scale - this.parentClientRect.left;
+        let y = e.pageY / this._scale - this.parentClientRect.top;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
