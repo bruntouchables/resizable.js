@@ -273,9 +273,9 @@ class Resizable {
         break;
       }
       case 'n': {
-        let alpha = Math.atan2(e.pageX / this._scale - this.wrapperCenter.x, -e.pageY / this._scale + this.wrapperCenter.y);
+        let alpha = Math.atan2(e.pageX - this.parentClientRect.left / this._scale - this.wrapperCenter.x, -(e.pageY - this.parentClientRect.top) / this._scale + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
-        let d = Math.sqrt(Math.pow(e.pageY / this._scale - this.wrapperCenter.y, 2) + Math.pow(e.pageX / this._scale - this.wrapperCenter.x, 2));
+        let d = Math.sqrt(Math.pow(e.pageY - this.parentClientRect.top / this._scale - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.parentClientRect.left / this._scale - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
@@ -498,8 +498,8 @@ class Resizable {
 
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperClientRect = {
-      left: this.rotatedClientRect.left / this._scale + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
-      top: this.rotatedClientRect.top / this._scale + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
+      left: (this.rotatedClientRect.left - this.parentClientRect.left) / this._scale + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
+      top: (this.rotatedClientRect.top - this.parentClientRect.top) / this._scale + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
       height: this.wrapper.offsetHeight,
       width: this.wrapper.offsetWidth
     };
