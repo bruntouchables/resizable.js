@@ -250,7 +250,7 @@ class Resizable {
 
     switch (this.handle) {
       case 'rotate': {
-        let newAngle = Math.atan2(e.pageX / this._scale - this.wrapperCenter.x, -e.pageY / this._scale + this.wrapperCenter.y) * (180 / Math.PI);
+        let newAngle = Math.atan2((e.pageX - this.parentClientRect.left) / this._scale - this.wrapperCenter.x, -(e.pageY - this.parentClientRect.top) / this._scale + this.wrapperCenter.y) * (180 / Math.PI);
 
         // discontinuous rotate effect
         let angles = [-180, -135, -90, -45, 0, 45, 90, 135, 180];
