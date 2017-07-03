@@ -390,9 +390,11 @@ class Resizable {
         break;
       }
       case 'sw': {
-        let alpha = Math.atan2(e.pageX / this._scale - this.wrapperCenter.x, -e.pageY / this._scale + this.wrapperCenter.y);
+        let x = e.pageX / this._scale - this.parentClientRect.left;
+        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
-        let d = Math.sqrt(Math.pow(e.pageY / this._scale - this.wrapperCenter.y, 2) + Math.pow(e.pageX / this._scale - this.wrapperCenter.x, 2));
+        let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dw = d * Math.sin(alpha - angle);
 
