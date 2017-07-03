@@ -111,13 +111,13 @@ class Resizable {
     });
   }
 
-  // set scale(scale) {
-  //   this._scale = scale;
-  // }
+  set scale(scale) {
+    this._scale = scale;
+  }
 
-  // get DOMElement() {
-  //   return this.wrapper;
-  // }
+  get DOMElement() {
+    return this.wrapper;
+  }
 
   createDOMElements(element) {
     // add wrapper before element
