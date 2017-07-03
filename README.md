@@ -14,14 +14,6 @@
 <div id="example"></div>
 ```
 
-```css
-#example {
-  background: #79589f;
-  height: 200px;
-  width: 200px;
-}
-```
-
 ```javascript
 let element = document.getElementById('example');
 new Resizable(element);
