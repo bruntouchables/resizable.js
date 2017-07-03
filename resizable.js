@@ -250,9 +250,9 @@ class Resizable {
 
     switch (this.handle) {
       case 'rotate': {
-        let x = (e.pageX - this.parentClientRect.left) / this._scale;
-        let y = -(e.pageY - this.parentClientRect.top) / this._scale;
-        let newAngle = Math.atan2(x - this.wrapperCenter.x, y + this.wrapperCenter.y) * (180 / Math.PI);
+        let x = e.pageX / this._scale - this.parentClientRect.left;
+        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let newAngle = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y) * (180 / Math.PI);
 
         // discontinuous rotate effect
         let angles = [-180, -135, -90, -45, 0, 45, 90, 135, 180];
@@ -273,9 +273,11 @@ class Resizable {
         break;
       }
       case 'n': {
-        let alpha = Math.atan2(e.pageX - this.parentClientRect.left / this._scale - this.wrapperCenter.x, -(e.pageY - this.parentClientRect.top) / this._scale + this.wrapperCenter.y);
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
+        let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
-        let d = Math.sqrt(Math.pow(e.pageY - this.parentClientRect.top / this._scale - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.parentClientRect.left / this._scale - this.wrapperCenter.x, 2));
+        let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
@@ -498,8 +500,8 @@ class Resizable {
 
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperClientRect = {
-      left: (this.rotatedClientRect.left - this.parentClientRect.left) / this._scale + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
-      top: (this.rotatedClientRect.top - this.parentClientRect.top) / this._scale + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
+      left: this.rotatedClientRect.left / this._scale - this.parentClientRect.left + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
+      top: this.rotatedClientRect.top / this._scale - this.parentClientRect.top + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
       height: this.wrapper.offsetHeight,
       width: this.wrapper.offsetWidth
     };
