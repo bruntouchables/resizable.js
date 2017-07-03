@@ -8,7 +8,7 @@
 class Resizable {
   constructor(element, options) {
     this.wrapper = '<div class="resizable"></div>';
-    this._scale = (options && options.scale) ? options.scale : .8;
+    this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
     this.rotation = 0;
@@ -173,7 +173,6 @@ class Resizable {
       allowed = allowed || e.target === this.wrapper;
 
       // BTDT: handle click event on the wrapper or the element
-      // on click callback call
       if (this.onClickCallback && allowed) {
         this.onClickCallback(e);
       }
