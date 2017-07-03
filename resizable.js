@@ -470,10 +470,18 @@ class Resizable {
         x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2,
         y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
       };
+
+      if (this.onResizeCallback) {
+        this.onResizeCallback();
+      }
     }
   }
 
   onClick(callback) {
     this.onClickCallback = callback;
+  }
+
+  onResize(callback) {
+    this.onResizeCallback = callback;
   }
 }
