@@ -436,7 +436,7 @@ class Resizable {
         wrapperNewWidth = -dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
 
-        wrapperNewHeight = wrapperNewWidth * this.ratio;
+        wrapperNewHeight = this.keepRatio ? wrapperNewWidth * this.ratio : -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
         let left = this.wrapperClientRect.left + dx + dw;
