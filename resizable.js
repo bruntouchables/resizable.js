@@ -45,10 +45,23 @@ class Resizable {
     // on init events
     this.attachInitEvents(element);
 
+    let parentStyles = getComputedStyle(this.wrapper.parentElement);
+    if (parentStyles.position === 'static') {
+      this.parentClientRect = {
+        left: 0,
+        top: 0
+      };
+    } else {
+      this.parentClientRect = {
+        left: this.wrapper.parentElement.offsetLeft,
+        top: this.wrapper.parentElement.offsetTop
+      };
+    }
+
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperClientRect = {
-      left: this.rotatedClientRect.left / this._scale,
-      top: this.rotatedClientRect.top / this._scale,
+      left: this.rotatedClientRect.left / this._scale - this.parentClientRect.left,
+      top: this.rotatedClientRect.top / this._scale - this.parentClientRect.top,
       height: this.rotatedClientRect.height / this._scale,
       width: this.rotatedClientRect.width / this._scale
     };
@@ -205,6 +218,19 @@ class Resizable {
       } else {
         this.wrapperMinWidth = this.wrapperMinHeight / this.ratio;
       }
+    }
+
+    let parentStyles = getComputedStyle(this.wrapper.parentElement);
+    if (parentStyles.position === 'static') {
+      this.parentClientRect = {
+        left: 0,
+        top: 0
+      };
+    } else {
+      this.parentClientRect = {
+        left: this.wrapper.parentElement.offsetLeft,
+        top: this.wrapper.parentElement.offsetTop
+      };
     }
 
     // bind `this` to event listeners
@@ -454,6 +480,19 @@ class Resizable {
     // remove `mousemove` and `mouseup` event listeners
     document.removeEventListener('mousemove', this.mouseMove);
     document.removeEventListener('mouseup', this.mouseUp);
+
+    let parentStyles = getComputedStyle(this.wrapper.parentElement);
+    if (parentStyles.position === 'static') {
+      this.parentClientRect = {
+        left: 0,
+        top: 0
+      };
+    } else {
+      this.parentClientRect = {
+        left: this.wrapper.parentElement.offsetLeft,
+        top: this.wrapper.parentElement.offsetTop
+      };
+    }
 
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperClientRect = {

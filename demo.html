@@ -10,6 +10,12 @@
         transform: scale(1.0);
         transform-origin: left top;
       }
+      
+      #parent {
+        position: absolute;
+        left: 50px;
+        top: 50px;
+      }
 
       #example {
         background: #79589f;
@@ -22,7 +28,9 @@
     </style>
   </head>
   <body>
-    <div id="example"></div>
+    <div id="parent">
+      <div id="example"></div>
+    </div>
 
     <script src="resizable.js"></script>
     <script>
