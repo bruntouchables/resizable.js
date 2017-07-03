@@ -268,19 +268,19 @@ class Resizable {
         break;
       }
       case 'n': {
-        let alpha = Math.atan2(e.pageX - this.wrapperCenter.x, -e.pageY + this.wrapperCenter.y);
+        let alpha = Math.atan2(e.pageX / this._scale - this.wrapperCenter.x, -e.pageY / this._scale + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
-        let d = Math.sqrt(Math.pow(e.pageY - this.wrapperCenter.y, 2) + Math.pow(e.pageX - this.wrapperCenter.x, 2));
+        let d = Math.sqrt(Math.pow(e.pageY / this._scale - this.wrapperCenter.y, 2) + Math.pow(e.pageX / this._scale - this.wrapperCenter.x, 2));
         let dh = d * Math.cos(alpha - angle);
         let dx = Math.cos(angle) * this.wrapperClientRect.width / 2 + Math.sin(angle) * this.wrapperClientRect.height / 2;
         let dy = -Math.sin(angle) * this.wrapperClientRect.width / 2 + Math.cos(angle) * this.wrapperClientRect.height / 2;
 
-        wrapperNewHeight = (dh + this.wrapperClientRect.height / 2) / this._scale;
+        wrapperNewHeight = dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
 
-        let top = (this.wrapperClientRect.top - dh + dy) / this._scale;
-        if (top > (this.wrapperClientRect.top + this.wrapperClientRect.height / 2 + dy) / this._scale - this.wrapperMinHeight) {
-          top = (this.wrapperClientRect.top + this.wrapperClientRect.height / 2 + dy) / this._scale - this.wrapperMinHeight;
+        let top = this.wrapperClientRect.top - dh + dy;
+        if (top > this.wrapperClientRect.top + this.wrapperClientRect.height / 2 + dy - this.wrapperMinHeight) {
+          top = this.wrapperClientRect.top + this.wrapperClientRect.height / 2 + dy - this.wrapperMinHeight;
         }
 
         Object.assign(this.wrapper.style, {
@@ -576,7 +576,7 @@ class Resizable {
       height: this.wrapper.offsetHeight,
       width: this.wrapper.offsetWidth
     };
-    
+
     // console.log('up', this.wrapperClientRect);
 
     if (this.handle === 'rotate') {
