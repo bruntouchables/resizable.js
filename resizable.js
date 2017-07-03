@@ -134,18 +134,13 @@ class Resizable {
   }
 
   applyStyles(element) {
-    let elementHeight = parseInt(element.offsetHeight, 10);
-    let elementWidth = parseInt(element.offsetWidth, 10);
-
     // apply styles to the wrapper
     Object.assign(this.wrapper.style, {
       position: 'absolute',
-      // left: element.style.left,
-      left: '200px',
-      top: '200px',
-      // top: element.style.top,
-      height: (elementHeight > this.wrapperMinHeight) ? elementHeight + 'px' : this.wrapperMinHeight + 'px',
-      width: (elementWidth > this.wrapperMinWidth) ? elementWidth + 'px' : this.wrapperMinWidth + 'px'
+      left: element.offsetLeft + 'px',
+      top: element.offsetTop + 'px',
+      height: (element.offsetHeight > this.wrapperMinHeight) ? element.offsetHeight + 'px' : this.wrapperMinHeight + 'px',
+      width: (element.offsetWidth > this.wrapperMinWidth) ? element.offsetWidth + 'px' : this.wrapperMinWidth + 'px'
     });
 
     // apply styles to the element
@@ -192,11 +187,10 @@ class Resizable {
     // get handle direction
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
-    // // calculate ratio
-    // let {height, width} = this.wrapper.getBoundingClientRect();
-    // this.ratio = height / width;
-
+    // calculate ratio
     this.ratio = this.wrapper.offsetHeight / this.wrapper.offsetWidth;
+
+    // scale min-height and min-width
     this.wrapperMinHeight = this.wrapperMinWidth = 30 / this._scale;
 
     if (this.keepRatio) {
@@ -220,29 +214,7 @@ class Resizable {
   }
 
   mouseMove(e) {
-    // let parentPosition = this.wrapper.parentElement.style;
-    // if (parentPosition === '' || parentPosition === 'static') {
-    //   this.parent = {
-    //     left: 0,
-    //     top: 0,
-    //     height: window.innerHeight,
-    //     width: window.innerWidth
-    //   };
-    // } else {
-    //   this.parent = this.wrapper.parentElement.getBoundingClientRect();
-    // }
-
-    // let {height, width, left, top} = this.wrapper.getBoundingClientRect();
-    // left = left - this.parent.left;
-    // top = top - this.parent.top;
-    // let right = this.parent.width - left - width;
-    // let bottom = this.parent.height - top - height;
-
-    // this.wrapperOldHeight = height / this._scale;
-    // this.wrapperOldWidth = width / this._scale;
-
     let wrapperNewHeight, wrapperNewWidth;
-    // keepRatio = false;
 
     switch (this.handle) {
       case 'rotate': {
@@ -287,14 +259,6 @@ class Resizable {
           top: top + 'px',
           transformOrigin: 'left bottom'
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: 'auto',
-        //   right: right / this._scale + 'px',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewHeight = (this.parent.height - bottom + this.parent.top - e.pageY) / this._scale;
         break;
       }
       case 'ne': {
@@ -324,17 +288,6 @@ class Resizable {
           top: top + 'px',
           transformOrigin: 'left bottom'
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: 'auto',
-        //   right: 'auto',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-        // wrapperNewHeight = this.ratio * wrapperNewWidth;
-        // keepRatio = true;
-        // }
         break;
       }
       case 'e': {
@@ -353,14 +306,6 @@ class Resizable {
           top: this.wrapperClientRect.top - this.wrapperClientRect.height / 2 + dy + 'px',
           transformOrigin: 'left bottom'
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: top / this._scale + 'px',
-        //   right: 'auto',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
         break;
       }
       case 'se': {
@@ -383,16 +328,6 @@ class Resizable {
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
           transformOrigin: 'left top'
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: top / this._scale + 'px',
-        //   right: 'auto',
-        //   bottom: 'auto'
-        // });
-        // wrapperNewWidth = (e.pageX - left - this.parent.left) / this._scale;
-        // wrapperNewHeight = this.ratio * wrapperNewWidth;
-        // keepRatio = true;
         break;
       }
       case 's': {
@@ -411,14 +346,6 @@ class Resizable {
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
           transformOrigin: 'left top'
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: left / this._scale + 'px',
-        //   top: top / this._scale + 'px',
-        //   right: right / this._scale + 'px',
-        //   bottom: 'auto'
-        // });
-        // wrapperNewHeight = (e.pageY - top - this.parent.top) / this._scale;
         break;
       }
       case 'sw': {
@@ -448,16 +375,6 @@ class Resizable {
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
           transformOrigin: 'right top'
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: 'auto',
-        //   top: top / this._scale + 'px',
-        //   right: right / this._scale + 'px',
-        //   bottom: 'auto'
-        // });
-        // wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
-        // wrapperNewHeight = this.ratio * wrapperNewWidth;
-        // keepRatio = true;
         break;
       }
       case 'w': {
@@ -481,14 +398,6 @@ class Resizable {
           top: this.wrapperClientRect.top + this.wrapperClientRect.height / 2 - dy + 'px',
           transformOrigin: 'right top'
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: 'auto',
-        //   top: top / this._scale + 'px',
-        //   right: right / this._scale + 'px',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
         break;
       }
       case 'nw': {
@@ -523,16 +432,6 @@ class Resizable {
           top: top + 'px',
           transformOrigin: 'right bottom',
         });
-
-        // Object.assign(this.wrapper.style, {
-        //   left: 'auto',
-        //   top: 'auto',
-        //   right: right / this._scale + 'px',
-        //   bottom: bottom / this._scale + 'px'
-        // });
-        // wrapperNewWidth = (this.parent.width - right + this.parent.left - e.pageX) / this._scale;
-        // wrapperNewHeight = this.ratio * wrapperNewWidth;
-        // keepRatio = true;
         break;
       }
     }
@@ -543,24 +442,6 @@ class Resizable {
         width: wrapperNewWidth + 'px',
       });
     }
-
-    // if (!this.rotate) {
-    //   // set new wrapper height and width
-    //   Object.assign(this.wrapper.style, {
-    //     height: (wrapperNewHeight !== undefined) ? wrapperNewHeight + 'px' : this.wrapperOldHeight + 'px',
-    //     width: (wrapperNewWidth !== undefined) ? wrapperNewWidth + 'px' : this.wrapperOldWidth + 'px'
-    //   });
-    //
-    //   // recalculate position
-    //   ({left, top} = this.wrapper.getBoundingClientRect());
-    //
-    //   Object.assign(this.wrapper.style, {
-    //     bottom: '',
-    //     left: (left - this.parent.left) / this._scale + 'px',
-    //     right: '',
-    //     top: (top - this.parent.top) / this._scale + 'px'
-    //   });
-    // }
   }
 
   mouseUp(e) {
