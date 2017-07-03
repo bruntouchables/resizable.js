@@ -159,6 +159,12 @@ class Resizable {
       let allowed = e.target === element;
       allowed = allowed || e.target === this.wrapper;
 
+      // BTDT: handle click event on the wrapper or the element
+      // on click callback call
+      if (this.onClickCallback && allowed) {
+        this.onClickCallback(e);
+      }
+
       // show handles only on the active element
       allowed = allowed || (e.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
 
@@ -465,5 +471,9 @@ class Resizable {
         y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
       };
     }
+  }
+
+  onClick(callback) {
+    this.onClickCallback = callback;
   }
 }
