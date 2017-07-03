@@ -53,7 +53,6 @@ class Resizable {
       width: this.rotatedClientRect.width / this._scale
     };
 
-    // TODO:
     this.wrapperCenter = {
       x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2,
       y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
@@ -576,8 +575,6 @@ class Resizable {
       height: this.wrapper.offsetHeight,
       width: this.wrapper.offsetWidth
     };
-
-    // console.log('up', this.wrapperClientRect);
 
     if (this.handle === 'rotate') {
       this.angle += this.rotation;
