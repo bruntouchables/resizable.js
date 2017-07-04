@@ -45,32 +45,6 @@ class Resizable {
     // on init events
     this.attachInitEvents(element);
 
-    let parentStyles = getComputedStyle(this.wrapper.parentElement);
-    if (parentStyles.position === 'static') {
-      this.parentClientRect = {
-        left: 0,
-        top: 0
-      };
-    } else {
-      this.parentClientRect = {
-        left: this.wrapper.parentElement.offsetLeft,
-        top: this.wrapper.parentElement.offsetTop
-      };
-    }
-
-    this.rotatedClientRect = this.wrapper.getBoundingClientRect();
-    this.wrapperClientRect = {
-      left: this.rotatedClientRect.left / this._scale - this.parentClientRect.left,
-      top: this.rotatedClientRect.top / this._scale - this.parentClientRect.top,
-      height: this.rotatedClientRect.height / this._scale,
-      width: this.rotatedClientRect.width / this._scale
-    };
-
-    this.wrapperCenter = {
-      x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2,
-      y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
-    };
-
     // track element mutations
     let elementObserver = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
@@ -205,6 +179,29 @@ class Resizable {
     // get handle direction
     this.handle = e.target.className.slice('resize-handle resize-handle-'.length);
 
+    let parentStyles = getComputedStyle(this.wrapper.parentElement);
+    if (parentStyles.position === 'static') {
+      this.parentClientRect = {
+        left: 0,
+        top: 0
+      };
+    } else {
+      this.parentClientRect = this.wrapper.parentElement.getBoundingClientRect();
+    }
+
+    this.rotatedClientRect = this.wrapper.getBoundingClientRect();
+    this.wrapperClientRect = {
+      left: (this.rotatedClientRect.left - this.parentClientRect.left) / this._scale + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
+      top: (this.rotatedClientRect.top - this.parentClientRect.top) / this._scale + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
+      height: this.wrapper.offsetHeight,
+      width: this.wrapper.offsetWidth
+    };
+
+    this.wrapperCenter = {
+      x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2,
+      y: this.wrapperClientRect.top + this.wrapperClientRect.height / 2
+    };
+
     // calculate ratio
     this.ratio = this.wrapper.offsetHeight / this.wrapper.offsetWidth;
 
@@ -217,19 +214,6 @@ class Resizable {
       } else {
         this.wrapperMinWidth = this.wrapperMinHeight / this.ratio;
       }
-    }
-
-    let parentStyles = getComputedStyle(this.wrapper.parentElement);
-    if (parentStyles.position === 'static') {
-      this.parentClientRect = {
-        left: 0,
-        top: 0
-      };
-    } else {
-      this.parentClientRect = {
-        left: this.wrapper.parentElement.offsetLeft,
-        top: this.wrapper.parentElement.offsetTop
-      };
     }
 
     // bind `this` to event listeners
@@ -249,8 +233,8 @@ class Resizable {
 
     switch (this.handle) {
       case 'rotate': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let newAngle = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y) * (180 / Math.PI);
 
         // discontinuous rotate effect
@@ -272,8 +256,8 @@ class Resizable {
         break;
       }
       case 'n': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -297,8 +281,8 @@ class Resizable {
         break;
       }
       case 'ne': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -328,8 +312,8 @@ class Resizable {
         break;
       }
       case 'e': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -348,8 +332,8 @@ class Resizable {
         break;
       }
       case 'se': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -360,6 +344,8 @@ class Resizable {
 
         wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
+
+        console.log(wrapperNewWidth);
 
         wrapperNewHeight = this.keepRatio ? this.ratio * wrapperNewWidth : -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
@@ -372,8 +358,8 @@ class Resizable {
         break;
       }
       case 's': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -392,8 +378,8 @@ class Resizable {
         break;
       }
       case 'sw': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -423,8 +409,8 @@ class Resizable {
         break;
       }
       case 'w': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -448,8 +434,8 @@ class Resizable {
         break;
       }
       case 'nw': {
-        let x = e.pageX / this._scale - this.parentClientRect.left;
-        let y = e.pageY / this._scale - this.parentClientRect.top;
+        let x = (e.pageX - this.parentClientRect.left) / this._scale;
+        let y = (e.pageY - this.parentClientRect.top) / this._scale;
         let alpha = Math.atan2(x - this.wrapperCenter.x, -y + this.wrapperCenter.y);
         let angle = this.angle * (Math.PI / 180);
         let d = Math.sqrt(Math.pow(y - this.wrapperCenter.y, 2) + Math.pow(x - this.wrapperCenter.x, 2));
@@ -498,23 +484,10 @@ class Resizable {
     document.removeEventListener('mousemove', this.mouseMove);
     document.removeEventListener('mouseup', this.mouseUp);
 
-    let parentStyles = getComputedStyle(this.wrapper.parentElement);
-    if (parentStyles.position === 'static') {
-      this.parentClientRect = {
-        left: 0,
-        top: 0
-      };
-    } else {
-      this.parentClientRect = {
-        left: this.wrapper.parentElement.offsetLeft,
-        top: this.wrapper.parentElement.offsetTop
-      };
-    }
-
     this.rotatedClientRect = this.wrapper.getBoundingClientRect();
     this.wrapperClientRect = {
-      left: this.rotatedClientRect.left / this._scale - this.parentClientRect.left + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
-      top: this.rotatedClientRect.top / this._scale - this.parentClientRect.top + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
+      left: (this.rotatedClientRect.left - this.parentClientRect.left) / this._scale + (this.rotatedClientRect.width / this._scale - this.wrapper.offsetWidth) / 2,
+      top: (this.rotatedClientRect.top - this.parentClientRect.top) / this._scale + (this.rotatedClientRect.height / this._scale - this.wrapper.offsetHeight) / 2,
       height: this.wrapper.offsetHeight,
       width: this.wrapper.offsetWidth
     };
