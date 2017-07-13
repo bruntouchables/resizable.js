@@ -13,7 +13,7 @@ class Resizable {
 
     this.rotation = 0;
     this.angle = 0;
-    this.keepRatio = false;
+    this.keepRatio = true;
 
     // custom handles
     if (options && options.handles) {
