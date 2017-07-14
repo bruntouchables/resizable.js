@@ -7,14 +7,8 @@
     <style>
       body {
         margin: 0; /* transform scale uses margin */
-        transform: scale(0.8);
+        transform: scale(1.0);
         transform-origin: left top;
-      }
-      
-      #parent {
-        position: absolute;
-        left: 50px;
-        top: 50px;
       }
 
       #example {
@@ -28,16 +22,12 @@
     </style>
   </head>
   <body>
-    <div id="parent">
-      <div id="example"></div>
-    </div>
+    <div id="example"></div>
 
     <script src="resizable.js"></script>
     <script>
       let element = document.getElementById('example');
-      new Resizable(element, {
-        scale: 0.8
-      });
+      new Resizable(element);
     </script>
   </body>
 </html>

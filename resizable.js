@@ -141,23 +141,28 @@ class Resizable {
   }
 
   attachInitEvents(element) {
-    // allow resize after click
+    // allow resize on mousedown
     document.addEventListener('mousedown', e => {
-      let allowed = e.target === element;
-      allowed = allowed || e.target === this.wrapper;
+      e.preventDefault();
 
-      // BTDT: handle click event on the wrapper or the element
-      if (this.onClickCallback && allowed) {
-        this.onClickCallback(e);
+      let isChild = e.target === element;
+      let isParent = e.target === this.wrapper;
+      let isHandle = e.target.classList.contains('resize-handle');
+      let isActive = this.wrapper.classList.contains('active');
+
+      if (isChild || isParent || isHandle && isActive) {
+        // remove .active from other .resizable elements
+        let resizableElements = [...document.querySelectorAll('.resizable')];
+        resizableElements.map(element => {
+          element.classList.remove('active');
+        });
+
+        // allow resize
+        this.wrapper.classList.add('active');
       }
 
-      // show handles only on the active element
-      allowed = allowed || (e.target.classList.contains('resize-handle') && this.wrapper.classList.contains('active'));
-
-      if (allowed) {
-        this.wrapper.classList.add('active');
-      } else {
-        this.wrapper.classList.remove('active');
+      if (this.onClickCallback && isChild || isParent) {
+        this.onClickCallback(e);
       }
     });
 
@@ -344,8 +349,6 @@ class Resizable {
 
         wrapperNewWidth = dw + this.wrapperClientRect.width / 2;
         wrapperNewWidth = wrapperNewWidth < this.wrapperMinWidth ? this.wrapperMinWidth : wrapperNewWidth;
-
-        console.log(wrapperNewWidth);
 
         wrapperNewHeight = this.keepRatio ? this.ratio * wrapperNewWidth : -dh + this.wrapperClientRect.height / 2;
         wrapperNewHeight = wrapperNewHeight < this.wrapperMinHeight ? this.wrapperMinHeight : wrapperNewHeight;
