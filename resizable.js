@@ -143,12 +143,13 @@ class Resizable {
   attachInitEvents(element) {
     // allow resize on mousedown
     document.addEventListener('mousedown', e => {
-      let isChild = e.target === element;
+      // BTDT: contains == (element itself or descendant)
+      let isDescendant = element.contains(e.target);
       let isParent = e.target === this.wrapper;
       let isHandle = e.target.classList.contains('resize-handle');
       let isActive = this.wrapper.classList.contains('active');
 
-      if (isChild || isParent || isHandle && isActive) {
+      if (isDescendant || isParent || isHandle && isActive) {
         // remove .active from other .resizable elements
         let resizableElements = [...document.querySelectorAll('.resizable')];
         resizableElements.map(element => {
@@ -159,7 +160,7 @@ class Resizable {
         this.wrapper.classList.add('active');
       }
 
-      if (this.onClickCallback && isChild || isParent) {
+      if (this.onClickCallback && isDescendant || isParent) {
         this.onClickCallback(e);
       }
     });

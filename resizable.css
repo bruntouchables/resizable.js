@@ -9,6 +9,10 @@
   outline: 1px dashed #79589f;
 }
 
+.resizable > :not(.resize-handle) {
+  cursor: default;
+}
+
 .resize-handle {
   background-color: #fff;
   border: 1px solid #79589f;
