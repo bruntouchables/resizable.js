@@ -8,12 +8,15 @@
 class Resizable {
   constructor(element, options) {
     this.wrapper = '<div class="resizable"></div>';
-    this._scale = (options && options.scale) ? options.scale : 1.0;
     this.handles = '';
 
+    // options
+    this._scale = options && options.hasOwnProperty('scale') ? options.scale : 1.0;
+    this.keepRatio = options && options.hasOwnProperty('keepRatio') ? options.keepRatio : true;
+
+    // rotate
     this.rotation = 0;
     this.angle = 0;
-    this.keepRatio = true;
 
     // custom handles
     if (options && options.handles) {
@@ -135,8 +138,8 @@ class Resizable {
       position: 'relative',
       left: 0,
       top: 0,
-      height: this.wrapper.style.height,
-      width: this.wrapper.style.width
+      height: '100%',
+      width: '100%'
     });
   }
 
