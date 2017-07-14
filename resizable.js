@@ -143,8 +143,6 @@ class Resizable {
   attachInitEvents(element) {
     // allow resize on mousedown
     document.addEventListener('mousedown', e => {
-      e.preventDefault();
-
       let isChild = e.target === element;
       let isParent = e.target === this.wrapper;
       let isHandle = e.target.classList.contains('resize-handle');
