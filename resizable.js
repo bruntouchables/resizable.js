@@ -499,6 +499,9 @@ class Resizable {
 
     if (this.handle === 'rotate') {
       this.angle += this.rotation;
+      if (this.onRotateCallback) {
+        this.onRotateCallback(this.angle);
+      }
     } else {
       this.wrapperCenter = {
         x: this.wrapperClientRect.left + this.wrapperClientRect.width / 2,
@@ -517,5 +520,9 @@ class Resizable {
 
   onResize(callback) {
     this.onResizeCallback = callback;
+  }
+
+  onRotate(callback) {
+    this.onRotateCallback = callback;
   }
 }
