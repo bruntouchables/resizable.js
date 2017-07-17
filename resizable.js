@@ -48,6 +48,14 @@ class Resizable {
     // on init events
     this.attachInitEvents(element);
 
+    // set wrapper initial rotation
+    if (options && options.angle) {
+      this.angle = options.angle;
+      this.rotation = options.angle;
+      this.wrapper.style.transform = 'rotate(' + options.angle + 'deg)';
+      this.wrapper.style.transformOrigin = 'center center';
+    }
+
     // track element mutations
     let elementObserver = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
