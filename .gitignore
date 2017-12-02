@@ -1,5 +1,5 @@
-### OSX ###
+# OSX
 .DS_Store
 
-### JetBrains ###
+# JetBrains
 .idea/
