@@ -6,7 +6,7 @@
 }
 
 .resizable.active {
-  outline: 1px dashed #79589f;
+  border: 1px dashed #79589f;
 }
 
 .resizable > :not(.resize-handle) {
