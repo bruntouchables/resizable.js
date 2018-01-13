@@ -1,8 +1,9 @@
 .resizable {
-  word-wrap: break-word;
+  border: 1px solid transparent;
   /* prevent flickering */
-  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  word-wrap: break-word;
 }
 
 .resizable.active {
