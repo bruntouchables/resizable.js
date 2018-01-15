@@ -12,7 +12,7 @@ class Resizable {
 
     // options
     this._scale = options && options.hasOwnProperty('scale') ? options.scale : 1.0;
-    this.keepRatio = options && options.hasOwnProperty('keepRatio') ? options.keepRatio : true;
+    this.keepRatio = options && options.hasOwnProperty('keepRatio') ? options.keepRatio : false;
 
     // rotate
     this.rotation = 0;

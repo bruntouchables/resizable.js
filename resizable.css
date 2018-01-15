@@ -1,5 +1,5 @@
 .resizable {
-  border: 1px solid transparent;
+  outline: 1px solid transparent;
   /* prevent flickering */
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
@@ -7,7 +7,7 @@
 }
 
 .resizable.active {
-  border: 1px dashed #79589f;
+  outline: 1px dashed blue;
 }
 
 .resizable > :not(.resize-handle) {
@@ -16,7 +16,7 @@
 
 .resize-handle {
   background-color: #fff;
-  border: 1px solid #79589f;
+  border: 1px solid blue;
   box-sizing: border-box;
   border-radius: 1px;
   display: none;

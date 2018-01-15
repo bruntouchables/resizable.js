@@ -3,9 +3,9 @@
 
 ### Getting started
 
-- Add _resizable.css_ and _resizable.js_ to your project
+- Add `resizable.css` and `resizable.js` to your project
 - Create a DOM element
-- Initialize a new Resizable instance
+- Initialize a new **Resizable** instance
 - Enjoy!
 
 ### Usage
