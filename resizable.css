@@ -7,7 +7,7 @@
 }
 
 .resizable.active {
-  border: 1px dashed blue;
+  outline: 1px dashed blue;
 }
 
 .resizable > :not(.resize-handle) {
@@ -16,7 +16,7 @@
 
 .resize-handle {
   background-color: #fff;
-  border: 1px solid blue;
+  outline: 1px solid blue;
   box-sizing: border-box;
   border-radius: 1px;
   display: none;
