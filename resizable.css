@@ -1,5 +1,5 @@
 .resizable {
-  border: 1px solid transparent;
+  outline: 1px solid transparent;
   /* prevent flickering */
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
