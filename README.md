@@ -15,7 +15,7 @@
 ```
 
 ```javascript
-let element = document.getElementById('example');
+const element = document.getElementById("example");
 new Resizable(element);
 ```
 
